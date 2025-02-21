@@ -1,11 +1,17 @@
 package com.employee.demo.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -76,4 +82,94 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return employeeMap;
     }
+
+
+
+
+    @Override
+    public List<EmployeeResponse> getEmployeesSortedBySalary() {
+        List<Employee> employees = repository.findAll();
+        List<EmployeeResponse> employeeResponses = new ArrayList<>();
+
+        for (Employee emp : employees) {
+            employeeResponses.add(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+        }
+
+        Collections.sort(employeeResponses, new Comparator<EmployeeResponse>() {
+            @Override
+            public int compare(EmployeeResponse e1, EmployeeResponse e2) {
+                return Double.compare(e2.getSalary(), e1.getSalary()); // Descending order
+            }
+        });
+
+        return employeeResponses;
+    }
+
+
+
+
+    @Override
+    public List<String> getEmployeeNames() {
+        List<Employee> employees = repository.findAll();
+        List<String> names = new ArrayList<>();
+        for (Employee emp : employees) {
+            names.add(emp.getName());
+        }
+        return names;
+    }
+
+
+
+
+    @Override
+    public Map<String, Long> getEmployeeCountPerDepartment() {
+        List<Employee> employees = repository.findAll();
+        Map<String, Long> countMap = new HashMap<>();
+
+        for (Employee emp : employees) {
+            String department = emp.getDepartment();
+            if (countMap.containsKey(department)) {
+                countMap.put(department, countMap.get(department) + 1);
+            } else {
+                countMap.put(department, 1L);
+            }
+        }
+        return countMap;
+    }
+
+    @Override
+    public Queue<EmployeeResponse> getEmployeesAsQueue() {
+        List<Employee> employees = repository.findAll();
+        Queue<EmployeeResponse> queue = new LinkedList<>();
+
+        for (Employee emp : employees) {
+            queue.offer(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+        }
+        return queue;
+    }
+
+    @Override
+    public Stack<EmployeeResponse> getEmployeesAsStack() {
+        List<Employee> employees = repository.findAll();
+        Stack<EmployeeResponse> stack = new Stack<>();
+
+        for (Employee emp : employees) {
+            stack.push(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+        }
+        return stack;
+    }
+    
+    @Override
+    public List<EmployeeResponse> addMultipleEmployees(List<EmployeeRequest> employeeRequests) {
+        List<Employee> employees = employeeRequests.stream()
+                .map(req -> new Employee(null, req.getName(), req.getDepartment(), req.getSalary()))
+                .collect(Collectors.toList());
+
+        List<Employee> savedEmployees = repository.saveAll(employees);
+
+        return savedEmployees.stream()
+                .map(emp -> new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()))
+                .collect(Collectors.toList());
+    }
+
 }

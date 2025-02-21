@@ -2,7 +2,9 @@ package com.employee.demo.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
@@ -19,4 +21,16 @@ public interface EmployeeService {
 	Set<String> getUniqueEmployeeDepartments();
 
 	Map<Long, EmployeeResponse> getEmployeesByIdMap();
+
+	List<EmployeeResponse> getEmployeesSortedBySalary();
+
+	List<String> getEmployeeNames();
+
+	Map<String, Long> getEmployeeCountPerDepartment();
+
+	Queue<EmployeeResponse> getEmployeesAsQueue();
+
+	Stack<EmployeeResponse> getEmployeesAsStack();
+
+	List<EmployeeResponse> addMultipleEmployees(List<EmployeeRequest> employeeRequests);
 }

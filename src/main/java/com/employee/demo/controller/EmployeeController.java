@@ -2,7 +2,9 @@ package com.employee.demo.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +25,7 @@ public class EmployeeController {
         this.service = service;
     }
 
-   /**
-    * 
-    * @param employeeRequest
-    * @return
-    */
+   
 
     @PostMapping("/add")
     public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
@@ -53,4 +51,35 @@ public class EmployeeController {
     public Map<Long, EmployeeResponse> getEmployeesByIdMap() {
         return service.getEmployeesByIdMap();
     }
+    
+    @GetMapping("/sorted-by-salary")
+    public List<EmployeeResponse> getEmployeesSortedBySalary() {
+        return service.getEmployeesSortedBySalary();
+    }
+
+    @GetMapping("/employee-names")
+    public List<String> getEmployeeNames() {
+        return service.getEmployeeNames();
+    }
+
+    @GetMapping("/count-per-department")
+    public Map<String, Long> getEmployeeCountPerDepartment() {
+        return service.getEmployeeCountPerDepartment();
+    }
+
+    @GetMapping("/queue")
+    public Queue<EmployeeResponse> getEmployeesAsQueue() {
+        return service.getEmployeesAsQueue();
+    }
+
+    @GetMapping("/stack")
+    public Stack<EmployeeResponse> getEmployeesAsStack() {
+        return service.getEmployeesAsStack();
+    }
+    
+    @PostMapping("/add-multiple")
+    public List<EmployeeResponse> addMultipleEmployees(@RequestBody List<EmployeeRequest> employeeRequests) {
+        return service.addMultipleEmployees(employeeRequests);
+    }
+
 }
