@@ -1,10 +1,18 @@
 package com.employee.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.employee.demo.model.Employee;
-import com.employee.demo.request.EmployeeRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+import java.util.List;
 
-	Employee save(EmployeeRequest employeeRequest);}
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee,Long> {
+
+	public Employee findByName(String name);
+	public List<Employee> findByDepartment(String department);
+
+
+
+
+}

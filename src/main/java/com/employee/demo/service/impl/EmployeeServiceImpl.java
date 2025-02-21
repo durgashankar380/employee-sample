@@ -1,79 +1,222 @@
 package com.employee.demo.service.impl;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.stereotype.Service;
-
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
 import com.employee.demo.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private final EmployeeRepository repository;
 
-    public EmployeeServiceImpl(EmployeeRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    public EmployeeRepository employeeRepository;
 
-   
-	
 
     @Override
-    public EmployeeResponse addEmployee(EmployeeRequest employeeRequest) {
-        Employee employee = new Employee();
-        employee.setName(employeeRequest.getName());
-        employee.setDepartment(employeeRequest.getDepartment());
-        employee.setSalary(employeeRequest.getSalary());
-        Employee savedEmployee = repository.save(employee);
-        return new EmployeeResponse(savedEmployee.getId(), savedEmployee.getName(), savedEmployee.getDepartment(), savedEmployee.getSalary());
-    }
-    
-    @Override
-    public Map<String, Double> getTotalSalaryPerDepartment() {
-        List<Employee> employees = repository.findAll();
-        Map<String, Double> totalSalaryMap = new HashMap<>();
-        for (Employee emp : employees) {
-            totalSalaryMap.put(emp.getDepartment(), totalSalaryMap.getOrDefault(emp.getDepartment(), 0.0) + emp.getSalary());
+    public List<Employee> stackOfEmployee() {
+        List<Employee> employeeEntities=employeeRepository.findAll();
+        Stack<Employee> stack=new Stack<>();
+        List<Employee> list  =new ArrayList<>();
+        for (Employee employee : employeeEntities) {
+            stack.push(employee);
         }
-        return totalSalaryMap;
+        do {
+            list.add(stack.peek());
+            stack.pop();
+        }while(!stack.isEmpty());
+        return list;
+    }
+
+
+
+//    @Override
+//    public Queue<EmployeeResponse> getEmployeesAsQueue() {
+//        List<Employee> employees = repository.findAll();
+//        Queue<EmployeeResponse> queue = new LinkedList<>();
+//
+//        for (Employee emp : employees) {
+//            queue.offer(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+//        }
+//        return queue;
+//    }
+
+
+    @Override
+    public List<String> getAllEmployeeName()
+    {
+        List<Employee> employeeEntities =employeeRepository.findAll();
+        List<String> empName =new ArrayList<>();
+        for(Employee employee : employeeEntities)
+        {
+            empName.add(employee.getName());
+        }
+        return empName;
+    }
+
+
+    @Override
+    public ResponseEntity<Employee>addMultipleEmployees(@RequestBody List<Employee> employeeEntity)
+    {
+        try{
+            if(employeeEntity == null || employeeEntity.equals(""))
+            {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            for(Employee employee: employeeEntity)
+            {
+                boolean b= employee.getEmployeeId()!=0 && employee.getSalary()!=0 && employee.getDepartment()!=null && employee.getName()!=null;
+                if(b)
+                {
+                    employeeRepository.save(employee);
+
+                }
+            }
+            // return null;
+        }
+        catch(Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return null;
     }
 
     @Override
-    public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
-        List<Employee> employees = repository.findAll();
-        Map<String, List<EmployeeResponse>> groupedEmployees = new HashMap<>();
-        for (Employee emp : employees) {
-            groupedEmployees.putIfAbsent(emp.getDepartment(), new ArrayList<>());
-            groupedEmployees.get(emp.getDepartment()).add(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+    public Map<String,Double> getTotalSalaryByDepartment() {
+
+        List<Employee> employees = employeeRepository.findAll();
+        Map<String, Double> map = new HashMap<>();
+        for (Employee employeeEntity : employees) {
+
+            String dep = employeeEntity.getDepartment();
+            Double sal = employeeEntity.getSalary();
+            map.put(dep, map.getOrDefault(dep, 0.0) + sal);
         }
-        return groupedEmployees;
+
+
+        return map;
     }
 
     @Override
-    public Set<String> getUniqueEmployeeDepartments() {
-        List<Employee> employees = repository.findAll();
-        Set<String> uniqueDepartments = new HashSet<>();
-        for (Employee emp : employees) {
-            uniqueDepartments.add(emp.getDepartment());
+    public List<EmployeeResponse> getAllEmployees()
+    {
+        List<Employee> employeeEntity=  employeeRepository.findAll();
+
+        List<EmployeeResponse> responseList =new ArrayList<>();
+        for (Employee employee :employeeEntity){
+            EmployeeResponse employeeResponse =new EmployeeResponse();
+            BeanUtils.copyProperties(employee,employeeResponse);
+            responseList.add(employeeResponse);
         }
-        return uniqueDepartments;
+
+        Collections.sort(responseList, new Comparator<EmployeeResponse>() {
+            @Override
+            public int compare(EmployeeResponse e1, EmployeeResponse e2) {
+                return Double.compare(e2.getSalary(),e1.getSalary());
+            }
+        });
+        return responseList;
+
     }
 
     @Override
-    public Map<Long, EmployeeResponse> getEmployeesByIdMap() {
-        List<Employee> employees = repository.findAll();
-        Map<Long, EmployeeResponse> employeeMap = new HashMap<>();
-        for (Employee emp : employees) {
-            employeeMap.put(emp.getId(), new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+    public Optional<Employee> getEmployeeById(Long id) {
+        Optional<Employee> byemployeeOptional = employeeRepository.findById(id);
+        if(byemployeeOptional.isPresent()){
+            return  byemployeeOptional;
+
+        }else {
+            System.out.println("id not null");
         }
-        return employeeMap;
+        return  null;
+
+    }
+
+    @Override
+    public Employee updateEmpById(long id, Employee employeeEntity) {
+        Employee employee=employeeRepository.findById(id).orElse(null);
+        if(employee!=null)
+        {
+            employee.setName(employeeEntity.getName()!=null && !employeeEntity.getName().equals("") ? employeeEntity.getName() : employee.getName());
+            employee.setDepartment(employeeEntity.getDepartment()!=null && !employeeEntity.getDepartment().equals("")? employeeEntity.getDepartment() : employee.getDepartment());
+            employee.setSalary(employeeEntity.getSalary() );
+        }
+        return employeeRepository.save(employee);
+
+    }
+
+    @Override
+    public Employee getEmployeeByName(String name) {
+
+
+        return employeeRepository.findByName(name);
+    }
+
+    @Override
+    public List<Employee> getAllEmployeeByDepartment(String department)
+    {
+        return employeeRepository.findByDepartment(department);
+    }
+
+    @Override
+    public ResponseEntity<?> totalSalaryByDepartment(String dept) {
+        List<Employee> employeeEntityList=employeeRepository.findAll();
+        Map<String ,Double> map=new HashMap<>();
+
+        for( Employee entity:employeeEntityList){
+            String department=entity.getDepartment();
+            Double salary=entity.getSalary();
+            map.put(department,map.getOrDefault(department,0.0)+salary);
+        }
+
+        if(map.containsKey(dept))return new ResponseEntity<>(map.get(dept), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public Map<String, Long> getcountperDepartment() {
+        return Map.of();
+    }
+
+//    @Override
+//    public Map<String, Long> getcountperDepartment() {
+//        Map<String,Long> departmentCount=new HashMap<>();
+//        List<Employee> employeeEntities = employeeRepository.findAll();
+//        Set<String> distinctDepartment =new HashSet<>();
+//        for(Employee employee :employeeEntities)
+//        {
+//            distinctDepartment.add(employee.getDepartment());
+//        }
+//        for(String department : distinctDepartment)
+//        {
+//            long count=employeeRepository.findByDepartment(department).size();
+//            departmentCount.put(department,count);
+//        }
+//
+//
+//        return departmentCount;
+//    }
+
+//    @Override
+//    public ResponseEntity<Employee> addMultipleEmployees(List<Employee> employeeEntity) {
+//        return null;
+//    }
+
+
+    @Override
+    public Employee addEmployee(EmployeeRequest employee)
+    {
+        Employee employees=new Employee();
+        employees.setName(employee.getName());
+        employees.setDepartment(employee.getDepartment());
+        Employee emp= employeeRepository.save(employees);
+        return null;
     }
 }
