@@ -76,4 +76,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return employeeMap;
     }
+
+
+
+
+	@Override
+	public List<Employee> findAllByOrderBySalaryDesc() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+	@Override
+	public List<String> getAllEmpNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

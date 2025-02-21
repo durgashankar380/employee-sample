@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
 import com.employee.demo.service.EmployeeService;
@@ -53,4 +54,17 @@ public class EmployeeController {
     public Map<Long, EmployeeResponse> getEmployeesByIdMap() {
         return service.getEmployeesByIdMap();
     }
+    
+    @GetMapping("/sorted-by-salary")
+    public List<Employee> getEmpSortBySalary() {
+    	return service.findAllByOrderBySalaryDesc();
+    			 
+    }
+    
+    @GetMapping("/employee-name")
+    public List<String> getAllEmpNames() {
+		List<String> ename = service.getAllEmpNames();
+    	return ename;
+    }
+    
 }
