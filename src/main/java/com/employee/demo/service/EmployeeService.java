@@ -2,6 +2,7 @@ package com.employee.demo.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import com.employee.demo.model.Employee;
@@ -23,5 +24,20 @@ public interface EmployeeService {
 
 	List<Employee> findAllByOrderBySalaryDesc();
 
+
 	List<String> getAllEmpNames();
+
+	Map<String, Integer> getDepartmentEmployeeCount();
+
+	List<Employee> addMultipleEmployee(List<Employee> employees);
+
+	boolean deleteEmployeeById(Long id);
+
+	void updateEmployeeById(Long id, Employee e);
+
+	List<Employee> getEmployeeInFirstInFirstOut();
+
+	List<Employee> getEmployeeInLastInFirstOut();
+
+	
 }

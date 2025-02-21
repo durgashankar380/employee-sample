@@ -1,11 +1,17 @@
 package com.employee.demo.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 
 import org.springframework.stereotype.Service;
 
@@ -82,8 +88,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> findAllByOrderBySalaryDesc() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Employee> employees = repository.findAll();
+		Collections.sort(employees,new Comparator<Employee>() {
+			@Override
+			public int compare(Employee e1,Employee e2) {
+				return Double.compare(e2.getSalary(),e1.getSalary());
+			}
+		});
+		return employees;
 	}
 
 
@@ -91,7 +103,93 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<String> getAllEmpNames() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Employee> employees = repository.findAll();
+		List<String> empName = new ArrayList<>();
+		
+		for(Employee e : employees) {
+			empName.add(e.getName());
+		}
+		return empName;
 	}
-}
+
+
+
+
+	@Override
+	public Map<String, Integer> getDepartmentEmployeeCount() {
+		List<Employee> employees = repository.findAll();
+		Map<String,Integer> deptEmpCount = new HashMap<>();
+		for(Employee e : employees) {
+			String department = e.getDepartment();
+			if(deptEmpCount.containsKey(department)) {
+				deptEmpCount.put(department, deptEmpCount.get(department)+1);
+			}
+			else {
+				deptEmpCount.put(department, 1);
+			}
+		}
+		return deptEmpCount;
+	}
+
+	@Override
+	public List<Employee> addMultipleEmployee(List<Employee> employees) {
+			return repository.saveAll(employees);
+		}
+
+	@Override
+	public boolean deleteEmployeeById(Long id) {
+			boolean isPresent = repository.existsById(id);
+			if(!isPresent) return false;
+			repository.deleteById(id);
+			return true;
+		}
+
+
+	@Override
+	public void updateEmployeeById(Long id, Employee e) {
+		Optional<Employee> op = repository.findById(id);
+		if(op.isPresent()) {
+			Employee emp = op.get();
+			emp.setName(e.getName());
+			emp.setDepartment(e.getDepartment());
+			emp.setSalary(e.getSalary());
+			repository.save(emp);
+		}
+		
+	}
+
+
+	@Override
+	public List<Employee> getEmployeeInFirstInFirstOut() {
+		List<Employee> list = new ArrayList<>();
+		List<Employee> employees = repository.findAll();
+		Queue<Employee> empQueue = new LinkedList<>();
+		
+		for(Employee e : employees) {
+			empQueue.add(e);
+		}
+		do{	
+			list.add(empQueue.peek());
+			empQueue.poll();
+		} while(!empQueue.isEmpty());
+		return list;
+	}
+
+	@Override
+	public List<Employee> getEmployeeInLastInFirstOut() {
+		List<Employee> list1 = new ArrayList<>();
+		List<Employee> employees = repository.findAll();
+		Stack<Employee> empStack = new Stack<>();
+		
+		for(Employee e : employees) {
+			empStack.push(e);
+		}
+		do{	
+			list1.add(empStack.peek());
+			empStack.pop();
+		} while(!empStack.isEmpty());
+		return list1;
+	}
+	
+	}
+	

@@ -2,10 +2,16 @@ package com.employee.demo.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,12 +29,6 @@ public class EmployeeController {
     public EmployeeController(EmployeeService service) {
         this.service = service;
     }
-
-   /**
-    * 
-    * @param employeeRequest
-    * @return
-    */
 
     @PostMapping("/add")
     public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
@@ -65,6 +65,45 @@ public class EmployeeController {
     public List<String> getAllEmpNames() {
 		List<String> ename = service.getAllEmpNames();
     	return ename;
+    }
+    
+    @GetMapping("/count-per-department")
+    Map<String,Integer> getDepartmentEmployeeCount(){
+    	Map<String,Integer> deptCount = service.getDepartmentEmployeeCount();
+    	return deptCount;
+    }
+    
+    @GetMapping("/queue")
+    public List<Employee> getEmployeeInFirstInFirstOut() {
+    	return service.getEmployeeInFirstInFirstOut();
+    }
+    
+    @GetMapping("stack")
+    public List<Employee> getEmployeeInLastInFirstOut() {
+    	return service.getEmployeeInLastInFirstOut();
+    }
+    
+    @PostMapping("/add-multiple")
+    public List<Employee> addMultipleEmployee(@RequestBody List<Employee> employees) {
+		List<Employee> addEmp = service.addMultipleEmployee(employees);
+    	return addEmp;
+    }
+    
+    @DeleteMapping("/id/{id}")
+    public boolean deleteEmployeeById(@PathVariable Long id) {
+    return service.deleteEmployeeById(id);
+    }
+    
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Employee> updateEmpById(@PathVariable Long id,@RequestBody Employee e) {
+    	System.out.println(id);
+    	if(id!=0 && e!= null)
+    	{
+    		service.updateEmployeeById( id,e);
+    		return ResponseEntity.status(HttpStatus.OK).build();
+    	}
+    	
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     
 }
