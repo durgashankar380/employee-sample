@@ -53,4 +53,9 @@ public class EmployeeController {
     public Map<Long, EmployeeResponse> getEmployeesByIdMap() {
         return service.getEmployeesByIdMap();
     }
+    @GetMapping("/sorted-by-salary")
+    public List<EmployeeResponse> getEmployeesSortedBySalary() {
+        return employeeService.getAllEmployees();
+    }
+
 }
