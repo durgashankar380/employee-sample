@@ -4,29 +4,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.employee.demo.request.EmployeeRequest;
-import com.employee.demo.response.EmployeeResponse;
+import com.employee.demo.model.Employee;
+import com.employee.demo.request.RequestEmployee;
+import com.employee.demo.response.ResponseEmployee;
 import com.employee.demo.service.EmployeeService;
 
-@RestController
+
+@RestController  
 @RequestMapping("/employees")
 public class EmployeeController {
-    private final EmployeeService service;
+    
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService service) {
-        this.service = service;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
-
-   
-
+     
+    
     //1
     @PostMapping("/add") 
     public Employee createEmployee(@RequestBody RequestEmployee requestEmployee) {
@@ -120,4 +124,6 @@ public class EmployeeController {
    }
    
     
-}
+     } 
+    
+

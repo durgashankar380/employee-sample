@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.employee.demo.request.EmployeeRequest;
-import com.employee.demo.response.EmployeeResponse;
+import com.employee.demo.model.Employee;
+import com.employee.demo.request.RequestEmployee;
+import com.employee.demo.response.ResponseEmployee;
 
 public interface EmployeeService {
 
