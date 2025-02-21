@@ -23,12 +23,7 @@ public class EmployeeController {
         this.service = service;
     }
 
-   /**
-    * 
-    * @param employeeRequest
-    * @return
-    */
-
+  
     @PostMapping("/add")
     public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
         return service.addEmployee(employeeRequest);
