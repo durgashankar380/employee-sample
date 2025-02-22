@@ -69,12 +69,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Map<String, Double> getTotalSalaryPerDepartment() {
 		try {
 			List<Employee> employees = employeeRepository.findAll();
-
-			// Check if the employees list is null or empty
-			if (employees == null || employees.isEmpty()) {
-				throw new EmployeeSaveException("No employees found in the database");
-			}
-
 			Map<String, Double> departmentSalaryMap = new HashMap<>();
 
 			for (Employee emp : employees) {
@@ -86,10 +80,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 			return departmentSalaryMap;
 
-		} catch (Exception e) {
-			System.err.println("Unexpected error arises when calculating total salary");
-			throw new RuntimeException("Unexpected error", e);
-		}
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 	
 
@@ -98,10 +91,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Map<String, List<Employee>> getEmployeesGroupedByDepartment() {
 		List<Employee> employees = employeeRepository.findAll();
 		try {
-		if (employees == null || employees.isEmpty()) {
-			throw new EmployeeSaveException("No employees found in the database");
-		}
-
 		Map<String, List<Employee>> groupedEmployees = new HashMap<>();
 
 		for (Employee employee : employees) {
@@ -120,16 +109,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return groupedEmployees;
-		}catch (Exception e) {
-			System.err.println("Unexpected error arises when calculating total salary");
-			throw new RuntimeException("Unexpected error", e);
-		}
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 		
 	}
 
 	// 4 get unique department (get all types of department)
 	@Override
 	public Set<String> getUniqueDepartments() {
+		try {
 		List<Employee> employees = employeeRepository.findAll();
 
 		Set<String> uniqueDepartments = new HashSet<>();
@@ -137,12 +126,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 			uniqueDepartments.add(employee.getDepartment());
 		}
 		return uniqueDepartments;
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 
 	// 5 get the employee by id using map(id as key and employee details or employee
 	// object as value)
 	@Override
 	public Map<Long, Employee> getEmployeesAsMap() {
+		try {
 		List<Employee> employees = employeeRepository.findAll();
 		Map<Long, Employee> employeeMap = new HashMap<>();
 
@@ -151,6 +144,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return employeeMap;
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 
 	// 6 add the multiple employees at once post method
@@ -187,6 +183,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	// 7 get the employee by descending order of salary
 	@Override
 	public List<Employee> getEmployeesSortedBySalaryDesc() {
+		try {
 		List<Employee> employees = employeeRepository.findAll();
 
 		// This is a method reference that refers to the getSalary() method of the
@@ -198,11 +195,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Collections.reverse(employees);
 
 		return employees;
+		 } catch (Exception e) {
+		        throw new RuntimeException("Failed to retrieve unique departments", e);
+		    }
 	}
 
 	// 8 get only names of the employees
 	@Override
 	public List<String> getEmployeeNames() {
+		try {
 		List<Employee> employees = employeeRepository.findAll();
 		List<String> employeeNames = new ArrayList<>();
 
@@ -211,11 +212,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return employeeNames;
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 
 	// 9 get the no of employee present per department
 	@Override
 	public Map<String, Integer> getStudentCountByDepartment() {
+		try {
 		List<Employee> employee = employeeRepository.findAll();
 		Map<String, Integer> departmentCountMap = new HashMap<>();
 
@@ -227,11 +232,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return departmentCountMap;
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 
 	//10
 	@Override
 	public List<Employee> getEmployeesInFIFOOrder() {
+		try {
 		List<Employee> employees = employeeRepository.findAll();
 		Queue<Employee> employeeQueue = new PriorityQueue<>(Comparator.comparing(Employee::getId));
 		employeeQueue.addAll(employees);
@@ -242,11 +251,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		return fifoEmp;
+	}catch (Exception e) {
+        throw new RuntimeException("Employee Data Not Found", e);
+    }
 	}
 	
      //11
 	@Override
 	public List<Employee> getEmployeesInLIFOOrder() {
+		try {
 	    List<Employee> employees = employeeRepository.findAll();
 	    Stack<Employee> stack = new Stack<>();
 
@@ -260,34 +273,49 @@ public class EmployeeServiceImpl implements EmployeeService {
 	    }
 
 	    return lifoEmployees;
+	 } catch (Exception e) {
+	        throw new RuntimeException("Employee Data Not Found", e);
+	    }
 	}
 
     //12
 	@Override
 	public ResponseEmployee getEmployeeById(Long id) {
+		try {
 		Employee employee = employeeRepository.findById(id).orElseThrow();
 		return new ResponseEmployee(employee.getId(), employee.getName(), employee.getDepartment(),
 				employee.getSalary());
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 
 	
 	@Override
 	@Transactional
 	public Employee updateEmployee(Long id, RequestEmployee requestEmployee) {
+		try {
 		Employee employee = employeeRepository.findById(id).orElseThrow();
 		employee.setName(requestEmployee.getName());
 		employee.setDepartment(requestEmployee.getDepartment());
 		employee.setSalary(requestEmployee.getSalary());
 		return employeeRepository.save(employee);
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 
 	//14
 	@Override
 	public void deleteEmployee(Long id) {
+		try {
 		if (!employeeRepository.existsById(id)) {
 			throw new EmployeeNotFoundException("Employee not found with ID: " + id);
 		}
 		employeeRepository.deleteById(id);
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
 	}
 
 }
