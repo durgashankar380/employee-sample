@@ -17,24 +17,52 @@ public class EmployeeController {
     @Autowired
     private EmployeeService service;
 
-    /**
-     * @return
-     * @autor
-     */
+
+    @PostMapping("/addEmployee")
+    public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
+        return this.service.addEmployee(employeeRequest);
+    }
+
+
+    @GetMapping("/findTotalSalaryByDepartment")
+    public Map<String, Double> getTotalSalaryByDepartment() {
+        return  service.getTotalSalaryByDepartment();
+    }
+
+    @GetMapping("/grouped-by-department")
+    public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
+        return service.getEmployeesGroupedByDepartment();
+    }
+    @GetMapping("/unique-departments")
+    public Set<String> getUniqueEmployeeDepartments(){
+        return service.getUniqueEmployeeDepartments();
+    }
+
+    @GetMapping("/getEmployeeById")
+    public Map<Long ,EmployeeResponse> getEmployeeById() {
+        return this.service.getEmployeeById();
+    }
+
+    @GetMapping("/employee-names")
+    public List<String> getEmployeeNames() {
+        return service.getAllEmployeeName();
+    }
+
+    @GetMapping("/queue")
+    public Queue<EmployeeResponse>queueOfEmployee()
+    {
+        return this.service.queueOfEmployee();
+    }
 
     @GetMapping("/stackOfEmployee")
-    public List<Employee>stackOfEmployee()
+    public Stack<EmployeeResponse>stackOfEmployee()
     {
         return this.service.stackOfEmployee();
     }
 
 
 
-//    @GetMapping("/queueOfEmployee")
-//    public List<Employee>queueOfEmployee()
-//    {
-//        return this.service.queueOfEmployee();
-//    }
+
 
 
     @PostMapping("/add-multiple")
@@ -50,24 +78,14 @@ public class EmployeeController {
 
     @GetMapping("/sorted-by-salary")
     public List<EmployeeResponse> getEmployeesSortedBySalary() {
-        return service.getAllEmployees();
+        return service.getEmployeesSortedBySalary();
     }
 
-
-    @GetMapping("/employee-names")
-    public List<String> getEmployeeNames() {
-        return service.getAllEmployeeName();
-    }
 
 
     @GetMapping("/getAllEmployees")
     public List<EmployeeResponse> getAllEmployees() {
-        return this.service.getAllEmployees();
-    }
-
-    @GetMapping("/getEmployeeById/{id}")
-    public Optional<Employee> getEmployeeById(@PathVariable long id) {
-        return this.service.getEmployeeById(id);
+        return this.service.getEmployeesSortedBySalary();
     }
 
     @GetMapping("/getEmployeeByName")
@@ -80,20 +98,8 @@ public class EmployeeController {
         return this.service.updateEmpById(id, employeeEntity);
     }
 
-    @GetMapping("/getAllEmployeeByDepartment")
-    public List<Employee> getAllEmployeeByDepartment(@RequestParam String department) {
-        return this.service.getAllEmployeeByDepartment(department);
-    }
 
-    @PostMapping("/addEmployee")
-    public Employee addEmployee(@RequestBody EmployeeRequest employee) {
-        return this.service.addEmployee(employee);
-    }
 
-    @GetMapping("/findTotalSalaryByDepartment")
-    public Map<String, Double> getTotalSalaryByDepartment() {
-        return  service.getTotalSalaryByDepartment();
-    }
 
     @GetMapping("/getbydeptsalary/{dept}")
     public ResponseEntity<?> depSalary(@PathVariable String dept){

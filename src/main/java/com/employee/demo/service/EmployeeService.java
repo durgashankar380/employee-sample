@@ -8,43 +8,50 @@ import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 
 public interface EmployeeService {
 
-//    public List<EmployeeEntity> getAllEmployees();
 
-	public List<Employee>stackOfEmployee();
+	EmployeeResponse addEmployee(EmployeeRequest employeeRequest);
 
-	//public Queue<EmployeeResponse> getEmployeesAsQueue();
+	Map<String,Double> getTotalSalaryByDepartment();
 
-	public List<EmployeeResponse> getAllEmployees();
+	 Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment();
+
+	Set<String> getUniqueEmployeeDepartments();
+
+	Map<Long,EmployeeResponse> getEmployeeById();
+
+	 List<EmployeeResponse> getEmployeesSortedBySalary();
+
+	List<String>getAllEmployeeName();
+
+	Map<String, Long> getcountperDepartment();
+
+	Queue<EmployeeResponse> queueOfEmployee();
+
+	Stack<EmployeeResponse>stackOfEmployee();
 
 
-	Optional<Employee> getEmployeeById(Long id);
+
+
+
+
+	//................................//
+
+
+
 
 	Employee updateEmpById(long id, Employee employeeEntity);
 
-	//     Employee addEmployee(Employee employee);
-	Employee addEmployee(EmployeeRequest employee);
 
 
 	Employee getEmployeeByName(String name);
 
-	List<Employee> getAllEmployeeByDepartment(String department);
+
 
 	ResponseEntity totalSalaryByDepartment(String dept);
 
-	Map<String, Long> getcountperDepartment();
-
 	ResponseEntity<Employee> addMultipleEmployees(List<Employee> employeeEntity);
-
-	public List<String>getAllEmployeeName();
-
-	Map<String,Double> getTotalSalaryByDepartment();
-
-
 }
