@@ -1,8 +1,6 @@
 package com.employee.demo.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,5 +46,35 @@ public class EmployeeController {
     @GetMapping("/employee-map")
     public Map<Long, EmployeeResponse> getEmployeesByIdMap() {
         return service.getEmployeesByIdMap();
+    }
+
+    @GetMapping("/sorted-by-salary")
+    public List<EmployeeResponse> getSortedSalary(){
+        return service.getSortedSalaryDesc();
+    }
+
+    @GetMapping("/employee-names")
+    public List<String> getEmployeesList(){
+        return service.getEmployeesList();
+    }
+
+    @GetMapping("/count-per-department")
+    public Map<String,Long> countPerDepartment(){
+        return service.countPerDepartment();
+    }
+
+    @GetMapping("/queue")
+    public Queue<EmployeeResponse> getQueue(){
+        return service.getQueueOfEmployees();
+    }
+
+    @GetMapping("/stack")
+    public Stack<EmployeeResponse> getStack(){
+        return service.getStackOfEmployees();
+    }
+
+    @PostMapping("/add-multiple")
+    public List<EmployeeResponse> addMultiple(@RequestBody List<EmployeeRequest> requestList){
+        return service.addEmployeeList(requestList);
     }
 }

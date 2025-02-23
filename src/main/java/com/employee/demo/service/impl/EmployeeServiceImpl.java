@@ -1,11 +1,6 @@
 package com.employee.demo.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.stereotype.Service;
 
@@ -75,5 +70,68 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeMap.put(emp.getId(), new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
         }
         return employeeMap;
+    }
+
+    @Override
+    public List<EmployeeResponse> getSortedSalaryDesc() {
+        List<Employee> employees=repository.findAll();
+        employees.sort((a,b)->Double.compare(a.getSalary(),b.getSalary()));
+        List<EmployeeResponse> responseList=new ArrayList<>();
+        for(Employee employee:employees)responseList.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+        return responseList;
+    }
+
+    @Override
+    public List<String> getEmployeesList() {
+        List<Employee> employees=repository.findAll();
+        List<String> names=new ArrayList<>();
+        for(Employee employee:employees)names.add(employee.getName());
+        return names;
+    }
+
+    @Override
+    public Map<String, Long> countPerDepartment() {
+        List<Employee> employees = repository.findAll();
+        Map<String,Long> map = new HashMap<>();
+        for (Employee employee : employees) {
+            map.put(employee.getDepartment(),map.getOrDefault(employee.getDepartment(),(long)0)+1);
+        }
+        return map;
+    }
+
+    @Override
+    public Queue<EmployeeResponse> getQueueOfEmployees() {
+        List<Employee> employees=repository.findAll();
+        Queue<EmployeeResponse> employeeResponseQueue= new LinkedList<>();
+        for(Employee employee:employees)employeeResponseQueue.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+        return  employeeResponseQueue;
+    }
+
+    @Override
+    public Stack<EmployeeResponse> getStackOfEmployees() {
+        List<Employee> employees=repository.findAll();
+        Stack<EmployeeResponse> employeeResponseStack=new Stack<>();
+        for(Employee employee:employees){
+            employeeResponseStack.push(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+        }
+        return employeeResponseStack ;
+    }
+
+    @Override
+    public List<EmployeeResponse> addEmployeeList(List<EmployeeRequest> requestList) {
+        List<EmployeeResponse> responseList=new ArrayList<>();
+        List<Employee> employeeList=new ArrayList<>();
+        for(EmployeeRequest employeeRequest:requestList){
+            Employee employee=new Employee();
+            employee.setName(employeeRequest.getName());
+            employee.setDepartment(employeeRequest.getDepartment());
+            employee.setSalary(employeeRequest.getSalary());
+            employeeList.add(employee);
+            //responseList.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary() ));
+            //    employeeList.add(new Employee(employeeRequest.getName(),employeeRequest.getDepartment(),employeeRequest.getSalary()));
+        }
+        List<Employee> employees =repository.saveAll(employeeList);
+        for(Employee employee:employees)responseList.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary() ));
+        return responseList;
     }
 }
