@@ -239,7 +239,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		    }
 	}
 
-	//10
+	//10 get employees in FIFO order
 	@Override
 	public List<Employee> getEmployeesInFIFOOrder() {
 		try {
@@ -258,7 +258,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 	}
 	
-     //11
+     //11 get employees in LIFO order
 	@Override
 	public List<Employee> getEmployeesInLIFOOrder() {
 		try {
@@ -280,7 +280,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	    }
 	}
 	
-    //12
+    //12 get top 3 employees by department
     @Override
     public Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment() {
         try {
@@ -309,7 +309,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    //13
+    //13 get Employee who have second highest grade
     @Override
     public List<ResponseEmployee> getEmployeesWithSecondHighestGrade() {
         try {
@@ -339,7 +339,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    //14
+    //14 get department with highest total grade
     @Override
     public String getDepartmentWithHighestTotalGrade() {
         try {
@@ -361,7 +361,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    //15
+    //15 get Employees above department average
     @Override
     public List<ResponseEmployee> getEmployeesAboveDepartmentAverage() {
         try {
@@ -392,7 +392,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     
-    //16
+    //16 get most comman first letter
     @Override
     public char getMostCommonFirstLetter() {
         try {
@@ -414,7 +414,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    //17
+    //17 
 	@Override
 	public ResponseEmployee getEmployeeById(Long id) {
 		try {
