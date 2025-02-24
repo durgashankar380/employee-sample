@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
 import org.springframework.stereotype.Service;
 
@@ -277,8 +279,142 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        throw new RuntimeException("Employee Data Not Found", e);
 	    }
 	}
-
+	
     //12
+    @Override
+    public Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment() {
+        try {
+            List<Employee> Employees = employeeRepository.findAll();
+            Map<String, List<ResponseEmployee>> result = new HashMap<>();
+            Map<String, List<Employee>> departmentMap = new HashMap<>();
+
+            for (Employee Employee : Employees) {
+                departmentMap.computeIfAbsent(Employee.getDepartment(), k -> new ArrayList<>()).add(Employee);
+            }
+
+            for (Map.Entry<String, List<Employee>> entry : departmentMap.entrySet()) {
+                List<Employee> EmployeeList = entry.getValue();
+                EmployeeList.sort((s1, s2) -> Double.compare(s2.getSalary(), s1.getSalary()));
+
+                List<ResponseEmployee> top3 = new ArrayList<>();
+                for (int i = 0; i < Math.min(3, EmployeeList.size()); i++) {
+                    top3.add(new ResponseEmployee(EmployeeList.get(i)));
+                }
+                result.put(entry.getKey(), top3);
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return Collections.emptyMap();
+        }
+    }
+
+    //13
+    @Override
+    public List<ResponseEmployee> getEmployeesWithSecondHighestGrade() {
+        try {
+            List<Employee> Employees = employeeRepository.findAll();
+            Set<Double> uniqueGrades = new TreeSet<>(Collections.reverseOrder());
+
+            for (Employee Employee : Employees) {
+                uniqueGrades.add(Employee.getSalary());
+            }
+
+            if (uniqueGrades.size() < 2) return new ArrayList<>();
+
+            Iterator<Double> iterator = uniqueGrades.iterator();
+            iterator.next();
+            double secondHighestGrade = iterator.next();
+
+            List<ResponseEmployee> result = new ArrayList<>();
+            for (Employee Employee : Employees) {
+                if (Employee.getSalary() == secondHighestGrade) {
+                    result.add(new ResponseEmployee(Employee));
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    //14
+    @Override
+    public String getDepartmentWithHighestTotalGrade() {
+        try {
+            List<Employee> Employees = employeeRepository.findAll();
+            Map<String, Double> departmentGradeSum = new HashMap<>();
+
+            for (Employee Employee : Employees) {
+                departmentGradeSum.put(Employee.getDepartment(),
+                        departmentGradeSum.getOrDefault(Employee.getDepartment(), 0.0) + Employee.getSalary());
+            }
+
+            return departmentGradeSum.entrySet().stream()
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //15
+    @Override
+    public List<ResponseEmployee> getEmployeesAboveDepartmentAverage() {
+        try {
+            List<Employee> Employees = employeeRepository.findAll();
+            Map<String, Double> departmentAverage = new HashMap<>();
+            Map<String, Integer> departmentCount = new HashMap<>();
+
+            for (Employee Employee : Employees) {
+                departmentAverage.put(Employee.getDepartment(),
+                        departmentAverage.getOrDefault(Employee.getDepartment(), 0.0) + Employee.getSalary());
+                departmentCount.put(Employee.getDepartment(),
+                        departmentCount.getOrDefault(Employee.getDepartment(), 0) + 1);
+            }
+
+            departmentAverage.replaceAll((dept, sum) -> sum / departmentCount.get(dept));
+
+            List<ResponseEmployee> result = new ArrayList<>();
+            for (Employee Employee : Employees) {
+                if (Employee.getSalary() > departmentAverage.get(Employee.getDepartment())) {
+                    result.add(new ResponseEmployee(Employee));
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    
+    //16
+    @Override
+    public char getMostCommonFirstLetter() {
+        try {
+            List<Employee> Employees =employeeRepository.findAll();
+            Map<Character, Integer> letterCount = new HashMap<>();
+
+            for (Employee Employee : Employees) {
+                char firstLetter = Employee.getName().charAt(0);
+                letterCount.put(firstLetter, letterCount.getOrDefault(firstLetter, 0) + 1);
+            }
+
+            return letterCount.entrySet().stream()
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse(' ');
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ' ';
+        }
+    }
+
+    //17
 	@Override
 	public ResponseEmployee getEmployeeById(Long id) {
 		try {
@@ -290,7 +426,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		    }
 	}
 
-	
+	//18
 	@Override
 	@Transactional
 	public Employee updateEmployee(Long id, RequestEmployee requestEmployee) {
@@ -305,7 +441,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		    }
 	}
 
-	//14
+	//19
 	@Override
 	public void deleteEmployee(Long id) {
 		try {
@@ -317,5 +453,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		        throw new RuntimeException("Employee Data Not Found", e);
 		    }
 	}
+	
 
 }

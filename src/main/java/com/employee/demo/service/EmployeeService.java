@@ -43,14 +43,29 @@ public interface EmployeeService {
     
     //11
     List<Employee> getEmployeesInLIFOOrder();
-
+    
     //12
-    ResponseEmployee getEmployeeById(Long id);
+    Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment();
     
     //13
-    Employee updateEmployee(Long id, RequestEmployee requestEmployee);
+    List<ResponseEmployee> getEmployeesWithSecondHighestGrade();
     
     //14
+    String getDepartmentWithHighestTotalGrade();
+    
+    //15
+    List<ResponseEmployee> getEmployeesAboveDepartmentAverage();
+    
+    //16
+    char getMostCommonFirstLetter();
+
+    //17
+    ResponseEmployee getEmployeeById(Long id);
+    
+    //18
+    Employee updateEmployee(Long id, RequestEmployee requestEmployee);
+    
+    //19
     void deleteEmployee(Long id);  
 
 }

@@ -99,25 +99,55 @@ public class EmployeeController {
     public List<Employee> getEmployeesInLIFOOrder() {
         return employeeService.getEmployeesInLIFOOrder();
     }
-
+    
     
     //12
-     @GetMapping("/{id}")  
+    @GetMapping("/top-three-employees")
+    public Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment() {
+    	return  employeeService. getTop3EmployeesByDepartment();
+    }
+    
+    //13
+    @GetMapping("/second-highest")
+    public List<ResponseEmployee> getEmployeesWithSecondHighestGrade(){
+    	return  employeeService.getEmployeesWithSecondHighestGrade();
+    }
+    
+    //14
+    @GetMapping("/highest-total-grade")
+    public String getDepartmentWithHighestTotalGrade() {
+    	return  employeeService.getDepartmentWithHighestTotalGrade();
+    }
+
+    //15
+    @GetMapping("/more-then-department-average")
+    public List<ResponseEmployee> getEmployeesAboveDepartmentAverage(){
+    	return employeeService.getEmployeesAboveDepartmentAverage();
+    }
+    
+    //16
+    @GetMapping("/most-comman-first-letter")
+    public char getMostCommonFirstLetter() {
+		return employeeService.getMostCommonFirstLetter();
+	}
+    
+    //17
+     @GetMapping("/Employee-by-id")  
     public ResponseEmployee getEmployeeById(@RequestParam Long id) {
         return employeeService.getEmployeeById(id);
     }
     
     
     
-  //13
-   @PutMapping("/{id}")  
+  //18
+   @PutMapping("/Update")  
     public Employee updateEmployee(@RequestParam Long id, @RequestBody RequestEmployee requestEmployee) {
         return employeeService.updateEmployee(id, requestEmployee);
     }
 
     
-    //14
-    @DeleteMapping("/{id}")  
+    //19
+    @DeleteMapping("/delete")  
     public String deleteEmployee(@RequestParam Long id) {
         employeeService.deleteEmployee(id);
         return "Employee deleted successfully!";
