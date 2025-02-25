@@ -7,4 +7,5 @@ import com.employee.demo.request.EmployeeRequest;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-	Employee save(EmployeeRequest employeeRequest);}
+	Employee save(EmployeeRequest employeeRequest);
+	}

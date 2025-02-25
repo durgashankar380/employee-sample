@@ -39,5 +39,15 @@ public interface EmployeeService {
 
 	List<Employee> getEmployeeInLastInFirstOut();
 
+	Map<String, List<Employee>> getTop3HighestPaidEmployeePerDepartment();
+
+	List<Employee> getSecondHighestSalary();
+
+	String getDepartmentWithHighestTotalSalary();
+
+	List<Employee> getEmployeeEarnAboveDepartmentAverageSalary();
+
+	String mostCommonFirstLetterinEmployeeNames();
+
 	
 }

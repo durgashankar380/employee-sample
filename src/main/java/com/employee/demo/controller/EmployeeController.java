@@ -2,7 +2,6 @@ package com.employee.demo.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
@@ -106,4 +105,29 @@ public class EmployeeController {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     
+    @GetMapping("/Top-3-Highest-Paid-Employee")
+    public Map<String, List<Employee>> getTop3HighestPaidEmployeePerDepartment() {
+		return service.getTop3HighestPaidEmployeePerDepartment();	
+    }
+    
+    @GetMapping("/second-highest-salary")
+    public List<Employee> getSecondHighestSalary() {
+    	return service.getSecondHighestSalary();
+    }
+    
+    @GetMapping("/highest-total-salary-department")
+    public String getDepartmentWithHighestTotalSalary() {
+		return service.getDepartmentWithHighestTotalSalary();
+    }
+    
+    @GetMapping("/department-average-salary")
+    public List<Employee> getEmployeeEarnAboveDepartmentAverageSalary() {
+		return service.getEmployeeEarnAboveDepartmentAverageSalary();	
+    }
+    
+    @GetMapping("/most-common-first-letter")
+    public String mostCommonFirstLetterinEmployeeNames() {
+		return service.mostCommonFirstLetterinEmployeeNames();
+    	
+    }
 }
