@@ -23,7 +23,6 @@ public class EmployeeController {
         return this.service.addEmployee(employeeRequest);
     }
 
-
     @GetMapping("/findTotalSalaryByDepartment")
     public Map<String, Double> getTotalSalaryByDepartment() {
         return  service.getTotalSalaryByDepartment();
@@ -33,6 +32,7 @@ public class EmployeeController {
     public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
         return service.getEmployeesGroupedByDepartment();
     }
+
     @GetMapping("/unique-departments")
     public Set<String> getUniqueEmployeeDepartments(){
         return service.getUniqueEmployeeDepartments();
@@ -60,14 +60,9 @@ public class EmployeeController {
         return this.service.stackOfEmployee();
     }
 
-
-
-
-
-
     @PostMapping("/add-multiple")
-    public ResponseEntity<Employee> addMultipleEmployees(@RequestBody List<Employee> employeeEntity) {
-        return service.addMultipleEmployees(employeeEntity);
+    public List<EmployeeResponse> addMultipleEmployees(List<EmployeeRequest> employeeRequests)  {
+        return service.addMultipleEmployees(employeeRequests);
     }
 
 
@@ -80,8 +75,6 @@ public class EmployeeController {
     public List<EmployeeResponse> getEmployeesSortedBySalary() {
         return service.getEmployeesSortedBySalary();
     }
-
-
 
     @GetMapping("/getAllEmployees")
     public List<EmployeeResponse> getAllEmployees() {
@@ -98,14 +91,40 @@ public class EmployeeController {
         return this.service.updateEmpById(id, employeeEntity);
     }
 
-
-
-
     @GetMapping("/getbydeptsalary/{dept}")
     public ResponseEntity<?> depSalary(@PathVariable String dept){
         return service.totalSalaryByDepartment(dept);
     }
 
+   @GetMapping("/highestPaidEmployee")
+    public List<EmployeeResponse> thirdhighestPaidEmployee(){
+        return this.service.thirdhighestPaidEmployee();
+   }
+
+    @GetMapping("/secondHighestSalary")
+    public List<EmployeeResponse> getEmployeesWithSecondHighestSalary()
+    {
+        return this.service.getEmployeesWithSecondHighestSalary();
+    }
+
+    @GetMapping("/departmentWithHighestTotalSalary")
+    public String getDepartmentWithHighestTotalSalary(){
+
+        return this.service.getDepartmentWithHighestTotalSalary();
+    }
+
+    @GetMapping("/avgSalary")
+    public List<Employee> getAverageSalary()
+    {
+        return this.service.getAverageSalary();
+    }
+
+
+    @GetMapping("/commonletter")
+    public Character getMostCommonFirstLetter()
+    {
+        return this.service.getMostCommonFirstLetter();
+    }
 
 
 

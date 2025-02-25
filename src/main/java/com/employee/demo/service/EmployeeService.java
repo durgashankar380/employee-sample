@@ -33,25 +33,21 @@ public interface EmployeeService {
 
 	Stack<EmployeeResponse>stackOfEmployee();
 
-
-
-
-
-
-	//................................//
-
-
-
-
 	Employee updateEmpById(long id, Employee employeeEntity);
-
-
 
 	Employee getEmployeeByName(String name);
 
-
-
 	ResponseEntity totalSalaryByDepartment(String dept);
 
-	ResponseEntity<Employee> addMultipleEmployees(List<Employee> employeeEntity);
+	 List<EmployeeResponse> addMultipleEmployees(List<EmployeeRequest> employeeRequests) ;
+
+	List<EmployeeResponse> thirdhighestPaidEmployee();
+
+	List<EmployeeResponse> getEmployeesWithSecondHighestSalary();
+
+	String getDepartmentWithHighestTotalSalary();
+
+	List<Employee> getAverageSalary();
+
+	Character getMostCommonFirstLetter();
 }
