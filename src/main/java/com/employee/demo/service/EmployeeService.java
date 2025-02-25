@@ -29,4 +29,14 @@ public interface EmployeeService {
 	Stack<EmployeeResponse> getStackOfEmployees();
 
 	List<EmployeeResponse> addEmployeeList(List<EmployeeRequest> requestList);
+
+	List<EmployeeResponse> getTopThree();
+
+	String getDepartmentWithHighestSalary();
+
+	List<EmployeeResponse> getEmpEarnMoreThanAvgSalary();
+
+	Character getMostCommonFirstLetter();
+
+	List<EmployeeResponse> getSecondHighestSalary();
 }

@@ -77,4 +77,32 @@ public class EmployeeController {
     public List<EmployeeResponse> addMultiple(@RequestBody List<EmployeeRequest> requestList){
         return service.addEmployeeList(requestList);
     }
+    @GetMapping("/top3")
+    public List<EmployeeResponse> topThree(){
+        return service.getTopThree();
+    }
+
+    @GetMapping("/secondHighestSalary")
+    public List<EmployeeResponse> secondHighestSalary(){
+        return service.getSecondHighestSalary();
+    }
+    @GetMapping("/departmentWithHighestSalary")
+    public String departmentWithHighestSalary(){
+        return service.getDepartmentWithHighestSalary();
+    }
+    @GetMapping("/empEarnMoreThanAvgSalary")
+    public List<EmployeeResponse> empEarnMoreThanAvgSalary(){
+        return service.getEmpEarnMoreThanAvgSalary();
+    }
+    @GetMapping("/mostCommonFirstLetter")
+    public Character mostCommonFirstLetter(){
+        return service.getMostCommonFirstLetter();
+    }
+
+//    Find the Top 3 Highest Paid Employees in Each Department
+//    Find Employees with the Second-Highest Salary
+//    Find the Department with the Highest Total Salary
+//    Find Employees Who Earn More Than Their Department's Average Salary
+//    Find the Most Common First Letter in Employee Names
+
 }
