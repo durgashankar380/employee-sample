@@ -234,12 +234,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 break;
             }
         }
-        for (Employee employee2 : employees) {
-            if (employee2.getSalary() == secMaxSalary)
-                responseList.add(new EmployeeResponse(employee2.getId(), employee2.getName(), employee2.getDepartment(), employee2.getSalary()));
-            else if (employee2.getSalary() < secMaxSalary) {
-                break;
-            }
+        List<Employee> result=repository.findBySalary(secMaxSalary);
+        for (Employee employee : result) {
+                responseList.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
         }
         return responseList;
     }
