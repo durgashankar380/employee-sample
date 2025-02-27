@@ -209,7 +209,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		catch(Exception ex) {
 			System.err.println("Error updating employee by id"+ id +": "+ex.getMessage());
 		}
-		
 	}
 
 

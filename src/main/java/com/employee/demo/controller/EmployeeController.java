@@ -101,7 +101,6 @@ public class EmployeeController {
     		service.updateEmployeeById( id,e);
     		return ResponseEntity.status(HttpStatus.OK).build();
     	}
-    	
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     
@@ -128,6 +127,6 @@ public class EmployeeController {
     @GetMapping("/most-common-first-letter")
     public String mostCommonFirstLetterinEmployeeNames() {
 		return service.mostCommonFirstLetterinEmployeeNames();
-    	
     }
+    
 }
