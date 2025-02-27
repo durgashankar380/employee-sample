@@ -392,7 +392,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     
-    //16 get most comman first letter
+    //16 get most common first letter
     @Override
     public char getMostCommonFirstLetter() {
         try {
