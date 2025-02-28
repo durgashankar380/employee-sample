@@ -1,5 +1,6 @@
 package com.employee.demo.service.impl;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,8 +14,17 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.streaming.SXSSFRow.CellIterator;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.Exception.EmployeeNotFoundException;
 import com.employee.demo.Exception.EmployeeSaveException;
@@ -311,37 +321,38 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     //13 get Employee who have second highest grade
     @Override
-    public List<ResponseEmployee> getEmployeesWithSecondHighestGrade() {
+    public List<ResponseEmployee> getEmployeesWithSecondHighestSalary() {
         try {
-            List<Employee> Employees = employeeRepository.findAll();
-            Set<Double> uniqueGrades = new TreeSet<>(Collections.reverseOrder());
+            List<Employee> employees = employeeRepository.findAll();
 
-            for (Employee Employee : Employees) {
-                uniqueGrades.add(Employee.getSalary());
-            }
+            // Get distinct salaries in descending order
+            List<Double> distinctSalaries = employees.stream()
+                    .map(Employee::getSalary) // Extract salaries
+                    .distinct() // Remove duplicates
+                    .sorted(Comparator.reverseOrder()) // Sort in descending order
+                    .collect(Collectors.toList());
 
-            if (uniqueGrades.size() < 2) return new ArrayList<>();
+            // Ensure there is a second highest salary
+            if (distinctSalaries.size() < 2) return Collections.emptyList();
 
-            Iterator<Double> iterator = uniqueGrades.iterator();
-            iterator.next();
-            double secondHighestGrade = iterator.next();
+            double secondHighestSalary = distinctSalaries.get(1); // Get second highest salary
 
-            List<ResponseEmployee> result = new ArrayList<>();
-            for (Employee Employee : Employees) {
-                if (Employee.getSalary() == secondHighestGrade) {
-                    result.add(new ResponseEmployee(Employee));
-                }
-            }
-            return result;
+            // Get employees with the second highest salary
+            return employees.stream()
+                    .filter(emp -> Double.compare(emp.getSalary(), secondHighestSalary) == 0)
+                    .map(ResponseEmployee::new) // Convert to ResponseEmployee
+                    .collect(Collectors.toList());
+
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
 
+
     //14 get department with highest total grade
     @Override
-    public String getDepartmentWithHighestTotalGrade() {
+    public String getDepartmentWithHighestTotalSalary() {
         try {
             List<Employee> Employees = employeeRepository.findAll();
             Map<String, Double> departmentGradeSum = new HashMap<>();
@@ -453,6 +464,41 @@ public class EmployeeServiceImpl implements EmployeeService {
 		        throw new RuntimeException("Employee Data Not Found", e);
 		    }
 	}
-	
+
+	//20
+	@Override
+	public ResponseEntity<String> saveExcelData(MultipartFile file) {
+		try {
+		     InputStream inputStream=file.getInputStream(); 
+		     Workbook workbook=WorkbookFactory.create(inputStream);
+	         Sheet sheet=workbook.getSheetAt(0);
+		
+		
+	          Iterator<Row> rowIterator=sheet.iterator();
+	          if(rowIterator.hasNext()) rowIterator.next(); //to skip first row
+	          
+	          List<Employee> employees=new ArrayList<>();
+	          
+	          while(rowIterator.hasNext()) {
+	        	  Row row=rowIterator.next();
+	        	  
+	        	  //to read all cell data
+	        	  Iterator<Cell> cellIterator=row.cellIterator();
+	        	  Employee employee=new Employee();
+	        	  if(cellIterator.hasNext()) employee.setName(cellIterator.next().getStringCellValue());
+	        	  if(cellIterator.hasNext()) employee.setDepartment(cellIterator.next().getStringCellValue());
+	        	  if(cellIterator.hasNext()) employee.setSalary(cellIterator.next().getNumericCellValue());
+
+	        	  employee.add(employee);
+	        	  workbook.close();
+	          }
+		
+	    }
+		catch(Exception e) {
+			throw new RuntimeException("Failed to add data using excel sheet:"+e.getMessage());
+		}
+		return ResponseEntity.ok("data added ");
+		
+	}	
 
 }

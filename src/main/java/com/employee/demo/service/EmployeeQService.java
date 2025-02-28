@@ -3,6 +3,8 @@ package com.employee.demo.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.employee.demo.model.Employee;
 import com.employee.demo.response.ResponseEmployee;
 
@@ -48,5 +50,6 @@ public interface EmployeeQService {
     
     //14
     char getMostCommonFirstLetter();
+    
 }
 

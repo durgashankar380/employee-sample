@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
@@ -48,10 +51,10 @@ public interface EmployeeService {
     Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment();
     
     //13
-    List<ResponseEmployee> getEmployeesWithSecondHighestGrade();
+    List<ResponseEmployee> getEmployeesWithSecondHighestSalary();
     
     //14
-    String getDepartmentWithHighestTotalGrade();
+    String getDepartmentWithHighestTotalSalary();
     
     //15
     List<ResponseEmployee> getEmployeesAboveDepartmentAverage();
@@ -67,5 +70,8 @@ public interface EmployeeService {
     
     //19
     void deleteEmployee(Long id);  
+    
+    //15
+    ResponseEntity<String> saveExcelData(MultipartFile file);
 
 }

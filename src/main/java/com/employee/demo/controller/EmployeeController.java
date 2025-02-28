@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.RequestEmployee;
@@ -109,14 +110,14 @@ public class EmployeeController {
     
     //13
     @GetMapping("/second-highest")
-    public List<ResponseEmployee> getEmployeesWithSecondHighestGrade(){
-    	return  employeeService.getEmployeesWithSecondHighestGrade();
+    public List<ResponseEmployee> getEmployeesWithSecondHighestSalary(){
+    	return  employeeService.getEmployeesWithSecondHighestSalary();
     }
     
     //14
     @GetMapping("/highest-total-grade")
     public String getDepartmentWithHighestTotalGrade() {
-    	return  employeeService.getDepartmentWithHighestTotalGrade();
+    	return  employeeService.getDepartmentWithHighestTotalSalary();
     }
 
     //15
@@ -152,8 +153,12 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return "Employee deleted successfully!";
    }
-   
     
+    //20
+    @PostMapping("/upload")
+    public ResponseEntity<String> addExcelData(@RequestParam("file") MultipartFile file){
+    	return employeeService.saveExcelData(file);
+    }
      } 
     
 
