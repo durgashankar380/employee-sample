@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
@@ -129,4 +131,16 @@ public class EmployeeController {
 		return service.mostCommonFirstLetterinEmployeeNames();
     }
     
+//    --------------------------------------------------------------------------------------
+    
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) {
+		if(!file.getOriginalFilename().endsWith(".xlsx")) {
+			return ResponseEntity.badRequest().body("Invalid file format.Please upload an Excel (.xlsx) file");
+		}
+		
+		service.saveEmployeeFromExcel(file);
+    	return ResponseEntity.ok("File uploaded and employee data saved successfully.....");
+    	
+    }
 }

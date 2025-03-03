@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
@@ -48,6 +50,11 @@ public interface EmployeeService {
 	List<Employee> getEmployeeEarnAboveDepartmentAverageSalary();
 
 	String mostCommonFirstLetterinEmployeeNames();
+	
+	
+// ----------------------------------------------------------------------------------------
+	
+	void saveEmployeeFromExcel(MultipartFile file);
 
 	
 }

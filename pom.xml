@@ -60,6 +60,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+    <!-- Apache POI for handling Excel files -->
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>5.2.3</version> <!-- Check the latest version -->
+    </dependency>
+
+
 	</dependencies>
 
 	<build>

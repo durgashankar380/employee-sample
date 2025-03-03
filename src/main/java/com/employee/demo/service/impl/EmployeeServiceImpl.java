@@ -1,10 +1,12 @@
 package com.employee.demo.service.impl;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,12 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
@@ -457,5 +464,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 			System.err.println("Error finding most common first letter: "+e.getMessage());
 			return "Error retrieving data";
 			}
+		}
+
+
+//-----------------------------------------------------------------------------------------------
+
+	@Override
+	public void saveEmployeeFromExcel(MultipartFile file) {
+		try(InputStream is=file.getInputStream();
+		Workbook workbook = new XSSFWorkbook(is))  {
+			
+			Sheet sheet = workbook.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			
+			if(rowIterator.hasNext()) rowIterator.next();
+			
+			List<Employee> employees = new ArrayList<>();
+			while(rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				Employee emp = new Employee();
+				emp.setName(row.getCell(0).getStringCellValue());
+				emp.setDepartment(row.getCell(1).getStringCellValue());
+				emp.setSalary(row.getCell(2).getNumericCellValue());
+				employees.add(emp);
+			}
+			repository.saveAll(employees);
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to process Excel File : "+e.getMessage());
+		}
 		}
 	}
