@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.employee.demo.model.Employee;
 
 @Repository
-public interface employeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	// find by department
 	List<Employee> findByDepartment(String department);
 

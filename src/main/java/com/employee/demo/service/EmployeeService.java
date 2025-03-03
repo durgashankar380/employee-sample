@@ -3,6 +3,8 @@ package com.employee.demo.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
@@ -30,5 +32,15 @@ public interface EmployeeService {
 	List<Employee> findEarliestWiseEmployees();
 
 	List<Employee> addMultipleEmployee(List<Employee> employees);
+
+	Map<String, List<EmployeeResponse>> findTopThreeHighestPaidEmployee();
+
+	Map<Double, List<EmployeeResponse>> findSecondHighestPaidEmployees();
+
+	char findMostCommonFirstWord();
+
+	void saveFile(MultipartFile file);
+
+	Map<String, Double> findHighestPaidDepartment();
 
 }
