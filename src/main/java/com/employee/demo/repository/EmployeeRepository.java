@@ -9,7 +9,9 @@ import com.employee.demo.request.EmployeeRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.data.domain.Page;
+import java.awt.print.Pageable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,4 +48,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@Modifying
     @Query(nativeQuery = true,value="insert into employee(name,department,salary) values (:name,:department,:salary) ")
 	Employee addEmployee(@Param("name") String name,@Param("department") String department,@Param("salary") double salary);
+
 }

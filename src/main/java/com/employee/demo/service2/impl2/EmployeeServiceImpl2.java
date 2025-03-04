@@ -11,7 +11,7 @@ import java.util.*;
 
 @Service
 public class EmployeeServiceImpl2 implements EmployeeService2 {
-    private  final EmployeeRepository repository;
+    private final EmployeeRepository repository;
 
     public EmployeeServiceImpl2(EmployeeRepository repository) {
         this.repository = repository;
