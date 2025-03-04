@@ -2,6 +2,8 @@ package com.employee.demo.repository;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -77,8 +79,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 	@Transactional
 	@Query(value = "UPDATE final_user SET name = :name, department = :department, salary = :salary WHERE employee_id = :id", nativeQuery = true)
 	int updateEmployeeByIdNative(long id, String name, String department, double salary);
-
-
 
 
 
