@@ -24,12 +24,6 @@ public class Employee {
         this.department = department;
         this.salary = salary;
     }
-
-	public void add(Employee employee) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 }
     

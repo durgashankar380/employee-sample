@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
+import com.employee.demo.response.EmployeePageResponse;
 import com.employee.demo.service.EmployeeService;
 
 
@@ -154,11 +156,26 @@ public class EmployeeController {
         return "Employee deleted successfully!";
    }
     
-    //20
+  //20 To add data in database using excel sheet
     @PostMapping("/upload")
     public ResponseEntity<String> addExcelData(@RequestParam("file") MultipartFile file){
     	return employeeService.saveExcelData(file);
     }
+    
+    
+    //21 Pagination and sorting by name
+    @GetMapping("/get-pagination-sorting-by-fields")
+    public EmployeePageResponse<ResponseEmployee> getPaginatedEmployees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortDirection,
+             @RequestParam(required = false) String keyword
+             )
+    {
+        return employeeService.getEmployeesWithPaginationAndSorting(page, size, sortBy,sortDirection, keyword);
+    }
+    
      } 
     
 

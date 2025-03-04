@@ -13,7 +13,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -21,7 +20,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.streaming.SXSSFRow.CellIterator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,7 @@ import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
+import com.employee.demo.response.EmployeePageResponse;
 import com.employee.demo.service.EmployeeService;
 
 import jakarta.transaction.Transactional;
@@ -465,7 +468,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		    }
 	}
 
-	//20
+	//20 To add data in database using excel sheet
 	@Override
 	public ResponseEntity<String> saveExcelData(MultipartFile file) {
 		try {
@@ -489,7 +492,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        	  if(cellIterator.hasNext()) employee.setDepartment(cellIterator.next().getStringCellValue());
 	        	  if(cellIterator.hasNext()) employee.setSalary(cellIterator.next().getNumericCellValue());
 
-	        	  employee.add(employee);
+	        	  ((List<Employee>) employee).add(employee);
 	        	  workbook.close();
 	          }
 		
@@ -500,5 +503,35 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return ResponseEntity.ok("data added ");
 		
 	}	
+	
+	//21 pagination and sorting by all fields 
+	@Override
+	public EmployeePageResponse<ResponseEmployee> getEmployeesWithPaginationAndSorting( int page, int size, String sortBy, String sortDirection, String keyword) {
+
+	    Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;  
+	    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+	    Page<Employee> employeePage;
+	    
+	    if (keyword != null && !keyword.isEmpty()) {
+	        employeePage = employeeRepository.findByNameContainingIgnoreCase(keyword, pageable);
+	    }
+	  else {
+	        employeePage = employeeRepository.findAll(pageable);
+	    }
+
+	    List<ResponseEmployee> responseEmployees = employeePage.getContent().stream()
+	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()))
+	            .collect(Collectors.toList());
+
+	    return new EmployeePageResponse<>(
+	            responseEmployees,
+	            employeePage.getNumber(),
+	            employeePage.getSize(),
+	            employeePage.getTotalElements(),
+	            employeePage.getTotalPages(),
+	            employeePage.isLast()
+	    );
+	}
 
 }

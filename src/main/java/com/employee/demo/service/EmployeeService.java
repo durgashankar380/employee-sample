@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
+import com.employee.demo.response.EmployeePageResponse;
 
 public interface EmployeeService {
 
@@ -71,7 +73,10 @@ public interface EmployeeService {
     //19
     void deleteEmployee(Long id);  
     
-    //15
+    //20 To add data in database using excel sheet	
     ResponseEntity<String> saveExcelData(MultipartFile file);
+    
+    //21 pagination and sorting by name 
+    EmployeePageResponse<ResponseEmployee> getEmployeesWithPaginationAndSorting( int page, int size, String sortBy, String sortDirection, String keyword);
 
 }
