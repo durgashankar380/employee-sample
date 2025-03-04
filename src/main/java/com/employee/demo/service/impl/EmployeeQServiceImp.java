@@ -102,6 +102,7 @@ public class EmployeeQServiceImp implements EmployeeQService {
 		return countMap;
 	}
 
+// get count of employee by department
 	@Override
 	public Map<String, Long> findCountOfEmployeeInDepartment() {
 		List<Object[]> result = employeeQRepository.getEmployeeCountInDepartment();
@@ -114,6 +115,7 @@ public class EmployeeQServiceImp implements EmployeeQService {
 		return countMap;
 	}
 
+// get employee list by department
 	@Override
 	public Map<String, List<EmployeeResponse>> getAllEmployeeByDepartment() {
 		Map<String, List<EmployeeResponse>> result = new HashMap<>();
@@ -123,10 +125,22 @@ public class EmployeeQServiceImp implements EmployeeQService {
 			String name = (String) obj[1];
 			String department = (String) obj[2];
 			Double salary = (Double) obj[3];
-			EmployeeResponse employee = new EmployeeResponse(id,name,department,salary);
+			EmployeeResponse employee = new EmployeeResponse(id, name, department, salary);
 			result.computeIfAbsent(department, k -> new ArrayList<>()).add(employee);
 		}
 		return result;
+	}
+
+	@Override
+	public List<Employee> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Employee> getAllEmployee() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

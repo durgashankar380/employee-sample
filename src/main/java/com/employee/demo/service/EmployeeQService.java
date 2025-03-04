@@ -30,4 +30,8 @@ public interface EmployeeQService {
 
 	Map<String, List<EmployeeResponse>> getAllEmployeeByDepartment();
 
+	List<Employee> getAllEmployee();
+
+	List<Employee> getAll();
+
 }
