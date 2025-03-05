@@ -41,7 +41,7 @@ public interface EmployeeService {
     List<String> getEmployeeNames();
     
     //9
-    Map<String, Integer> getStudentCountByDepartment();
+    Map<String, Integer> getEmployeeCountByDepartment();
     
     //10
     List<Employee> getEmployeesInFIFOOrder();
@@ -76,7 +76,8 @@ public interface EmployeeService {
     //20 To add data in database using excel sheet	
     ResponseEntity<String> saveExcelData(MultipartFile file);
     
-    //21 pagination and sorting by name 
-    EmployeePageResponse<ResponseEmployee> getEmployeesWithPaginationAndSorting( int page, int size, String sortBy, String sortDirection, String keyword);
+  
+    
+   
 
 }

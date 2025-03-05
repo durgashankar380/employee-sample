@@ -234,7 +234,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	// 9 get the no of employee present per department
 	@Override
-	public Map<String, Integer> getStudentCountByDepartment() {
+	public Map<String, Integer> getEmployeeCountByDepartment() {
 		try {
 		List<Employee> employee = employeeRepository.findAll();
 		Map<String, Integer> departmentCountMap = new HashMap<>();
@@ -504,34 +504,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 	}	
 	
-	//21 pagination and sorting by all fields 
-	@Override
-	public EmployeePageResponse<ResponseEmployee> getEmployeesWithPaginationAndSorting( int page, int size, String sortBy, String sortDirection, String keyword) {
-
-	    Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;  
-	    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-
-	    Page<Employee> employeePage;
-	    
-	    if (keyword != null && !keyword.isEmpty()) {
-	        employeePage = employeeRepository.findByNameContainingIgnoreCase(keyword, pageable);
-	    }
-	  else {
-	        employeePage = employeeRepository.findAll(pageable);
-	    }
-
-	    List<ResponseEmployee> responseEmployees = employeePage.getContent().stream()
-	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()))
-	            .collect(Collectors.toList());
-
-	    return new EmployeePageResponse<>(
-	            responseEmployees,
-	            employeePage.getNumber(),
-	            employeePage.getSize(),
-	            employeePage.getTotalElements(),
-	            employeePage.getTotalPages(),
-	            employeePage.isLast()
-	    );
-	}
+	
+	
+	 
 
 }

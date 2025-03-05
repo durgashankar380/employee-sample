@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.model.Employee;
+import com.employee.demo.request.EmployeePageRequest;
 import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
 import com.employee.demo.response.EmployeePageResponse;
@@ -87,8 +88,8 @@ public class EmployeeController {
     
     //9
     @GetMapping("/count-by-department")
-    public Map<String, Integer> getStudentCountByDepartment() {
-        return employeeService.getStudentCountByDepartment();
+    public Map<String, Integer> getEmployeeCountByDepartment() {
+        return employeeService.getEmployeeCountByDepartment();
     }
     
     //10
@@ -160,20 +161,6 @@ public class EmployeeController {
     @PostMapping("/upload")
     public ResponseEntity<String> addExcelData(@RequestParam("file") MultipartFile file){
     	return employeeService.saveExcelData(file);
-    }
-    
-    
-    //21 Pagination and sorting by name
-    @GetMapping("/get-pagination-sorting-by-fields")
-    public EmployeePageResponse<ResponseEmployee> getPaginatedEmployees(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "ASC") String sortDirection,
-             @RequestParam(required = false) String keyword
-             )
-    {
-        return employeeService.getEmployeesWithPaginationAndSorting(page, size, sortBy,sortDirection, keyword);
     }
     
      } 
