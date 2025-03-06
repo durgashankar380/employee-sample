@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.employee.demo.model.Employee;
-import com.employee.demo.request.EmployeeRequestPage;
+import com.employee.demo.request.EmployeePageRequest;
 
 public interface EmployeePaginationService {
 
@@ -13,10 +13,10 @@ public interface EmployeePaginationService {
 
 	List<Employee> findEmployeeWithSorting(String field);
 	
-	Page<Employee> findEmployeeWithPagination(EmployeeRequestPage request);
+	Page<Employee> findEmployeeWithPagination(EmployeePageRequest request);
 
-	Page<Employee> findEmployeeWithPaginationAndSorting(EmployeeRequestPage request);
+	Page<Employee> findEmployeeWithPaginationAndSorting(EmployeePageRequest request);
 
-	
+	Page<Employee> searchEmployees(EmployeePageRequest request);
 
 }

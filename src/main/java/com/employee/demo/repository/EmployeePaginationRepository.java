@@ -1,9 +1,10 @@
 package com.employee.demo.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.employee.demo.model.Employee;
@@ -12,8 +13,11 @@ import com.employee.demo.model.Employee;
 public interface EmployeePaginationRepository extends JpaRepository<Employee, Long> {
 
 	@Query("SELECT e FROM Employee e WHERE " +
-		       "LOWER(e.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-		       "LOWER(e.department) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-	List<Employee> findEmployee(String keyword);
+	           "(:salary IS NULL OR e.salary = :salary) AND " +
+	           "(:keyword IS NULL OR LOWER(e.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+	    Page<Employee> searchEmployees(@Param("salary") Double salary, 
+	                                   @Param("keyword") String keyword, 
+	                                   Pageable pageable);
+
 
 }

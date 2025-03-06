@@ -29,6 +29,7 @@ public class ExcelHelper {
 	public static List<Employee> convertExcelToListOfEmployee(InputStream is) {
 		List<Employee> list = new ArrayList<>();
 		try {
+			@SuppressWarnings("resource")
 			XSSFWorkbook workBook = new XSSFWorkbook(is);
 			XSSFSheet sheet = workBook.getSheet("Sheet1");
 			int rowNumber = 0;

@@ -6,10 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("hiding")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageResponse<T> {
+public class EmployeePageResponse<T> {
 
 	int recordCount;
 	T response;

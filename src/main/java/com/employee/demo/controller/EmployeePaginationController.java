@@ -1,6 +1,5 @@
 package com.employee.demo.controller;
 
-
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.demo.model.Employee;
-import com.employee.demo.request.EmployeeRequestPage;
-import com.employee.demo.response.PageResponse;
+import com.employee.demo.request.EmployeePageRequest;
+import com.employee.demo.response.EmployeePageResponse;
 import com.employee.demo.service.EmployeePaginationService;
 
 @RestController
@@ -27,9 +26,9 @@ public class EmployeePaginationController {
 	 * @return get List of all Employee.
 	 */
 	@GetMapping("/employees")
-	public PageResponse<List<Employee>> findAllEmployee() {
+	public EmployeePageResponse<List<Employee>> findAllEmployee() {
 		List<Employee> allEmployees = service.getAllEmployee();
-		return new PageResponse<>(allEmployees.size(), allEmployees);
+		return new EmployeePageResponse<>(allEmployees.size(), allEmployees);
 	}
 
 	/**
@@ -37,9 +36,9 @@ public class EmployeePaginationController {
 	 * @return get List of all Employee with sorting by any field.
 	 */
 	@GetMapping("/employee-sort-by/{field}")
-	public PageResponse<List<Employee>> getEmployeesWithSort(@PathVariable String field) {
+	public EmployeePageResponse<List<Employee>> getEmployeesWithSort(@PathVariable String field) {
 		List<Employee> allEmployees = service.findEmployeeWithSorting(field);
-		return new PageResponse<>(allEmployees.size(), allEmployees);
+		return new EmployeePageResponse<>(allEmployees.size(), allEmployees);
 	}
 
 	/**
@@ -48,9 +47,9 @@ public class EmployeePaginationController {
 	 * @return
 	 */
 	@GetMapping("/pagination")
-	public PageResponse<Page<Employee>> getEmployeesWithPagination(@RequestBody EmployeeRequestPage request) {
+	public EmployeePageResponse<Page<Employee>> getEmployeesWithPagination(@RequestBody EmployeePageRequest request) {
 		Page<Employee> employeePage = service.findEmployeeWithPagination(request);
-		return new PageResponse<>(employeePage.getSize(), employeePage);
+		return new EmployeePageResponse<>(employeePage.getContent().size(), employeePage);
 	}
 
 	/**
@@ -61,12 +60,21 @@ public class EmployeePaginationController {
 	 * @return get employee in pagination with sorting.
 	 */
 	@GetMapping("/pagination-sort")
-	public PageResponse<Page<Employee>> getEmployeesWithPaginationAndSorting(@RequestBody EmployeeRequestPage request) {
+	public EmployeePageResponse<Page<Employee>> getEmployeesWithPaginationAndSorting(
+			@RequestBody EmployeePageRequest request) {
 		Page<Employee> employeePage = service.findEmployeeWithPaginationAndSorting(request);
-		return new PageResponse<>(employeePage.getSize(), employeePage);
+		return new EmployeePageResponse<>(employeePage.getContent().size(), employeePage);
 	}
-	
-	
-	
+
+	/**
+	 * 
+	 * @param keyword
+	 * @return get employee data with searching
+	 */
+	@GetMapping("/search-by")
+	public EmployeePageResponse<Page<Employee>> getEmployeesWithSearch(@RequestBody EmployeePageRequest request) {
+		Page<Employee> employees = service.searchEmployees(request);
+		return new EmployeePageResponse<>(employees.getContent().size(), employees);
+	}
 
 }

@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeRequestPage {
+public class EmployeePageRequest {
 	private int pageNumber;
 	private int pageSize;
 	private String sortBy;
+	private String keyword;
+	private Double salary;
 
 }
