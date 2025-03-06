@@ -1,27 +1,15 @@
 package com.employee.demo.controller;
 
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.beans.support.PropertyComparator;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.demo.model.Employee;
-import com.employee.demo.repository.EmployeeRepositoryPagination;
-import com.employee.demo.response.EmployeeResponse;
 import com.employee.demo.service.EmployeeServicePagination;
-
 import dto.EmployeePageRequestDto;
 
 @RestController
@@ -33,10 +21,11 @@ public class EmployeeControllerPagination {
 	public EmployeeControllerPagination(EmployeeServicePagination employeeServicePagination) {
 		this.employeeServicePagination=employeeServicePagination;
 	}
+	
 	/**
-	 * @author ritik
+	 * Fetch all employees using pagination
 	 * @param dto EmployeePageRequestDto containing pagination details such as page number, page size, and sorting.
-	 * @return get all employes by pagination
+	 * @return get all employees by pagination
 	 */
 	
 	@PostMapping
@@ -46,7 +35,7 @@ public class EmployeeControllerPagination {
 	
 	
 	/**
-	 * @author ritik
+	 * Fetch all Employees apply sorting and then pagination
 	 * @param dto EmployeePageRequestDto containing pagination details such as page number, page size, sort column, sort direction
 	 * @return fetch all data and then apply pagination
 	 */
@@ -54,6 +43,16 @@ public class EmployeeControllerPagination {
 	@PostMapping("/list")
 	public Page<Employee> getAllEmployeeUsingPaginationList(@RequestBody EmployeePageRequestDto dto) {
 		return employeeServicePagination.getAllEmployeeUsingPaginationList(dto);
-		
 	}
-}
+	
+	/**
+	 * Search employee with pagination, and multiple searches
+	 * @param dto EmployeePageRequestDto containing pagination details and search filters.
+	 * @return search result with pagination
+	 */
+	
+	@PostMapping("/search")
+	public Page<Employee> searchEmployees(@RequestBody EmployeePageRequestDto dto) {
+		return employeeServicePagination.searchEmployees(dto);
+		}
+	}
