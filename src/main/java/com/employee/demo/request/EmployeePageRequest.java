@@ -14,4 +14,5 @@ public class EmployeePageRequest {
 	    private String sortBy;
 	    private String sortDirection;
 	    private String keyword;
+	    private String Dkeyword;
 }
