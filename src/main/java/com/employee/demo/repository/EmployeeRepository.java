@@ -81,5 +81,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 	int updateEmployeeByIdNative(long id, String name, String department, double salary);
 
 
+	List<Employee> findByNameLikeIgnoreCase(String SearchBy);
 
+	Page<Employee> findByNameContainingIgnoreCase(String searchBy, Pageable pageable);
 }
