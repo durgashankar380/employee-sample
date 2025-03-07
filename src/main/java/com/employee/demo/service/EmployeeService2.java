@@ -1,4 +1,4 @@
-package com.employee.demo.service2;
+package com.employee.demo.service;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;

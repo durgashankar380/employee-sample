@@ -1,8 +1,8 @@
-package com.employee.demo.controllerPage;
+package com.employee.demo.controller;
 
-import com.employee.demo.responsePage.EmployeePageResponse;
-import com.employee.demo.resquestPage.EmployeePageRequest;
-import com.employee.demo.servicePage.implimentation.EmployeeServicePageImpl;
+import com.employee.demo.response.EmployeePageResponse;
+import com.employee.demo.request.EmployeePageRequest;
+import com.employee.demo.service.impl.EmployeeServicePageImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;

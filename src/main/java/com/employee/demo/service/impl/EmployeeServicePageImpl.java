@@ -1,11 +1,11 @@
-package com.employee.demo.servicePage.implimentation;
+package com.employee.demo.service.impl;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.responsePage.EmployeePageResponse;
-import com.employee.demo.resquestPage.EmployeePageRequest;
-import com.employee.demo.servicePage.EmployeeServicePage;
+import com.employee.demo.response.EmployeePageResponse;
+import com.employee.demo.request.EmployeePageRequest;
+import com.employee.demo.service.EmployeeServicePage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

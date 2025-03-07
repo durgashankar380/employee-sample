@@ -1,4 +1,4 @@
-package com.employee.demo.resquestPage;
+package com.employee.demo.request;
 
 import lombok.Data;
 

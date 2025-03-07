@@ -1,6 +1,5 @@
-package com.employee.demo.responsePage;
+package com.employee.demo.response;
 
-import com.employee.demo.response.EmployeeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

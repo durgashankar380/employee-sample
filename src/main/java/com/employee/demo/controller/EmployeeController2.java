@@ -1,10 +1,9 @@
-package com.employee.demo.controller2;
+package com.employee.demo.controller;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.service2.EmployeeService2;
-import org.apache.naming.EjbRef;
+import com.employee.demo.service.EmployeeService2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

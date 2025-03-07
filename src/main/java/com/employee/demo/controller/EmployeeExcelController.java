@@ -1,6 +1,6 @@
-package com.employee.demo.controllerexel;
+package com.employee.demo.controller;
 
-import com.employee.demo.excelService.ExcelService;
+import com.employee.demo.service.ExcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

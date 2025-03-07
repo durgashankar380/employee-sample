@@ -1,10 +1,10 @@
-package com.employee.demo.service2.impl2;
+package com.employee.demo.service.impl;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.service2.EmployeeService2;
+import com.employee.demo.service.EmployeeService2;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
