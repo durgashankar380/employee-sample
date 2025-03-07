@@ -9,5 +9,5 @@ public class EmployeePageRequest {
     private Integer pageSize;
     private String sortBy;
     private String sortDir;
-//    private String searchBy;
+    private String searchBy;
 }

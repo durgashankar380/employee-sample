@@ -22,5 +22,8 @@ public class EmployeePageResponse {
     private int numberOfElement;
     private long totalElement;
     private Sort sort;
+    private boolean first;
+    private boolean last;
+    private boolean empty;
 
 }

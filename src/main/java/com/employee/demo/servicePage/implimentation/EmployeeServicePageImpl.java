@@ -27,8 +27,13 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
         Sort.Direction direction = request.getSortDir().equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 
         Pageable pageable= (Pageable) PageRequest.of(request.getPageSize(),request.getPageIndex(),Sort.by(direction,request.getSortBy()));
-
-        Page<Employee> employees=repository.findAll(pageable);
+        Page<Employee> employees;
+        if(!request.getSearchBy().isEmpty() && !request.getSearchBy().isBlank()){
+//            if(request.getNumSearch()=>Integer.MIN_VALUE && request.getNumSearch()<=Integer.MAX_VALUE)
+            employees=repository.search(request.getSearchBy(),pageable);
+        }else{
+            employees=repository.findAll(pageable);
+        }
         List<EmployeeResponse> responseList=employees.getContent().stream().
                 map(employee -> new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary())).
                 toList();
@@ -40,9 +45,10 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
                 employees.getSize(),
                 employees.getNumberOfElements(),
                 employees.getTotalElements(),
-                employees.getSort()
+                employees.getSort(),
+                employees.isFirst(),
+                employees.isLast(),
+                employees.isEmpty()
         );
-
-
     }
 }

@@ -2,6 +2,7 @@ package com.employee.demo.repository;
 
 import com.employee.demo.response.EmployeeResponse;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.employee.demo.model.Employee;
@@ -10,7 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
-import java.awt.print.Pageable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,4 +50,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(nativeQuery = true,value="insert into employee(name,department,salary) values (:name,:department,:salary) ")
 	Employee addEmployee(@Param("name") String name,@Param("department") String department,@Param("salary") double salary);
 
+//	@Query(nativeQuery = true,value = "select e from Employee e where lower(e.name) like" +
+//			"concat('%',:search,'%') or lower(e.department) like concat('%',:search,'%')")
+	@Query("SELECT e FROM Employee e WHERE " +
+			"LOWER(e.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+			"LOWER(e.department) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+			"CAST(e.salary AS string)  LIKE (CONCAT('%', :search, '%')) OR " +
+			"CAST(e.id AS string) LIKE (CONCAT('%', :search, '%')) ")
+
+//			" e.salary LIKE CONCAT('%',:num,'%') OR " +
+//			" e.id LIKE CONCAT('%',:num,'%') ")
+	Page<Employee> search(@Param("search") String searchBy, Pageable pageable);
 }
