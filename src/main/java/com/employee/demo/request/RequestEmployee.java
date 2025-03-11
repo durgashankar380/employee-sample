@@ -11,5 +11,6 @@ public class RequestEmployee {
     private String name;
     private String department;
     private Double salary;
+    private Integer status;
 }
 

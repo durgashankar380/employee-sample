@@ -16,10 +16,12 @@ public class ResponseEmployee {
 	private String department;
 	private double salary;
 	
+	
 	 public ResponseEmployee(Employee Employee) {
 	        this.id = Employee.getId();
 	        this.name = Employee.getName();
 	        this.department = Employee.getDepartment();
 	        this.salary = Employee.getSalary();
+	      
 	    }
 }

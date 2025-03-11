@@ -1,6 +1,9 @@
 package com.employee.demo.service.impl;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +20,11 @@ import com.employee.demo.response.ResponseEmployee;
 import com.employee.demo.service.EmployeePageService;
 
 @Service
-public class EmployeePageServiceImpl implements EmployeePageService{
-	@Autowired
-	private EmployeePageRepository employeePageRepository;
-	
+public class EmployeePageServiceImpl implements EmployeePageService {
+
+    @Autowired
+    private EmployeePageRepository employeePageRepository;
+
 	@Override
 	public EmployeePageResponse getEmployeesWithPaginationAndSorting(int page, int size, String sortBy, String sortDirection, String keyword) {
 
@@ -35,6 +39,9 @@ public class EmployeePageServiceImpl implements EmployeePageService{
 	    List<ResponseEmployee> responseEmployees = employeePage.getContent().stream()
 	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()))
 	            .collect(Collectors.toList());
+	    
+	  
+
 
 	    return new EmployeePageResponse(
 	            responseEmployees,
@@ -50,6 +57,43 @@ public class EmployeePageServiceImpl implements EmployeePageService{
 	            employeePage.isEmpty()
 	    );
 	}
+	
+	
+	@Override
+	public EmployeePageResponse getEmployeesByStatus(int pageNo, int pageSize, int status) {
+	    Pageable pageable = PageRequest.of(pageNo, pageSize);
+	    Page<Employee> employeesPage;
 
+	    if (status == 1 || status == 2 || status == 3) {
+	        employeesPage = employeePageRepository.findByStatus(status, pageable);
+	    } else if (status == 0) {
+	        employeesPage = employeePageRepository.findByStatusNot(3, pageable);
+	    } else {
+	    	 return new EmployeePageResponse();
+	    }
 
+	 
+	    List<ResponseEmployee> responseEmployees = employeesPage.getContent()
+	        .stream()
+	        .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()))
+	        .collect(Collectors.toList());
+	    
+	   
+
+	    return new EmployeePageResponse(
+	        responseEmployees,
+	        employeesPage.getPageable(),
+	        employeesPage.getTotalElements(),
+	        employeesPage.isLast(),
+	        employeesPage.getTotalPages(),
+	        employeesPage.getSize(),
+	        employeesPage.getNumber(),
+	        employeesPage.getSort(),
+	        employeesPage.isFirst(),
+	        employeesPage.getNumberOfElements(),
+	        employeesPage.isEmpty()
+	    );
+
+	}
 }
+
