@@ -16,6 +16,8 @@ public class EmployeePageRequestDto {
 	private Sort.Direction sort = Sort.Direction.ASC;
 	private String sortByColumn = "id";
 
+	private Integer status;
+
 	private String searchKeyword;
 	private Long id;
 	private Double salary;

@@ -3,9 +3,14 @@ package com.employee.demo.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 import com.employee.demo.model.Employee;
+
+import dto.EmployeePageRequestDto;
+import jakarta.transaction.Transactional;
 
 public interface EmployeeRepositoryPagination extends JpaRepository<Employee, Long> {
 
@@ -21,4 +26,10 @@ public interface EmployeeRepositoryPagination extends JpaRepository<Employee, Lo
 			@Param("salary") Double salary,
 			@Param("department") String department,
 			Pageable pageable);
+
+	 Page<Employee> findByStatus(int status, Pageable pageable);	 
+	 Page<Employee> findByStatusNot(int status,Pageable pageable);
+	 
 }
+
+	

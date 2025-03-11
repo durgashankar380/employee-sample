@@ -46,6 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setName(employeeRequest.getName());
         employee.setDepartment(employeeRequest.getDepartment());
         employee.setSalary(employeeRequest.getSalary());
+        employee.setStatus(1);
         Employee savedEmployee = repository.save(employee);
         return new EmployeeResponse(savedEmployee.getId(), savedEmployee.getName(), savedEmployee.getDepartment(), savedEmployee.getSalary());
     	}
