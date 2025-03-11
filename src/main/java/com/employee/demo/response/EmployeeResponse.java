@@ -15,12 +15,17 @@ public class EmployeeResponse {
 	private String name;
 	private String department;
 	private double salary;
+	private int status;
 
 	public EmployeeResponse(Employee employee) {
 		this.id=employee.getId();
 		this.name=employee.getName();
 		this.department=employee.getDepartment();
 		this.salary=employee.getSalary();
-		
+		this.status = employee.getStatus();	
+	}
+
+	public EmployeeResponse(long id2, String name2, String department2, double salary2) {
+		// TODO Auto-generated constructor stub
 	}
 }

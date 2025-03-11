@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class EmployeePageResponse<T> {
 
 	int recordCount;
+	String message; 
 	T response;
 }
