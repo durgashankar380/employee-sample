@@ -434,7 +434,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		try {
 		Employee employee = employeeRepository.findById(id).orElseThrow();
 		return new ResponseEmployee(employee.getId(), employee.getName(), employee.getDepartment(),
-				employee.getSalary());
+				employee.getSalary(),employee.getStatus());
 		 } catch (Exception e) {
 		        throw new RuntimeException("Employee Data Not Found", e);
 		    }

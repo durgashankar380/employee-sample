@@ -15,6 +15,7 @@ public class ResponseEmployee {
 	private String name;
 	private String department;
 	private double salary;
+	private int status;
 	
 	
 	 public ResponseEmployee(Employee Employee) {
@@ -22,6 +23,8 @@ public class ResponseEmployee {
 	        this.name = Employee.getName();
 	        this.department = Employee.getDepartment();
 	        this.salary = Employee.getSalary();
-	      
+	        this.status= Employee.getStatus();
 	    }
+	 
+	
 }
