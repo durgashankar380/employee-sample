@@ -58,7 +58,17 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 			"CAST(e.salary AS string)  LIKE (CONCAT('%', :search, '%')) OR " +
 			"CAST(e.id AS string) LIKE (CONCAT('%', :search, '%')) ")
 
-//			" e.salary LIKE CONCAT('%',:num,'%') OR " +
-//			" e.id LIKE CONCAT('%',:num,'%') ")
 	Page<Employee> search(@Param("search") String searchBy, Pageable pageable);
+
+	Page<Employee> findByNameAndDepartmentAndSalary(String name, String department, Double salary, Pageable pageable);
+
+	@Query(
+			nativeQuery = true,
+			value = "select * from employee where status=1 or status=2"
+	)
+	Page<Employee> findAllByStatus(Pageable pageable);
+
+	Page<Employee> findByStatusNot(int i, Pageable pageable);
+
+	Page<Employee> findByStatus(int status, Pageable pageable);
 }

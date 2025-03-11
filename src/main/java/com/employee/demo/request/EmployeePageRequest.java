@@ -1,13 +1,15 @@
 package com.employee.demo.request;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeePageRequest {
-    private Integer pageIndex;
     private Integer pageSize;
+    private Integer pageNumber;
     private String sortBy;
     private String sortDir;
     private String searchBy;
+    private int status;
 }

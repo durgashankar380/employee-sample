@@ -25,7 +25,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
         System.out.println(employees);
         List<EmployeeResponse>responseList=new ArrayList<>();
         for(Employee employee:employees)
-            responseList.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+            responseList.add(new EmployeeResponse(employee));
         System.out.println(responseList);
         return employees;
     }
@@ -35,7 +35,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
         List<Employee> employees=repository.getAllEmp();
         List<EmployeeResponse> responseList=new ArrayList<>();
         for (Employee employee:employees){
-            responseList.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+            responseList.add(new EmployeeResponse(employee));
         }
         System.out.println(responseList);
         return responseList;
@@ -46,7 +46,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
         List<Employee> employees=repository.secondHighestSalary();
         List<EmployeeResponse>responseList=new ArrayList<>();
         for(Employee employee:employees)
-            responseList.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+            responseList.add(new EmployeeResponse(employee));
         return responseList;
     }
 //4
@@ -96,7 +96,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
         List<Employee> employees=repository.getSortedSalaryDesc();
         List<EmployeeResponse> responseList=new ArrayList<>();
         for(Employee employee:employees){
-            responseList.add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+            responseList.add(new EmployeeResponse(employee));
         }
         System.out.println(responseList);
         return responseList;
@@ -116,7 +116,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
         for(Employee employee:employees){
             String dept=employee.getDepartment();
             map.putIfAbsent(dept, new ArrayList<EmployeeResponse>());
-            map.get(dept).add(new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+            map.get(dept).add(new EmployeeResponse(employee));
         }
         return map;
     }
@@ -137,7 +137,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
         List<Employee> employees=repository.getAllEmp();
         for(Employee employee:employees){
             long Id=employee.getId();
-            map.put(Id,new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary()));
+            map.put(Id,new EmployeeResponse(employee));
         }
         return map;
     }
@@ -150,7 +150,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
             System.out.println(employeeRequest);
             Employee employee=repository.addEmployee(employeeRequest.getName(),employeeRequest.getDepartment(),employeeRequest.getSalary());
             System.out.println(employee+"data added successfully ");
-            return new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary());
+            return new EmployeeResponse(employee);
         }
         return null;
     }

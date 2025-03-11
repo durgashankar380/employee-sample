@@ -4,11 +4,12 @@ import java.util.*;
 
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
+import org.springframework.http.ResponseEntity;
 
 public interface EmployeeService {
 
 
-	EmployeeResponse addEmployee(EmployeeRequest employeeRequest);
+	ResponseEntity<?> addAndUpdateEmployee(EmployeeRequest employeeRequest);
 
 	Map<String, Double> getTotalSalaryPerDepartment();
 

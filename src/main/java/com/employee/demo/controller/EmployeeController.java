@@ -2,6 +2,7 @@ package com.employee.demo.controller;
 
 import java.util.*;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,9 +24,9 @@ public class EmployeeController {
 
    
 
-    @PostMapping("/add")
-    public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
-        return service.addEmployee(employeeRequest);
+    @PostMapping("/addAndUpdate")
+    public ResponseEntity<?> addAndUpdateEmployee(@RequestBody EmployeeRequest employeeRequest) {
+        return service.addAndUpdateEmployee(employeeRequest);
     }
     
     @GetMapping("/total-salary")

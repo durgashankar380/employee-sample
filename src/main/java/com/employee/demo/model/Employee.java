@@ -1,5 +1,6 @@
 package com.employee.demo.model;
 
+import com.employee.demo.request.EmployeeRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,6 @@ public class Employee {
     private Long id;
     private String name;
     private String department;
-    private double salary;
-
+    private Double salary;
+    private Integer status;
 }

@@ -2,6 +2,9 @@ package com.employee.demo.service.impl;
 
 import java.util.*;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.employee.demo.model.Employee;
@@ -20,13 +23,30 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public EmployeeResponse addEmployee(EmployeeRequest employeeRequest) {
-        Employee employee = new Employee();
-        employee.setName(employeeRequest.getName());
-        employee.setDepartment(employeeRequest.getDepartment());
-        employee.setSalary(employeeRequest.getSalary());
-        Employee savedEmployee = repository.save(employee);
-        return new EmployeeResponse(savedEmployee.getId(), savedEmployee.getName(), savedEmployee.getDepartment(), savedEmployee.getSalary());
+    public ResponseEntity<?> addAndUpdateEmployee(EmployeeRequest employeeRequest) {
+        Employee savedEmployee = null;
+        if(employeeRequest.getId()==0) {
+            Employee employee = new Employee();
+            employee.setName(employeeRequest.getName());
+            employee.setDepartment(employeeRequest.getDepartment());
+            employee.setSalary(employeeRequest.getSalary());
+            employee.setStatus(1);
+            savedEmployee = repository.save(employee);
+        }else{
+            savedEmployee=repository.findById(employeeRequest.getId()).orElse(null);
+            if(savedEmployee==null){
+                return ResponseEntity.badRequest().body("THERE IS NO EMPLOYEE WITH THIS ID "+employeeRequest.getId());
+            }else{
+                savedEmployee.setName(employeeRequest.getName().isBlank() && employeeRequest.getName().isEmpty()?
+                        savedEmployee.getName():employeeRequest.getName());
+                savedEmployee.setDepartment(employeeRequest.getDepartment().isBlank() && employeeRequest.getDepartment().isEmpty()?
+                        savedEmployee.getDepartment():employeeRequest.getDepartment());
+                savedEmployee.setSalary(employeeRequest.getSalary()!=null && employeeRequest.getSalary()<0?
+                        savedEmployee.getSalary():employeeRequest.getSalary());
+                return new ResponseEntity<>(new EmployeeResponse(repository.save(savedEmployee)), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(new EmployeeResponse(savedEmployee), HttpStatus.CREATED);
     }
 
     @Override
@@ -45,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Map<String, List<EmployeeResponse>> groupedEmployees = new HashMap<>();
         for (Employee emp : employees) {
             groupedEmployees.putIfAbsent(emp.getDepartment(), new ArrayList<>());
-            groupedEmployees.get(emp.getDepartment()).add(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+            groupedEmployees.get(emp.getDepartment()).add(new EmployeeResponse(emp));
         }
         return groupedEmployees;
     }
@@ -65,7 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = repository.findAll();
         Map<Long, EmployeeResponse> employeeMap = new HashMap<>();
         for (Employee emp : employees) {
-            employeeMap.put(emp.getId(), new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+            employeeMap.put(emp.getId(), new EmployeeResponse(emp));
         }
         return employeeMap;
     }
@@ -76,7 +96,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employees.sort((a, b) -> Double.compare(a.getSalary(), b.getSalary()));
         List<EmployeeResponse> responseList = new ArrayList<>();
         for (Employee employee : employees)
-            responseList.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+            responseList.add(new EmployeeResponse(employee));
         return responseList;
     }
 
@@ -103,7 +123,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = repository.findAll();
         Queue<EmployeeResponse> employeeResponseQueue = new LinkedList<>();
         for (Employee employee : employees)
-            employeeResponseQueue.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+            employeeResponseQueue.add(new EmployeeResponse(employee));
         return employeeResponseQueue;
     }
 
@@ -112,7 +132,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = repository.findAll();
         Stack<EmployeeResponse> employeeResponseStack = new Stack<>();
         for (Employee employee : employees) {
-            employeeResponseStack.push(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+            employeeResponseStack.push(new EmployeeResponse(employee));
         }
         return employeeResponseStack;
     }
@@ -132,7 +152,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         List<Employee> employees = repository.saveAll(employeeList);
         for (Employee employee : employees)
-            responseList.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+            responseList.add(new EmployeeResponse(employee));
         return responseList;
     }
 
@@ -144,13 +164,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         int count = 0;
         if (employees.size() < 3) {
             for (Employee employee : employees) {
-                responseList.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+                responseList.add(new EmployeeResponse(employee));
             }
         } else {
             for (Employee employee : employees) {
                 if (count < 3) {
                     count++;
-                    responseList.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+                    responseList.add(new EmployeeResponse(employee));
                 } else break;
             }
         }
@@ -198,7 +218,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             String dept = employee.getDepartment();
             double salary = employee.getSalary();
             if (salaryMap.get(dept) < salary) {
-                responseList.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+                responseList.add(new EmployeeResponse(employee));
             }
         }
         return responseList;
@@ -236,7 +256,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         List<Employee> result=repository.findBySalary(secMaxSalary);
         for (Employee employee : result) {
-                responseList.add(new EmployeeResponse(employee.getId(), employee.getName(), employee.getDepartment(), employee.getSalary()));
+                responseList.add(new EmployeeResponse(employee));
         }
         return responseList;
     }
