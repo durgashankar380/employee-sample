@@ -7,25 +7,27 @@ import com.employee.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.*;
 
 @RestController
 @RequestMapping("employee/")
+//@EnableWebMvc
 public class EmployeeController {
 
     @Autowired
     private EmployeeService service;
 
 
-    @PostMapping("/addEmployee")
-    public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
+    @PostMapping("/addAndUpdateEmployee")
+    public ResponseEntity<?> addEmployee(@RequestBody EmployeeRequest employeeRequest) {
         return this.service.addEmployee(employeeRequest);
     }
 
     @GetMapping("/findTotalSalaryByDepartment")
     public Map<String, Double> getTotalSalaryByDepartment() {
-        return  service.getTotalSalaryByDepartment();
+        return service.getTotalSalaryByDepartment();
     }
 
     @GetMapping("/grouped-by-department")
@@ -34,12 +36,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/unique-departments")
-    public Set<String> getUniqueEmployeeDepartments(){
+    public Set<String> getUniqueEmployeeDepartments() {
         return service.getUniqueEmployeeDepartments();
     }
 
     @GetMapping("/getEmployeeById")
-    public Map<Long ,EmployeeResponse> getEmployeeById() {
+    public Map<Long, EmployeeResponse> getEmployeeById() {
         return this.service.getEmployeeById();
     }
 
@@ -49,19 +51,17 @@ public class EmployeeController {
     }
 
     @GetMapping("/queue")
-    public Queue<EmployeeResponse>queueOfEmployee()
-    {
+    public Queue<EmployeeResponse> queueOfEmployee() {
         return this.service.queueOfEmployee();
     }
 
     @GetMapping("/stackOfEmployee")
-    public Stack<EmployeeResponse>stackOfEmployee()
-    {
+    public Stack<EmployeeResponse> stackOfEmployee() {
         return this.service.stackOfEmployee();
     }
 
     @PostMapping("/add-multiple")
-    public List<EmployeeResponse> addMultipleEmployees(List<EmployeeRequest> employeeRequests)  {
+    public List<EmployeeResponse> addMultipleEmployees(@RequestBody List<EmployeeRequest> employeeRequests) {
         return service.addMultipleEmployees(employeeRequests);
     }
 
@@ -92,40 +92,36 @@ public class EmployeeController {
     }
 
     @GetMapping("/getbydeptsalary/{dept}")
-    public ResponseEntity<?> depSalary(@PathVariable String dept){
+    public ResponseEntity<?> depSalary(@PathVariable String dept) {
         return service.totalSalaryByDepartment(dept);
     }
 
-   @GetMapping("/highestPaidEmployee")
-    public List<EmployeeResponse> thirdhighestPaidEmployee(){
+    @GetMapping("/highestPaidEmployee")
+    public List<EmployeeResponse> thirdhighestPaidEmployee() {
         return this.service.thirdhighestPaidEmployee();
-   }
+    }
 
     @GetMapping("/secondHighestSalary")
-    public List<EmployeeResponse> getEmployeesWithSecondHighestSalary()
-    {
+    public List<EmployeeResponse> getEmployeesWithSecondHighestSalary() {
         return this.service.getEmployeesWithSecondHighestSalary();
     }
 
     @GetMapping("/departmentWithHighestTotalSalary")
-    public String getDepartmentWithHighestTotalSalary(){
+    public String getDepartmentWithHighestTotalSalary() {
 
         return this.service.getDepartmentWithHighestTotalSalary();
     }
 
     @GetMapping("/avgSalary")
-    public List<Employee> getAverageSalary()
-    {
+    public List<Employee> getAverageSalary() {
         return this.service.getAverageSalary();
     }
 
 
     @GetMapping("/commonletter")
-    public Character getMostCommonFirstLetter()
-    {
+    public Character getMostCommonFirstLetter() {
         return this.service.getMostCommonFirstLetter();
     }
-
 
 
 }

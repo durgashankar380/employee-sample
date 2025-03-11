@@ -1,10 +1,10 @@
-package com.employee.demo.service2.impl2;
+package com.employee.demo.service.impl;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.service2.EmployeeService2;
+import com.employee.demo.service.EmployeeService2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
 
     @Override
     public void addEmployee(EmployeeRequest employeeRequest) {
-        repository.insertEmployee(employeeRequest.getEmployeeId(), employeeRequest.getName(), employeeRequest.getDepartment(), employeeRequest.getSalary());
+        repository.insertEmployee(employeeRequest.getName(), employeeRequest.getDepartment(), employeeRequest.getSalary(), employeeRequest.getStatus());
     }
 
     @Override
@@ -82,8 +82,9 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
             String name = (String) result[1];
             String department = (String) result[2];
             Double salary = (Double) result[3];
+            Integer status = (Integer) result[4];
 
-            EmployeeResponse response = new EmployeeResponse(id, name, department, salary);
+            EmployeeResponse response = new EmployeeResponse(id, name, department, salary, status);
 
             if (!departmentMap.containsKey(department)) {
                 departmentMap.put(department, new ArrayList<>());
@@ -114,8 +115,9 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
             String name = (String) result[1];
             String department = (String) result[2];
             Double salary = (Double) result[3];
+            Integer status = (Integer) result[4];
 
-            EmployeeResponse response = new EmployeeResponse(employeeId, name, department, salary);
+            EmployeeResponse response = new EmployeeResponse(employeeId, name, department, salary, status);
             employeeMap.put(employeeId, response);
         }
 
@@ -138,7 +140,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
 
     @Override
     public Employee updateEmpById(long id, Employee employeeEntity) {
-        int rowsAffected = repository.updateEmployeeByIdNative(id, employeeEntity.getName(), employeeEntity.getDepartment(), employeeEntity.getSalary());
+        int rowsAffected = repository.updateEmployeeByIdNative(id, employeeEntity.getName(), employeeEntity.getDepartment(), employeeEntity.getSalary(), employeeEntity.getStatus());
 
         if (rowsAffected > 0) {
             Optional<Employee> updatedEmployee = repository.findById(id);
@@ -148,7 +150,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
         }
     }
 
-    public Optional<Employee> getEmployeeById(long id){
+    public Optional<Employee> getEmployeeById(long id) {
         return repository.findById(id);
     }
 

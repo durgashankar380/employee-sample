@@ -1,4 +1,4 @@
-package com.employee.demo.requestPage;
+package com.employee.demo.request;
 
 import lombok.Data;
 
@@ -9,8 +9,8 @@ public class EmployeePageRequest {
     private Integer pageSize;
     private String sortBy;
     private String sortDir;
-    private String SearchBy;
+    private String searchBy;
+    private Integer status;
 
 
 }
-//

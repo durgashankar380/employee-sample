@@ -1,4 +1,5 @@
 package com.employee.demo.service;
+
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
@@ -9,41 +10,41 @@ import java.util.*;
 public interface EmployeeService {
 
 
-	EmployeeResponse addEmployee(EmployeeRequest employeeRequest);
+    ResponseEntity<?> addEmployee(EmployeeRequest employeeRequest);
 
-	Map<String,Double> getTotalSalaryByDepartment();
+    Map<String, Double> getTotalSalaryByDepartment();
 
-	 Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment();
+    Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment();
 
-	Set<String> getUniqueEmployeeDepartments();
+    Set<String> getUniqueEmployeeDepartments();
 
-	Map<Long,EmployeeResponse> getEmployeeById();
+    Map<Long, EmployeeResponse> getEmployeeById();
 
-	 List<EmployeeResponse> getEmployeesSortedBySalary();
+    List<EmployeeResponse> getEmployeesSortedBySalary();
 
-	List<String>getAllEmployeeName();
+    List<String> getAllEmployeeName();
 
-	Map<String, Long> getcountperDepartment();
+    Map<String, Long> getcountperDepartment();
 
-	Queue<EmployeeResponse> queueOfEmployee();
+    Queue<EmployeeResponse> queueOfEmployee();
 
-	Stack<EmployeeResponse>stackOfEmployee();
+    Stack<EmployeeResponse> stackOfEmployee();
 
-	Employee updateEmpById(long id, Employee employeeEntity);
+    Employee updateEmpById(long id, Employee employeeEntity);
 
-	Employee getEmployeeByName(String name);
+    Employee getEmployeeByName(String name);
 
-	ResponseEntity totalSalaryByDepartment(String dept);
+    ResponseEntity totalSalaryByDepartment(String dept);
 
-	 List<EmployeeResponse> addMultipleEmployees(List<EmployeeRequest> employeeRequests) ;
+    List<EmployeeResponse> addMultipleEmployees(List<EmployeeRequest> employeeRequests);
 
-	List<EmployeeResponse> thirdhighestPaidEmployee();
+    List<EmployeeResponse> thirdhighestPaidEmployee();
 
-	List<EmployeeResponse> getEmployeesWithSecondHighestSalary();
+    List<EmployeeResponse> getEmployeesWithSecondHighestSalary();
 
-	String getDepartmentWithHighestTotalSalary();
+    String getDepartmentWithHighestTotalSalary();
 
-	List<Employee> getAverageSalary();
+    List<Employee> getAverageSalary();
 
-	Character getMostCommonFirstLetter();
+    Character getMostCommonFirstLetter();
 }

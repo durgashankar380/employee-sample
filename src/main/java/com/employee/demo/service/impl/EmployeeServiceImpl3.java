@@ -1,8 +1,8 @@
-package com.employee.demo.service3.Impl3;
+package com.employee.demo.service.impl;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
-import com.employee.demo.service3.EmployeeService3;
+import com.employee.demo.service.EmployeeService3;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,12 +23,12 @@ public class EmployeeServiceImpl3 implements EmployeeService3 {
 
     @Override
     public void saveFileData(MultipartFile file) throws IOException {
-        List<Employee> employeeList=new LinkedList<>();
-        Workbook workbook= new XSSFWorkbook(file.getInputStream());
-        Sheet sheet= workbook.getSheetAt(0);
-        sheet.forEach(row->{
-            Employee emp =new Employee();
-            if(row.getRowNum()!=0){
+        List<Employee> employeeList = new LinkedList<>();
+        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        sheet.forEach(row -> {
+            Employee emp = new Employee();
+            if (row.getRowNum() != 0) {
                 emp.setDepartment(row.getCell(1).getStringCellValue());
                 emp.setName(row.getCell(2).getStringCellValue());
                 emp.setSalary(row.getCell(3).getNumericCellValue());
@@ -38,12 +38,9 @@ public class EmployeeServiceImpl3 implements EmployeeService3 {
         repository.saveAll(employeeList);
     }
 
-    public List<Employee> findAll(){
+    public List<Employee> findAll() {
         return repository.findAll();
-}
-
-
-
+    }
 
 
 }

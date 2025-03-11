@@ -1,4 +1,4 @@
-package com.employee.demo.service2;
+package com.employee.demo.service;
 
 
 import com.employee.demo.model.Employee;
@@ -41,7 +41,6 @@ public interface EmployeeService2 {
     Map<String, Long> getcountperDepartment();
 
     Employee updateEmpById(long id, Employee employeeEntity);
-
 
 
 }

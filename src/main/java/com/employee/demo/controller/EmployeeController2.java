@@ -1,9 +1,9 @@
-package com.employee.demo.controller2;
+package com.employee.demo.controller;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.service2.EmployeeService2;
+import com.employee.demo.service.EmployeeService2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +20,14 @@ public class EmployeeController2 {
     public void addEmployee(@RequestBody EmployeeRequest employeeRequest) {
         this.service2.addEmployee(employeeRequest);
     }
+
     @GetMapping("/get-AllEmployee")
-    public List<Employee> getAllEmployee(){
+    public List<Employee> getAllEmployee() {
         return this.service2.getAllEmployee();
     }
 
     @GetMapping("/unique_departments")
-    public Set<String> getUniqueEmployeeDepartments(){
+    public Set<String> getUniqueEmployeeDepartments() {
         return service2.getUniqueEmployeeDepartments();
     }
 
@@ -43,50 +44,48 @@ public class EmployeeController2 {
     }
 
     @GetMapping("/queue-Employee")
-    public List<Employee> queueOfEmployee()
-    {
+    public List<Employee> queueOfEmployee() {
         return this.service2.queueOfEmployee();
     }
 
     @GetMapping("/stack-Of-Employee")
-    public List<Employee> stackOfEmployee()
-    {
+    public List<Employee> stackOfEmployee() {
         return this.service2.stackOfEmployee();
     }
 
     @GetMapping("/top3")
-    public List<Employee> getTop3(){
+    public List<Employee> getTop3() {
         return this.service2.getTopThree();
     }
 
 
     @GetMapping("/findTotalSalaryByDepartment")
     public List<Object> getTotalSalaryByDepartment() {
-        return  service2.getTotalSalaryByDepartment();
+        return service2.getTotalSalaryByDepartment();
     }
 
     @GetMapping("/department-withHighest-salary")
-    String findDepartmentWithHighestTotalSalary(){
+    String findDepartmentWithHighestTotalSalary() {
         return service2.findDepartmentWithHighestTotalSalary();
     }
 
     @GetMapping("/avg-salary")
-    List<Employee> findEmployeesAboveDepartmentAverageSalary(){
+    List<Employee> findEmployeesAboveDepartmentAverageSalary() {
         return service2.findEmployeesAboveDepartmentAverageSalary();
     }
 
     @GetMapping("/most-common-firstletter")
-    List<Object[]> findMostCommonFirstLetter(){
+    List<Object[]> findMostCommonFirstLetter() {
         return service2.findMostCommonFirstLetter();
     }
 
     @GetMapping("/2HighestSalary")
-    List<Employee> findEmployeesWithSecondHighestSalary(){
+    List<Employee> findEmployeesWithSecondHighestSalary() {
         return service2.findEmployeesWithSecondHighestSalary();
     }
 
     @GetMapping("get-emp-grp-by-dep")
-    public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment(){
+    public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
         return service2.getEmployeesGroupedByDepartment();
     }
 
