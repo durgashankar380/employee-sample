@@ -24,8 +24,8 @@ public class EmployeeStatusController {
 	            @RequestParam Long id, 
 	            @RequestParam int status) {
 	        
-	        EmployeeStatusRequest request = new EmployeeStatusRequest(id, status);
-	        return employeeStatusService.manageEmployeeStatus(request);
+	       // EmployeeStatusRequest request = new EmployeeStatusRequest(id, status);
+	        return employeeStatusService.manageEmployeeStatus(id,status);
 	    }
 	    
 

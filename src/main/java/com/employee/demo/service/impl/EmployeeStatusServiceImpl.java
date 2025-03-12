@@ -19,14 +19,14 @@ public class EmployeeStatusServiceImpl implements EmployeeStatusService {
     
 
     @Override
-    public EmployeeStatusResponse manageEmployeeStatus(EmployeeStatusRequest request) {
-        Optional<Employee> employeeOptional = employeeStatusRepository.findById(request.getId());
+    public EmployeeStatusResponse manageEmployeeStatus(Long id,int status) {
+        Optional<Employee> employeeOptional = employeeStatusRepository.findById(id);
 
         if (employeeOptional.isPresent()) {
             Employee employee = employeeOptional.get();
 
             String message;
-            switch (request.getStatus()) {
+            switch (status) {
                 case 1:
                     message = "Data activated successfully";
                     employee.setStatus(1);
