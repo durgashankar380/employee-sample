@@ -1,5 +1,7 @@
 package com.employee.demo.response;
 
+import com.employee.demo.ApiStatus.ApiStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeStatusResponse {
 
-    private String message;
+    private ApiStatus message;
 }

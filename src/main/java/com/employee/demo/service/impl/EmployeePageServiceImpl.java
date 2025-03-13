@@ -26,7 +26,7 @@ public class EmployeePageServiceImpl implements EmployeePageService {
     private EmployeePageRepository employeePageRepository;
 
 	@Override
-	public EmployeePageResponse getEmployeesWithPaginationAndSorting(int page, int size, String sortBy, String sortDirection, String keyword) {
+	public EmployeePageResponse getEmployeesWithPaginationAndSorting(int page, int size, String sortBy, String sortDirection, String keyword,int status) {
 
 	    Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
 	    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));

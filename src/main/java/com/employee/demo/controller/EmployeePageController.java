@@ -1,15 +1,8 @@
 package com.employee.demo.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.employee.demo.request.EmployeePageRequest;
 import com.employee.demo.response.EmployeePageResponse;
 import com.employee.demo.service.EmployeePageService;
@@ -22,14 +15,15 @@ public class EmployeePageController {
     private EmployeePageService employeePageService;
     
     
-    @GetMapping("/paginate")
+    @PostMapping("/paginate")
     public EmployeePageResponse getEmployees(@RequestBody EmployeePageRequest employeePageRequest) {
         return employeePageService.getEmployeesWithPaginationAndSorting(
         		employeePageRequest.getPage(),
         		employeePageRequest.getSize(),
         		employeePageRequest.getSortBy(),
         		employeePageRequest.getSortDirection(),
-        		employeePageRequest.getKeyword()
+        		employeePageRequest.getKeyword(),
+        		employeePageRequest.getStatus()
         );
    }
     
