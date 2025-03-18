@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.employee.demo.ApiStatus.ApiStatus;
 import com.employee.demo.Exception.EmployeeNotFoundException;
 import com.employee.demo.Exception.EmployeeSaveException;
 import com.employee.demo.model.Employee;
@@ -50,33 +51,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	// 1. add a employee
 	@Override
-
 	public Employee saveEmployee(RequestEmployee requestEmployee) {
-		try {
+	    try {
+	        if (requestEmployee.getName() == null || requestEmployee.getName().isEmpty()) {
+	            throw new EmployeeSaveException(ApiStatus.EMPLOYEE_NAME_MANDATORY);
+	        }
+	        if (requestEmployee.getDepartment() == null || requestEmployee.getDepartment().isEmpty()) {
+	            throw new EmployeeSaveException(ApiStatus.EMPLOYEE_DEPARTMENT_MANDATORY);
+	        }
+	        if (requestEmployee.getSalary() == null) {
+	            throw new EmployeeSaveException(ApiStatus.EMPLOYEE_SALARY_MANDATORY);
+	        }
 
-			if (requestEmployee.getName() == null || requestEmployee.getName().isEmpty()) {
-				throw new IllegalArgumentException("Name cannot be null or empty");
-			}
-			if (requestEmployee.getDepartment() == null || requestEmployee.getDepartment().isEmpty()) {
-				throw new IllegalArgumentException("Department cannot be null or empty");
-			}
-			if (requestEmployee.getSalary() == null) {
-				throw new IllegalArgumentException("Salary cannot be null");
-			}
+	        Employee employee = new Employee();
+	        employee.setName(requestEmployee.getName());
+	        employee.setDepartment(requestEmployee.getDepartment());
+	        employee.setSalary(requestEmployee.getSalary());
 
-			Employee employee = new Employee();
-			employee.setName(requestEmployee.getName());
-			employee.setDepartment(requestEmployee.getDepartment());
-			employee.setSalary(requestEmployee.getSalary());
-			return employeeRepository.save(employee);
-		}
-
-		catch (IllegalArgumentException e) {
-			throw new EmployeeSaveException("Validation Error: " + e.getMessage());
-		} catch (Exception e) {
-			throw new EmployeeSaveException("Failed to save employee due to an unexpected error");
-		}
-
+	        return employeeRepository.save(employee);
+	    } catch (EmployeeSaveException e) {
+	        throw e;
+	    } catch (Exception e) {
+	        throw new EmployeeSaveException(ApiStatus.EMPLOYEE_NOT_ADDED);
+	    }
 	}
 
 	// 2 get the total salary per department
@@ -171,27 +168,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 			
 			for (RequestEmployee req : requestEmployees) {
 				if (req.getName() == null || req.getName().isEmpty()) {
-					throw new IllegalArgumentException("Name cannot be null or empty");
+					throw new EmployeeSaveException(ApiStatus.EMPLOYEE_NAME_MANDATORY);
 				}
 				if (req.getDepartment() == null || req.getDepartment().isEmpty()) {
-					throw new IllegalArgumentException("Department cannot be null or empty");
+					throw new EmployeeSaveException(ApiStatus.EMPLOYEE_DEPARTMENT_MANDATORY);
 				}
 				if (req.getSalary() == null) {
-					throw new IllegalArgumentException("Salary cannot be null");
+					throw new EmployeeSaveException(ApiStatus.EMPLOYEE_SALARY_MANDATORY);
 				}
 			}
 
 			List<Employee> employees = new ArrayList<>();
 			for (RequestEmployee req : requestEmployees) {
-				Employee employee = new Employee(null, req.getName(), req.getDepartment(), req.getSalary(),req.getStatus());
+				Employee employee = new Employee(null, req.getName(), req.getDepartment(), req.getSalary(),req.getStatus(), null, null);
 				employees.add(employee);
 			}
 
 			return employeeRepository.saveAll(employees);
 		} catch (IllegalArgumentException e) {
-			throw new EmployeeSaveException("Validation Error: " + e.getMessage());
+			throw e;
 		} catch (Exception e) {
-			throw new EmployeeSaveException("Failed to save employees due to an unexpected error");
+			throw new EmployeeSaveException(ApiStatus.EMPLOYEE_NOT_ADDED);
 		}
 	}
 
@@ -211,7 +208,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return employees;
 		 } catch (Exception e) {
-		        throw new RuntimeException("Failed to retrieve unique departments", e);
+		        throw new RuntimeException("Employee Data Not Found", e);
 		    }
 	}
 
@@ -248,7 +245,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return departmentCountMap;
 		 } catch (Exception e) {
-		        throw new RuntimeException("Employee Data Not Found", e);
+		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
 		    }
 	}
 
@@ -267,7 +264,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return fifoEmp;
 	}catch (Exception e) {
-        throw new RuntimeException("Employee Data Not Found", e);
+        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
     }
 	}
 	
@@ -289,7 +286,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	    return lifoEmployees;
 	 } catch (Exception e) {
-	        throw new RuntimeException("Employee Data Not Found", e);
+	        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
 	    }
 	}
 	
@@ -436,7 +433,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return new ResponseEmployee(employee.getId(), employee.getName(), employee.getDepartment(),
 				employee.getSalary(),employee.getStatus());
 		 } catch (Exception e) {
-		        throw new RuntimeException("Employee Data Not Found", e);
+		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
 		    }
 	}
 
@@ -451,7 +448,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employee.setSalary(requestEmployee.getSalary());
 		return employeeRepository.save(employee);
 		 } catch (Exception e) {
-		        throw new RuntimeException("Employee Data Not Found", e);
+		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
 		    }
 	}
 
@@ -460,11 +457,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void deleteEmployee(Long id) {
 		try {
 		if (!employeeRepository.existsById(id)) {
-			throw new EmployeeNotFoundException("Employee not found with ID: " + id);
+			throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
 		}
 		employeeRepository.deleteById(id);
 		 } catch (Exception e) {
-		        throw new RuntimeException("Employee Data Not Found", e);
+		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
 		    }
 	}
 
@@ -498,7 +495,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 	    }
 		catch(Exception e) {
-			throw new RuntimeException("Failed to add data using excel sheet:"+e.getMessage());
+			throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_ADDED);
 		}
 		return ResponseEntity.ok("data added ");
 		

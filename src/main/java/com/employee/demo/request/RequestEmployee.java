@@ -12,5 +12,7 @@ public class RequestEmployee {
     private String department;
     private Double salary;
     private Integer status;
+    private String email;
+    private String password;
 }
 

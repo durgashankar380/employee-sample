@@ -2,6 +2,11 @@ package com.employee.demo.ApiStatus;
 
 public enum ApiStatus {
 
+	    EMPLOYEE_NAME_MANDATORY(500, "NAME CANNOT BE NULL OR EMPTY"),
+	    EMPLOYEE_DEPARTMENT_MANDATORY(500, "DEPARTMENT CANNOT BE NULL OR EMPTY"),
+	    EMPLOYEE_SALARY_MANDATORY(400, "SALARY CANNOT BE NULL"),
+	    EMPLOYEE_NOT_ADDED(500, "Failed to save employee due to an unexpected error"),
+	
 	    DATA_ACTIVATED_SUCCESSFULLY(200, "Data activated successfully"),
 	    DATA_INACTIVATED_SUCCESSFULLY(200, "Data inactivated successfully"),
 	    DATA_DELETED_SUCCESSFULLY(200, "Data deleted successfully"),

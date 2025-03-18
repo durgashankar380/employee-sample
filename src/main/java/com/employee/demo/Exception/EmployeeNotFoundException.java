@@ -1,7 +1,16 @@
 package com.employee.demo.Exception;
 
+import com.employee.demo.ApiStatus.ApiStatus;
+
 public class EmployeeNotFoundException extends RuntimeException {
-    public EmployeeNotFoundException(String message) {
-        super(message);
+	private final int statusCode;
+    public EmployeeNotFoundException(ApiStatus apiStatus) {
+        super(apiStatus.getMessage());
+        this.statusCode = apiStatus.getStatusCode();
     }
+    
+    public int getStatusCode() {
+        return statusCode;
+    }
+
 }
