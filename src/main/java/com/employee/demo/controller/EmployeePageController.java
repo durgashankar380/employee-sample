@@ -15,15 +15,10 @@ public class EmployeePageController {
     private EmployeePageService employeePageService;
     
     
-    @PostMapping("/paginate")
+    @PostMapping("/search-by")
     public EmployeePageResponse getEmployees(@RequestBody EmployeePageRequest employeePageRequest) {
         return employeePageService.getEmployeesWithPaginationAndSorting(
-        		employeePageRequest.getPage(),
-        		employeePageRequest.getSize(),
-        		employeePageRequest.getSortBy(),
-        		employeePageRequest.getSortDirection(),
-        		employeePageRequest.getKeyword(),
-        		employeePageRequest.getStatus()
+        		employeePageRequest
         );
    }
     

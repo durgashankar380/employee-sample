@@ -17,7 +17,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Employee {
     
-    @Id
+    public Employee(Object object, String name2, String department2, Double salary2) {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
@@ -31,7 +35,7 @@ public class Employee {
     private Double salary;
     
     @Column(name= "status")
-    private int status;
+    private int status = 1;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;

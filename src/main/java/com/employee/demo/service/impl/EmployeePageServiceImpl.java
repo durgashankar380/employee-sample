@@ -1,10 +1,6 @@
 package com.employee.demo.service.impl;
 
-import java.util.Collections;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeePageRepository;
+import com.employee.demo.request.EmployeePageRequest;
 import com.employee.demo.response.EmployeePageResponse;
 import com.employee.demo.response.ResponseEmployee;
 import com.employee.demo.service.EmployeePageService;
@@ -27,15 +24,15 @@ public class EmployeePageServiceImpl implements EmployeePageService {
     private EmployeePageRepository employeePageRepository;
 
 	@Override
-	public EmployeePageResponse getEmployeesWithPaginationAndSorting(int page, int size, String sortBy, String sortDirection, String keyword,int status) {
+	public EmployeePageResponse getEmployeesWithPaginationAndSorting(EmployeePageRequest request) {
 
-	    Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
-	    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+	    Sort.Direction direction =request.getSortDirection().equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
+	    Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), Sort.by(direction,request.getSortBy() ));
 
-	    keyword = (keyword == null || keyword.trim().isEmpty()) ? "" : keyword;
+	    String Keyword = (request.getKeyword() == null || request.getKeyword().trim().isEmpty()) ? "" : request.getKeyword();
 	   
 
-	    Page<Employee> employeePage = employeePageRepository.searchEmployees(keyword,  pageable);
+	    Page<Employee> employeePage = employeePageRepository.searchEmployees(request.getKeyword(),  pageable);
 
 	    List<ResponseEmployee> responseEmployees = employeePage.getContent().stream()
 	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary(),emp.getStatus()))
@@ -58,6 +55,8 @@ public class EmployeePageServiceImpl implements EmployeePageService {
 	            employeePage.isEmpty()
 	    );
 	}
+
+	
 	
 	
 	@Override

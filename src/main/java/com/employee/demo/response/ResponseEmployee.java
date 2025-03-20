@@ -16,6 +16,7 @@ public class ResponseEmployee {
 	private String department;
 	private double salary;
 	private int status;
+
 	
 	
 	 public ResponseEmployee(Employee Employee) {

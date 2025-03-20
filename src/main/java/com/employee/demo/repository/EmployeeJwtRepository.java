@@ -9,5 +9,4 @@ import com.employee.demo.request.RequestEmployee;
 public interface EmployeeJwtRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByEmail(String email);
 
-	void save(RequestEmployee employee);
 }

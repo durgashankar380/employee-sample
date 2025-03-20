@@ -180,7 +180,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 			List<Employee> employees = new ArrayList<>();
 			for (RequestEmployee req : requestEmployees) {
-				Employee employee = new Employee(null, req.getName(), req.getDepartment(), req.getSalary(),req.getStatus(), null, null);
+				Employee employee = new Employee(null, req.getName(), req.getDepartment(), req.getSalary());
 				employees.add(employee);
 			}
 
