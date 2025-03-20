@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.employee.demo.model.Employee;
+import com.employee.demo.request.EmployeePageRequestDto;
 import com.employee.demo.service.EmployeeServicePagination;
-import dto.EmployeePageRequestDto;
 
 
 @RestController
@@ -30,7 +30,7 @@ public class EmployeeControllerPagination {
 	 * @return get all employees by pagination
 	 */
 	
-	@PostMapping
+	@PostMapping("/pagination")
 	public Page<Employee> getAllEmployeeUsingPagination(@RequestBody EmployeePageRequestDto dto) {
 		return employeeServicePagination.getAllEmployeeUsingPagination(dto);
 	}
@@ -41,23 +41,23 @@ public class EmployeeControllerPagination {
 	 * @return fetch all data and then apply pagination
 	 */
 	
-	@GetMapping("/list")
-	public Page<Employee> getAllEmployeesUsingPaginationList(@RequestBody EmployeePageRequestDto dto) {
-		return employeeServicePagination.getAllEmployeeUsingPaginationList(dto);
+	@PostMapping("/pagination-sort")
+	public Page<Employee> getAllEmployeesUsingPaginationSort(@RequestBody EmployeePageRequestDto dto) {
+		return employeeServicePagination.getAllEmployeeUsingPaginationSort(dto);
 	}
 	
 	/**
-	 * Search employee with pagination, and multiple searches
+	 * Search employee with paginatio(n, and multiple searches
 	 * @param dto EmployeePageRequestDto containing pagination details and search filters.
 	 * @return search result with pagination
 	 */
 	
-	@GetMapping("/search")
+	@PostMapping("/search-by")
 	public Page<Employee> searchEmployees(@RequestBody EmployeePageRequestDto dto) {
 		return employeeServicePagination.searchEmployees(dto);
 		}
 	
-	@GetMapping("/status-pagination")
+	@PostMapping("/pagination-status")
 	public Page<Employee> getEmployeeByStatus(@RequestBody EmployeePageRequestDto dto) {
 		return employeeServicePagination.getEmployeeByStatus(dto);
 		}
@@ -67,9 +67,9 @@ public class EmployeeControllerPagination {
 		return employeeServicePagination.updateEmployeeStatus(id,status);
 		}
 	
-	@GetMapping("/update-insert-employee")
-	public ResponseEntity<String> updateOrInsertEmployee(@RequestBody Employee employee) {
-		String msg = employeeServicePagination.updateOrInsertEmployee(employee);
-		return new ResponseEntity<>(msg,HttpStatus.OK);
+	@PostMapping("/add-update")
+	public ResponseEntity<String> updateOrAddEmployee(@RequestBody EmployeePageRequestDto dto) {
+		String message = employeeServicePagination.updateOrAddEmployee(dto);
+		return new ResponseEntity<>(message,HttpStatus.OK);
 		}
 	}

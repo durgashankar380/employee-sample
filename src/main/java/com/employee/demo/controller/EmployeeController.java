@@ -36,50 +36,50 @@ public class EmployeeController {
         return service.addEmployee(employeeRequest);
     }
     
-    @GetMapping("/total-salary")
+    @GetMapping("/total-salary")        
     public Map<String, Double> getTotalSalaryPerDepartment() {
         return service.getTotalSalaryPerDepartment();
     }
 
-    @GetMapping("/grouped-by-department")
+    @GetMapping("/grouped-by-department")     
     public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
         return service.getEmployeesGroupedByDepartment();
     }
 
-    @GetMapping("/unique-departments")
+    @GetMapping("/unique-departments")              
     public Set<String> getUniqueEmployeeDepartments() {
         return service.getUniqueEmployeeDepartments();
     }
 
-    @GetMapping("/employee-map")
+    @GetMapping("/employee-map")              
     public Map<Long, EmployeeResponse> getEmployeesByIdMap() {
         return service.getEmployeesByIdMap();
     }
     
-    @GetMapping("/sorted-by-salary")
+    @GetMapping("/sorted-by-salary")                      
     public List<Employee> getEmpSortBySalary() {
     	return service.findAllByOrderBySalaryDesc();
     			 
     }
     
-    @GetMapping("/employee-name")
+    @GetMapping("/employee-name")          
     public List<String> getAllEmpNames() {
 		List<String> ename = service.getAllEmpNames();
     	return ename;
     }
     
-    @GetMapping("/count-per-department")
+    @GetMapping("/count-per-department")   
     Map<String,Integer> getDepartmentEmployeeCount(){
     	Map<String,Integer> deptCount = service.getDepartmentEmployeeCount();
     	return deptCount;
     }
     
-    @GetMapping("/queue")
+    @GetMapping("/queue")                  
     public List<Employee> getEmployeeInFirstInFirstOut() {
     	return service.getEmployeeInFirstInFirstOut();
     }
     
-    @GetMapping("stack")
+    @GetMapping("stack")                     
     public List<Employee> getEmployeeInLastInFirstOut() {
     	return service.getEmployeeInLastInFirstOut();
     }
@@ -106,17 +106,17 @@ public class EmployeeController {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     
-    @GetMapping("/Top-3-Highest-Paid-Employee")
+    @GetMapping("/Top-3-Highest-Paid-Employee")                 
     public Map<String, List<Employee>> getTop3HighestPaidEmployeePerDepartment() {
 		return service.getTop3HighestPaidEmployeePerDepartment();	
     }
     
-    @GetMapping("/second-highest-salary")
+    @GetMapping("/second-highest-salary")                          
     public List<Employee> getSecondHighestSalary() {
     	return service.getSecondHighestSalary();
     }
     
-    @GetMapping("/highest-total-salary-department")
+    @GetMapping("/highest-total-salary-department")             
     public String getDepartmentWithHighestTotalSalary() {
 		return service.getDepartmentWithHighestTotalSalary();
     }

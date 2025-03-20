@@ -15,4 +15,8 @@ public class Employee {
     
     private int status;
 
+    @Column(unique = true, nullable = false)
+    private String emailId;
+    
+    private String password;
 }

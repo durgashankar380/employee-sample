@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.employee.demo.model.Employee;
+import com.employee.demo.request.EmployeePageRequestDto;
 
-import dto.EmployeePageRequestDto;
 import jakarta.transaction.Transactional;
 
 public interface EmployeeRepositoryPagination extends JpaRepository<Employee, Long> {

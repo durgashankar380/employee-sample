@@ -3,24 +3,25 @@ package com.employee.demo.service.impl;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.employee.demo.ApiStatus.ApiStatus;
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepositoryPagination;
+import com.employee.demo.request.EmployeePageRequestDto;
 import com.employee.demo.service.EmployeeServicePagination;
-import dto.EmployeePageRequestDto;
-import jakarta.transaction.Transactional;
 
 @Service
 public class EmployeeServiceImplPagination implements EmployeeServicePagination {
 
 		private final EmployeeRepositoryPagination employeeRepositoryPagination;
+		private final PasswordEncoder passwordEncoder;
 	
-	public EmployeeServiceImplPagination(EmployeeRepositoryPagination employeeRepositoryPagination) {
+	public EmployeeServiceImplPagination(EmployeeRepositoryPagination employeeRepositoryPagination,PasswordEncoder passwordEncoder) {
 		this.employeeRepositoryPagination = employeeRepositoryPagination;
+		this.passwordEncoder=passwordEncoder;
 	}
 
 	// retrieve all employees using pagination
@@ -48,7 +49,7 @@ public class EmployeeServiceImplPagination implements EmployeeServicePagination 
 	// retrieves list of employees using pagination and sorting
 	
 	@Override
-	public Page<Employee> getAllEmployeeUsingPaginationList(EmployeePageRequestDto dto) {
+	public Page<Employee> getAllEmployeeUsingPaginationSort(EmployeePageRequestDto dto) {
 		return employeeRepositoryPagination.findAll(dto.getPageable());
 	}
 
@@ -75,44 +76,54 @@ public class EmployeeServiceImplPagination implements EmployeeServicePagination 
 	public String updateEmployeeStatus(long id, int status) {
 		Optional<Employee> empOptional = employeeRepositoryPagination.findById(id);
 		if(empOptional.isEmpty()) {
-			return "Employee with id "+ id + " not found";
+			return ApiStatus.EMPLOYEE_NOT_FOUND.getMessage();
 		}
 		Employee employee = empOptional.get();
 		employee.setStatus(status);
 		employeeRepositoryPagination.save(employee);
-		String statusMessage;
+		ApiStatus statusMessage;
 		if(status==1) {
-			statusMessage = " Activated successfully..";
+			return ApiStatus.EMPLOYEE_ACTIVATED.getMessage();
 		} else if(status==2) {
-			statusMessage = " Inactivated successfully..";
+			return ApiStatus.EMPLOYEE_INACTIVATED.getMessage();
 		} else if(status==3) {
-			statusMessage = " deleted successfully..";
+			return ApiStatus.EMPLOYEE_DELETED.getMessage();
 		}else {
-			return "Invalid Status";
+			return ApiStatus.INVALID_STATUS.getMessage();
 		}
-		return "Employee with ID " + id + statusMessage;
 	}
 	
 	
 	@Override
-	public String updateOrInsertEmployee(Employee employee) {
-	    if (employee.getId() == null || employee.getId() == 0) {   
-	        employee.setStatus(1);
-	        Employee savedEmployee = employeeRepositoryPagination.save(employee);
-	        return "Employee with id added Successfully"; 
+	public String updateOrAddEmployee(EmployeePageRequestDto dto) {
+	    if (dto.getId() == 0) {   
+	     
+	        Employee newEmployee = new Employee();
+	        newEmployee.setName(dto.getSearchKeyword());
+	        newEmployee.setDepartment(dto.getDepartment());
+	        newEmployee.setSalary(dto.getSalary());
+	        newEmployee.setStatus(1);
+	        newEmployee.setEmailId(dto.getEmailId());
+	        newEmployee.setPassword(passwordEncoder.encode(dto.getPassword()));
+	        employeeRepositoryPagination.save(newEmployee);
+	        return ApiStatus.EMPLOYEE_ADDED_SUCCESSFULLY.getMessage(); 
 	    }
-	    Optional<Employee> existingEmployee = employeeRepositoryPagination.findById(employee.getId());
+	    Optional<Employee> existingEmployee = employeeRepositoryPagination.findById(dto.getId());
 	    if (existingEmployee.isPresent()) {
 	        Employee updatedEmployee = existingEmployee.get();
-	        updatedEmployee.setName(employee.getName());
-	        updatedEmployee.setDepartment(employee.getDepartment());
-	        updatedEmployee.setSalary(employee.getSalary());
-	        return "Employee updated Successfully"; 
+	        updatedEmployee.setName(dto.getSearchKeyword());
+	        updatedEmployee.setDepartment(dto.getDepartment());
+	        updatedEmployee.setSalary(dto.getSalary());
+	        if(dto.getStatus() != null) {
+	        	updatedEmployee.setStatus(dto.getStatus());	
+	        }
+	        
+	        employeeRepositoryPagination.save(updatedEmployee);
+	        return ApiStatus.EMPLOYEE_UPDATED_SUCCESSFULLY.getMessage(); 
 	    } else {
-	        return "Employee does not Exist with this id"; 
+	        return ApiStatus.EMPLOYEE_DOES_NOT_EXIST.getMessage(); 
 	    }
 	}
-
 
 	@Override
 	public boolean existsById(Long id) {

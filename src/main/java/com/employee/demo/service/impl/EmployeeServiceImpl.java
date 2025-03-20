@@ -58,28 +58,33 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     @Override
     public Map<String, Double> getTotalSalaryPerDepartment() {
-    	try {
-        List<Employee> employees = repository.findAll();
-        Map<String, Double> totalSalaryMap = new HashMap<>();
-        for (Employee emp : employees) {
-            totalSalaryMap.put(emp.getDepartment(), totalSalaryMap.getOrDefault(emp.getDepartment(), 0.0) + emp.getSalary());
+        try {
+            List<Employee> employees = repository.findAll();
+            Map<String, Double> totalSalaryMap = new HashMap<>();
+
+            for (Employee emp : employees) {
+                if (emp.getDepartment() != null) { 
+                    totalSalaryMap.put(emp.getDepartment(), 
+                        totalSalaryMap.getOrDefault(emp.getDepartment(), 0.0) + emp.getSalary());
+                }        
+            }
+            return totalSalaryMap;
+        } catch (Exception e) {
+            System.err.println("Error calculating total salary per department: " + e.getMessage());
+            throw new RuntimeException("Failed to get Total Salary", e);
         }
-        return totalSalaryMap;
-    	}
-    	catch(Exception e) {
-    		System.err.println(e.getMessage());
-    		throw new RuntimeException("Failed to get Total Salary",e);
-    	}
     }
 
+    
     @Override
     public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
     	try {
         List<Employee> employees = repository.findAll();
         Map<String, List<EmployeeResponse>> groupedEmployees = new HashMap<>();
         for (Employee emp : employees) {
-            groupedEmployees.putIfAbsent(emp.getDepartment(), new ArrayList<>());
-            groupedEmployees.get(emp.getDepartment()).add(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+        	String department = emp.getDepartment() != null ? emp.getDepartment() : "Unknown";
+            groupedEmployees.putIfAbsent(department, new ArrayList<>());
+            groupedEmployees.get(department).add(new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
         }
         return groupedEmployees;
     	}
@@ -111,7 +116,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = repository.findAll();
         Map<Long, EmployeeResponse> employeeMap = new HashMap<>();
         for (Employee emp : employees) {
+        	if (emp.getId() != null) {
             employeeMap.put(emp.getId(), new EmployeeResponse(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary()));
+        	}
         }
         return employeeMap;
     	}
@@ -154,27 +161,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
+	
 	@Override
 	public Map<String, Integer> getDepartmentEmployeeCount() {
-		try {
-		List<Employee> employees = repository.findAll();
-		Map<String,Integer> deptEmpCount = new HashMap<>();
-		for(Employee e : employees) {
-			String department = e.getDepartment();
-			if(deptEmpCount.containsKey(department)) {
-				deptEmpCount.put(department, deptEmpCount.get(department)+1);
-			}
-			else {
-				deptEmpCount.put(department, 1);
-			}
-		}
-		return deptEmpCount;
-		}catch(Exception e) {
-			System.err.println("Failed to fetch employee department count"+e.getMessage());
-			return Collections.emptyMap();
-		}
-		}
+	    try {
+	        List<Employee> employees = repository.findAll();
+	        Map<String, Integer> deptEmpCount = new HashMap<>();
 
+	        for (Employee e : employees) {
+	            String department = e.getDepartment() != null ? e.getDepartment() : "Unknown"; 
+	            deptEmpCount.put(department, deptEmpCount.getOrDefault(department, 0) + 1); 
+	        }
+
+	        return deptEmpCount;
+	    } catch (Exception e) {
+	        System.err.println("Failed to fetch employee department count: " + e.getMessage());
+	        return Collections.emptyMap();
+	    }
+	}
+
+	
 	@Override
 	public List<Employee> addMultipleEmployee(List<Employee> employees) {
 		try {
@@ -263,46 +269,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
+	
 	@Override
 	public Map<String, List<Employee>> getTop3HighestPaidEmployeePerDepartment() {
-		try {
-		List<Employee> listEmp = repository.findAll();
-		if(listEmp == null || listEmp.isEmpty()) {
-			return new HashMap<>();
-		}
-			Map<String, List<Employee>> employeeByDepartment = new HashMap<>();
-			for(int i=0;i<listEmp.size();i++) {
-				Employee listEmp1 = listEmp.get(i);
-				if(!employeeByDepartment.containsKey(listEmp1.getDepartment())) {
-					employeeByDepartment.put(listEmp1.getDepartment(), new ArrayList<>());
-				}
-				employeeByDepartment.get(listEmp1.getDepartment()).add(listEmp1);
-			}
-			for (Map.Entry<String, List<Employee>> entry : employeeByDepartment.entrySet()) {
-	            List<Employee> departmentEmployee = entry.getValue();
-	            int n = departmentEmployee.size();
-	            for (int j = 0; j < n - 1; j++) {
-	                for (int k = 0; k < n - j - 1; k++) {
-	                    if (departmentEmployee.get(k).getSalary() < departmentEmployee.get(k + 1).getSalary()) {
-	                        Employee temp = departmentEmployee.get(k);
-	                        departmentEmployee.set(k, departmentEmployee.get(k + 1));
-	                        departmentEmployee.set(k + 1, temp);
-	                    }
-	                }
-	            }
+	    try {
+	        List<Employee> listEmp = repository.findAll();
+	        if (listEmp == null || listEmp.isEmpty()) {
+	            return new HashMap<>();
+	        }
 
-	            // Keep only top 3 books
-	            if (departmentEmployee.size() > 3) {
-	            	departmentEmployee.subList(3, departmentEmployee.size()).clear();
+	        Map<String, List<Employee>> employeeByDepartment = new HashMap<>();
+	        for (Employee emp : listEmp) {
+	            String department = emp.getDepartment() != null ? emp.getDepartment() : "Unknown"; // Handle null department
+	            employeeByDepartment.putIfAbsent(department, new ArrayList<>());
+	            employeeByDepartment.get(department).add(emp);
+	        }
+	        for (Map.Entry<String, List<Employee>> entry : employeeByDepartment.entrySet()) {
+	            List<Employee> departmentEmployees = entry.getValue();
+	            departmentEmployees.sort((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary()));
+	            if (departmentEmployees.size() > 3) {
+	                entry.setValue(departmentEmployees.subList(0, 3));
 	            }
 	        }
 	        return employeeByDepartment;
-		}catch(Exception e) {
-			System.err.println("Failed to fetch top 3 highest paid employee"+e.getMessage());
-			return Collections.emptyMap();
-		}
+	    } catch (Exception e) {
+	        System.err.println("Failed to fetch top 3 highest paid employees: " + e.getMessage());
+	        return Collections.emptyMap();
 	    }
-
+	}
 
 
 
@@ -380,53 +374,46 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 
-
 	@Override
 	public List<Employee> getEmployeeEarnAboveDepartmentAverageSalary() {
-		try {
-		List<Employee> listEmp = repository.findAll();
-		if(listEmp == null || listEmp.isEmpty()) {
-			return Collections.emptyList();
-		}
-		Map<String, List<Double>> departmentSalary = new HashMap<>();
-        for (int i = 0; i < listEmp.size(); i++) {
-            Employee emp1 = listEmp.get(i);
-            String department = emp1.getDepartment();
-            double salary = emp1.getSalary();
-
-            if (!departmentSalary.containsKey(department)) {
-            	departmentSalary.put(department, new ArrayList<>());
-            }
-            departmentSalary.get(department).add(salary);
-        }
-        Map<String, Double> departmentSalary1 = new HashMap<>();
-        for (Map.Entry<String, List<Double>> entry : departmentSalary.entrySet()) {
-            String department = entry.getKey();
-            List<Double> salaryList = entry.getValue();
-
-            int sum = 0;
-            for (int j = 0; j < salaryList.size(); j++) {
-                sum += salaryList.get(j);
-            }
-            double avg = (double) sum / salaryList.size();
-            departmentSalary1.put(department, avg);
-        }
-        List<Employee> resultEmployees = new ArrayList<>();
-        for (int i = 0; i < listEmp.size(); i++) {
-            Employee emp1 = listEmp.get(i);
-            String department = emp1.getDepartment();
-            if (emp1.getSalary() > departmentSalary1.get(department)) {
-                resultEmployees.add(emp1);
-            }
-        }
-
-        return resultEmployees;
-		}catch(Exception e) {
-			System.err.println("Error fetching employees earning above department average salary:"+e.getMessage());
-			return Collections.emptyList();
-		}
+	    try {
+	        List<Employee> listEmp = repository.findAll();
+	        if (listEmp == null || listEmp.isEmpty()) {
+	            return Collections.emptyList();
+	        }
+	        Map<String, List<Double>> departmentSalary = new HashMap<>();
+	        for (Employee emp : listEmp) {
+	            String department = emp.getDepartment() != null ? emp.getDepartment() : "Unknown";
+	            departmentSalary.putIfAbsent(department, new ArrayList<>());
+	            departmentSalary.get(department).add(emp.getSalary());
+	        }
+	        Map<String, Double> departmentAverageSalary = new HashMap<>();
+	        for (Map.Entry<String, List<Double>> entry : departmentSalary.entrySet()) {
+	            String department = entry.getKey();
+	            List<Double> salaryList = entry.getValue();
+	            double sum = 0.0;
+	            for (double salary : salaryList) {
+	                sum += salary;
+	            }
+	            double avg = sum / salaryList.size(); 
+	            departmentAverageSalary.put(department, avg);
+	        }
+	        List<Employee> resultEmployees = new ArrayList<>();
+	        for (Employee emp : listEmp) {
+	            String department = emp.getDepartment() != null ? emp.getDepartment() : "Unknown";
+	            double avgSalary = departmentAverageSalary.getOrDefault(department, 0.0);
+	            if (emp.getSalary() > avgSalary) {
+	                resultEmployees.add(emp);
+	            }
+	        }
+	        return resultEmployees;
+	    } catch (Exception e) {
+	        System.err.println("Error fetching employees earning above department average salary: " + e.getMessage());
+	        return Collections.emptyList();
+	    }
 	}
 
+	
 
 
 

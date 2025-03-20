@@ -15,79 +15,80 @@ import com.employee.demo.service.EmployeeServiceQuery;
 @RestController
 @RequestMapping("/emp")
 public class EmployeeControllerQuery {
-	private final EmployeeServiceQuery service1;
+	private final EmployeeServiceQuery service;
 
-	public EmployeeControllerQuery(EmployeeServiceQuery service1) {
-		this.service1 = service1;
+	public EmployeeControllerQuery(EmployeeServiceQuery service) {
+		this.service = service;
 	}
 	
-	@GetMapping("/total-salary-1")
+	
+	@GetMapping("/total-salary")
 	public Map<String, Double> getTotalSalaryPerDepartment() {
-		return service1.getTotalSalaryPerDepartment();		
+		return service.getTotalSalaryPerDepartment();		
 	}
 	
-	@GetMapping("/unique-departments-1")
+	@GetMapping("/unique-departments")
 	public List<String> getUniqueEmployeeDepartments(){
-		return service1.getUniqueEmployeeDepartments();
+		return service.getUniqueEmployeeDepartments();
 	}
 	
-	@GetMapping("/grouped-by-department-1")
+	@GetMapping("/grouped-by-department")
 	public Map<String, List<EmployeeResponse>> getEmployeeGroupByDepartment() {
-		return service1.getEmployeeGroupByDepartment();
+		return service.getEmployeeGroupByDepartment();
 	}
 	
-	@GetMapping("/employee-map-1")
+	@GetMapping("/employee-map")
 	public Map<Long, EmployeeResponse> getEmployeeByIdMap() {
-		return service1.getEmployeeByIdMap();	
+		return service.getEmployeeByIdMap();	
 	}
 	
-	@GetMapping("/sort-by-salary-1")
+	@GetMapping("/sort-by-salary")
 	public List<Employee> getEmployeeSortBySalary() {
-		return service1.getEmployeeSortBySalary();
+		return service.getEmployeeSortBySalary();
 	}
 	
-	@GetMapping("/count-per-department-1")
+	@GetMapping("/count-per-department")
 	public Map<String, Long> getDepartmentEmployeeCount() {
-		return service1.getDepartmentEmployeeCount();
+		return service.getDepartmentEmployeeCount();
 	}
 	
 	@GetMapping("/employee-name")
 	public List<String> getAllEmployeeName() {
-		return service1.getAllEmployeeName();
+		return service.getAllEmployeeName();
 	}
 	
-	@GetMapping("/queue-1")
+	@GetMapping("/queue")
 	public List<Employee> getEmployeeFirstInFirstOut() {
-		return service1.getEmployeeFirstInFirstOut();
+		return service.getEmployeeFirstInFirstOut();
 	}
 	
-	@GetMapping("/stack-1")
+	@GetMapping("/stack")
 	public List<Employee> getEmployeeLastInFirstOut() {
-		return service1.getEmployeeLastInFirstOut();
+		return service.getEmployeeLastInFirstOut();
 	}
 	
-	@GetMapping("/second-highest-salary-1")
+	@GetMapping("/second-highest-salary")
 	public List<Employee> getSecondHighestSalary() {
-		return service1.getSecondHighestSalary();
+		return service.getSecondHighestSalary();
 	}
 	
-	@GetMapping("/Top-3-Highest-Paid-Employee-1")
+	@GetMapping("/Top-3-Highest-Paid-Employee")
 	public Map<String, List<EmployeeResponse>> getTop3HighestPaidEmployeePerDepartment() {
-		return service1.getTop3HighestPaidEmployeePerDepartment();	
+		return service.getTop3HighestPaidEmployeePerDepartment();	
 	}
 	
-	@GetMapping("/department-average-salary-1")
+	@GetMapping("/department-average-salary")
 	public List<Object[]> getEmployeeEarnAboveDepartmentAverageSalary() {
-		return service1.getEmployeeEarnAboveDepartmentAverageSalary();
+		return service.getEmployeeEarnAboveDepartmentAverageSalary();
 	}
 	
-	@GetMapping("/highest-total-salary-department-1")
+	@GetMapping("/highest-total-salary-department")
     public List<String> getDepartmentWithHighestTotalSalary() {
-		return service1.getDepartmentWithHighestTotalSalary();
+		return service.getDepartmentWithHighestTotalSalary();
     }
 	
-	@GetMapping("/most-common-first-letter-1")
+	@GetMapping("/most-common-first-letter")
     public List<String> mostCommonFirstLetterinEmployeeNames() {
-		return service1.mostCommonFirstLetterinEmployeeNames();
+		return service.mostCommonFirstLetterinEmployeeNames();
     }
 }

@@ -1,4 +1,4 @@
-package dto;
+package com.employee.demo.request;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +22,9 @@ public class EmployeePageRequestDto {
 	private Long id;
 	private Double salary;
 	private String department;
+	private String emailId;
+	private String password;
+	
 	
 	public Pageable getPageable() {
 		return PageRequest.of(pageNo, pageSize,Sort.by(sort,sortByColumn));
