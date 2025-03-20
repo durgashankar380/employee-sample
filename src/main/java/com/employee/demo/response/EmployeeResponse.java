@@ -25,7 +25,5 @@ public class EmployeeResponse {
 		this.status = employee.getStatus();	
 	}
 
-	public EmployeeResponse(long id2, String name2, String department2, double salary2) {
-		// TODO Auto-generated constructor stub
-	}
+	
 }

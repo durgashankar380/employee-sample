@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.employee.demo.model.Employee;
 
 @Repository
-public interface EmployeeQRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeQueryRepository extends JpaRepository<Employee, Long> {
 
 	@Query("select Sum(e.salary) from Employee e")
 	Double findTotalSalary();
@@ -41,7 +41,7 @@ public interface EmployeeQRepository extends JpaRepository<Employee, Long> {
 	@Query("select e.department, sum(e.salary) from Employee e group by e.department order by sum(e.salary) desc limit 1")
 	List<Object[]> findHighestPaidDepartment();
      
-	@Query("select e.id, e.name, e.department, e.salary from Employee e")
+	@Query("select e.id, e.name, e.department, e.salary, e.status from Employee e")
 	List<Object[]> findEmployeeByDepartment();
 	
 	

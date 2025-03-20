@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.employee.demo.model.Employee;
@@ -17,6 +18,9 @@ import com.employee.demo.service.EmployeePaginationService;
 
 @Service
 public class EmployeePaginationServiceImpl implements EmployeePaginationService {
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private EmployeePaginationRepository repository;
@@ -31,7 +35,7 @@ public class EmployeePaginationServiceImpl implements EmployeePaginationService 
 	@Override
 	public Page<Employee> findEmployeeWithPagination(EmployeePageRequest request) {
 		Page<Employee> pageable = repository
-				.findAll(PageRequest.of(request.getPageNumber() - 1, request.getPageSize()));
+				.findAll(PageRequest.of(request.getPageNumber()-1, request.getPageSize()));
 		int count = repository.findAll().size();
 		if (request.getPageNumber() == 0) {
 			return repository.findAll(PageRequest.ofSize(count));
@@ -98,14 +102,16 @@ public class EmployeePaginationServiceImpl implements EmployeePaginationService 
 			newEmp.setDepartment(request.getDepartment());
 			newEmp.setSalary(request.getSalary());
 			newEmp.setStatus(1);
+			newEmp.setEmailId(request.getEmailId());
+			newEmp.setPassword(passwordEncoder.encode(request.getPassword()));
 			repository.save(newEmp);
 			return "New Employee Added Succesfully.";
 		}else if(emp != null) {
 			emp.setName(request.getName());
 			emp.setSalary(request.getSalary());
 			emp.setDepartment(request.getDepartment());
-			emp.setStatus(1);
-			repository.save(emp);
+			emp.setStatus(request.getStatus());
+			repository.save(emp); 
 			return "Employee Updated succesfully.";	
 		} else {
 			return "Employee Not existed with this id.";

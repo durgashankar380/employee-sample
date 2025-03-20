@@ -7,12 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeRequest {
-	private long id;
-	private String name;
-	private String department;
-	private double salary;
-	private int status;
+public class ForgetPasswordRequest {
+
 	private String emailId;
-	private String password;
+	private String newPassword;
+	private String confirmNewPassword;
 }

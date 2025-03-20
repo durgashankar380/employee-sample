@@ -19,4 +19,8 @@ public class Employee {
 	private String department;
 	private double salary;
 	private int status;
+	@Column(unique = true, nullable = false)
+	private String emailId;
+	private String password;
+	
 }

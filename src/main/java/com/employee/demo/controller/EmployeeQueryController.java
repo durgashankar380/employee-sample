@@ -9,71 +9,71 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.service.EmployeeQService;
+import com.employee.demo.service.EmployeeQueryService;
 
 @RestController
-@RequestMapping("/employeeQ")
-public class EmployeeQController {
+@RequestMapping("/employee-query")
+public class EmployeeQueryController {
 
-	private EmployeeQService employeeQService;
+	private EmployeeQueryService employeeQueryService;
 
-	public EmployeeQController(EmployeeQService service) {
-		this.employeeQService = service;
+	public EmployeeQueryController(EmployeeQueryService service) {
+		this.employeeQueryService = service;
 	}
 
 	@GetMapping("/total-salary")
 	public Double getTotalOfSalary() {
-		return employeeQService.findTotalOfSalary();
+		return employeeQueryService.findTotalOfSalary();
 	}
 
 	@GetMapping("/unique-department")
 	public List<String> getUniqueDepartment() {
-		return employeeQService.findUniqueDepartment();
+		return employeeQueryService.findUniqueDepartment();
 	}
 
 	@GetMapping("/sorted-by-salary")
 	List<Employee> getEmployeeSortedBySalary() {
-		return employeeQService.findEmployeeSortedBySalary();
+		return employeeQueryService.findEmployeeSortedBySalary();
 	}
 
 	@GetMapping("/employee-names")
 	public List<String> getAllEmployeeName() {
-		return employeeQService.findAllEmployeeName();
+		return employeeQueryService.findAllEmployeeName();
 	}
 
 	@GetMapping("/stack")
 	List<Employee> getLatestWiseEmployees() {
-		return employeeQService.findLatestWiseEmployees();
+		return employeeQueryService.findLatestWiseEmployees();
 	}
 
 	@GetMapping("/queue")
 	List<Employee> getEarliestWiseEmployees() {
-		return employeeQService.findEarliestWiseEmployees();
+		return employeeQueryService.findEarliestWiseEmployees();
 	}
 
 	@GetMapping("/second-highest-salary")
 	Map<Double, List<Employee>> getSecondHighestPaidEmployees() {
-		return employeeQService.findSecondHighestPaidEmployee();
+		return employeeQueryService.findSecondHighestPaidEmployee();
 	}
 
 	@GetMapping("/employee-map")
 	Map<Integer, Employee> getAllEmployeeDataOfId() {
-		return employeeQService.getAllEmployeeDataOnId();
+		return employeeQueryService.getAllEmployeeDataOnId();
 	}
 
 	@GetMapping("/count-per-department")
 	public Map<String, Long> getTotalEmployeeCountByEachDepartment() {
-		return employeeQService.findCountOfEmployeeInDepartment();
+		return employeeQueryService.findCountOfEmployeeInDepartment();
 	}
 
 	@GetMapping("/highest-paid-department")
 	Map<String, Double> getHighestSalariedDepartment() {
-		return employeeQService.findHighestPaidDepartment();
+		return employeeQueryService.findHighestPaidDepartment();
 	}
 	
 	@GetMapping("/grouped-by-department")
 	public Map<String, List<EmployeeResponse>> getAllEmployeeByDepartment() {
-		return employeeQService.getAllEmployeeByDepartment();
+		return employeeQueryService.getAllEmployeeByDepartment();
 	}
 
 }

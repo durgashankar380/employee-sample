@@ -56,20 +56,20 @@ public class EmployeePaginationController {
 				employees.getContent().isEmpty() ? "no record found !!" : "data found succesfully.", employees);
 	}
 
-	@GetMapping("status")
+	@PostMapping("/status")
 	public EmployeePageResponse<Page<Employee>> getEmployees(@RequestBody EmployeePageRequest request) {
 		Page<Employee> employeePage = service.getEmployees(request);
 		return new EmployeePageResponse<>(employeePage.getContent().size(),
 				employeePage.getContent().isEmpty() ? "no record found !!" : "data found succesfully", employeePage);
 	}
 
-	@GetMapping("manage-status")
+	@GetMapping("/manage-status")
 	public ResponseEntity<String> updateStatus(@RequestParam long id, @RequestParam int status) {
 		String message = service.updateStatus(id, status);
 		return new ResponseEntity<>(message, HttpStatus.OK); 
 	}
 	
-	@PostMapping("add-or-update")
+	@PostMapping("/add-or-update")
 	public ResponseEntity<String> addOrUpdateWithId( @RequestBody EmployeeRequest request) {
 		String message = service.addOrUpdateWithId(request);
 		return new ResponseEntity<>(message, HttpStatus.OK);

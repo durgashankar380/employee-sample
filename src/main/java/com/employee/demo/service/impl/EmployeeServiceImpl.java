@@ -41,27 +41,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 		savedEmployee.setStatus(1);
 		employeeRepository.save(savedEmployee);
 		return new EmployeeResponse(savedEmployee.getId(), savedEmployee.getName(), savedEmployee.getDepartment(),
-				savedEmployee.getSalary());
+				savedEmployee.getSalary(), savedEmployee.getStatus());
 	}
 
 // get the list of employees in departments	
 	@Override
 	public Map<String, List<Employee>> getAllEmployeeByDepartment() {
-		Map<String, List<Employee>> map = new HashMap<>();
+		Map<String, List<Employee>> groupedEmployees = new HashMap<>();
 		List<Employee> allEmployee = employeeRepository.findAll();
-		for (Employee employee : allEmployee) {
-			String department = employee.getDepartment();
-			List<Employee> departmentEmployee = new ArrayList<>();
-			if (map.containsKey(department)) {
-				departmentEmployee = map.get(department);
-			} else {
-				departmentEmployee = new ArrayList<>();
-				map.put(department, departmentEmployee);
-			}
-			departmentEmployee.add(employee);
+//		for (Employee employee : allEmployee) {
+//			String department = employee.getDepartment();
+//			List<Employee> departmentEmployee = new ArrayList<>();
+//			if (groupedEmployees.containsKey(department)) {
+//				departmentEmployee = groupedEmployees.get(department);
+//			} else {
+//				departmentEmployee = new ArrayList<>();
+//				groupedEmployees.put(department, departmentEmployee);
+//			}
+//			departmentEmployee.add(employee);
+//		}
+		
+                           // Second way	
+		for (Employee emp : allEmployee) {
+			groupedEmployees.putIfAbsent(emp.getDepartment(), new ArrayList<>());
+			groupedEmployees.get(emp.getDepartment()).add(emp);
 		}
-		return map;
+		return groupedEmployees;
 	}
+	
 
 // get the total sum of given salary of all department.	
 	@Override

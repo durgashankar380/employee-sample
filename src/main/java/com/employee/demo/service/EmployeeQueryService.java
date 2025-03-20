@@ -6,7 +6,7 @@ import java.util.Map;
 import com.employee.demo.model.Employee;
 import com.employee.demo.response.EmployeeResponse;
 
-public interface EmployeeQService {
+public interface EmployeeQueryService {
 
 	Double findTotalOfSalary();
 
@@ -30,8 +30,6 @@ public interface EmployeeQService {
 
 	Map<String, List<EmployeeResponse>> getAllEmployeeByDepartment();
 
-	List<Employee> getAllEmployee();
 
-	List<Employee> getAll();
 
 }

@@ -14,5 +14,6 @@ public class EmployeePageRequest {
 	private String keyword;
 	private Double salary;
 	private int status;
+	
 
 }
