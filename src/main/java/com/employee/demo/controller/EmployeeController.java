@@ -2,12 +2,12 @@ package com.employee.demo.controller;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
+import com.employee.demo.request.JwtResetPasswordRequest;
 import com.employee.demo.response.EmployeeResponse;
 import com.employee.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.*;
 
@@ -91,12 +91,12 @@ public class EmployeeController {
         return this.service.updateEmpById(id, employeeEntity);
     }
 
-    @GetMapping("/getbydeptsalary/{dept}")
+    @GetMapping("/getByDeptSalary/{dept}")
     public ResponseEntity<?> depSalary(@PathVariable String dept) {
         return service.totalSalaryByDepartment(dept);
     }
 
-    @GetMapping("/highestPaidEmployee")
+    @GetMapping("/thirdHighestPaidEmployee")
     public List<EmployeeResponse> thirdhighestPaidEmployee() {
         return this.service.thirdhighestPaidEmployee();
     }
@@ -118,10 +118,13 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/commonletter")
+    @GetMapping("/commonLetter")
     public Character getMostCommonFirstLetter() {
         return this.service.getMostCommonFirstLetter();
     }
 
-
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> changePassword(@RequestBody JwtResetPasswordRequest request){
+        return service.changePassword(request);
+    }
 }

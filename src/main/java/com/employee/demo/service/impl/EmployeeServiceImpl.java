@@ -1,21 +1,31 @@
 package com.employee.demo.service.impl;
 
+import com.employee.demo.apiStatus.APIStatus;
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeeRequest;
+import com.employee.demo.request.JwtForgetPasswordRequest;
+import com.employee.demo.request.JwtResetPasswordRequest;
 import com.employee.demo.response.EmployeeResponse;
 import com.employee.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService, UserDetailsService {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     public EmployeeRepository employeeRepository;
 
@@ -25,18 +35,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee savedEmployee = null;
         if (employeeRequest.getEmployeeId() == 0) {
             employee.setName(employeeRequest.getName());
-            employee.setDepartment(employeeRequest.getDepartment());
+           employee.setDepartment(employeeRequest.getDepartment());
             employee.setSalary(employeeRequest.getSalary());
+            employee.setEmail(employeeRequest.getEmail());
+            employee.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
             employee.setStatus(1);
             savedEmployee = employeeRepository.save(employee);
         } else {
             savedEmployee = employeeRepository.findById(employeeRequest.getEmployeeId()).orElse(null);
             if (savedEmployee == null) {
-                return ResponseEntity.badRequest().body("No Employee with this Id  " + employeeRequest.getEmployeeId());
+                return ResponseEntity.badRequest()
+                        .body(APIStatus.EMPLOYEE_INVALID_ID.getMessage() + " " + employeeRequest.getEmployeeId());
             } else {
 
                 savedEmployee.setName(employeeRequest.getName());
-                savedEmployee.setDepartment(employeeRequest.getDepartment().isBlank() && employeeRequest.getDepartment().isEmpty() ? savedEmployee.getDepartment() : employeeRequest.getDepartment());
+              //  savedEmployee.setDepartment(employeeRequest.getDepartment().isBlank() && employeeRequest.getDepartment().isEmpty() ? savedEmployee.getDepartment() : employeeRequest.getDepartment());
                 savedEmployee.setSalary(employeeRequest.getSalary() != 0 && employeeRequest.getSalary() < 0 ? savedEmployee.getSalary() : employeeRequest.getSalary());
                 return new ResponseEntity<>(new EmployeeResponse(employeeRepository.save(savedEmployee)), HttpStatus.OK);
 
@@ -66,7 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Map<String, List<EmployeeResponse>> groupedEmployee = new HashMap<>();
         for (Employee emp : employees) {
             groupedEmployee.putIfAbsent(emp.getDepartment(), new ArrayList<>());
-            groupedEmployee.get(emp.getDepartment()).add(new EmployeeResponse(emp.getEmployeeId(), emp.getName(), emp.getDepartment(), emp.getSalary(), emp.getStatus()));
+            groupedEmployee.get(emp.getDepartment()).add(new EmployeeResponse(emp));
         }
         return groupedEmployee;
     }
@@ -86,7 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employee = employeeRepository.findAll();
         Map<Long, EmployeeResponse> employeeMap = new HashMap<>();
         for (Employee emp : employee) {
-            employeeMap.put(emp.getEmployeeId(), new EmployeeResponse(emp.getEmployeeId(), emp.getName(), emp.getDepartment(), emp.getSalary(), emp.getStatus()));
+            employeeMap.put(emp.getEmployeeId(), new EmployeeResponse(emp));
         }
         return employeeMap;
 
@@ -98,7 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         List<EmployeeResponse> responseList = new ArrayList<>();
         for (Employee employee : employees) {
-            EmployeeResponse employeeResponse = new EmployeeResponse(employee.getEmployeeId(), employee.getDepartment(), employee.getName(), employee.getSalary(), employee.getStatus());
+            EmployeeResponse employeeResponse = new EmployeeResponse(employee);
             responseList.add(employeeResponse);
         }
 
@@ -131,7 +144,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = employeeRepository.findAll();
         Queue<EmployeeResponse> queue = new LinkedList<>();
         for (Employee emp : employees) {
-            queue.offer(new EmployeeResponse(emp.getEmployeeId(), emp.getName(), emp.getDepartment(), emp.getSalary(), emp.getStatus()));
+            queue.offer(new EmployeeResponse(emp));
         }
         return queue;
     }
@@ -152,14 +165,18 @@ public class EmployeeServiceImpl implements EmployeeService {
             Employee employee = new Employee();
             employee.setName(req.getName());
             employee.setSalary(req.getSalary());
-            employee.setDepartment(req.getDepartment());
+          //  employee.setDepartment(req.getDepartment());
             employee.setStatus(req.getStatus());
+            employee.setEmail(req.getEmail());
+//            employee.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
+
+            employee.setPassword(passwordEncoder.encode(req.getPassword()));
             return employee;
         }).collect(Collectors.toList());
 
         List<Employee> savedEmployees = employeeRepository.saveAll(employees);
 
-        return savedEmployees.stream().map(emp -> new EmployeeResponse(emp.getEmployeeId(), emp.getName(), emp.getDepartment(), emp.getSalary(), emp.getStatus())).collect(Collectors.toList());
+        return savedEmployees.stream().map(EmployeeResponse::new).collect(Collectors.toList());
     }
 
     @Override
@@ -167,10 +184,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id).orElse(null);
         if (employee != null) {
             employee.setName(employeeEntity.getName() != null && !employeeEntity.getName().equals("") ? employeeEntity.getName() : employee.getName());
-            employee.setDepartment(employeeEntity.getDepartment() != null && !employeeEntity.getDepartment().equals("") ? employeeEntity.getDepartment() : employee.getDepartment());
+           // employee.setDepartment(employeeEntity.getDepartment() != null && !employeeEntity.getDepartment().equals("") ? employeeEntity.getDepartment() : employee.getDepartment());
             employee.setSalary(employeeEntity.getSalary());
             employee.setStatus(employeeEntity.getStatus() != null && employeeEntity.getStatus() != 0 ? employeeEntity.getStatus() : employee.getStatus());
         }
+        assert employee != null;
         return employeeRepository.save(employee);
 
     }
@@ -200,7 +218,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employeeEntities = employeeRepository.findAll();
         Stack<EmployeeResponse> stack = new Stack<>();
         for (Employee emp : employeeEntities) {
-            stack.push(new EmployeeResponse(emp.getEmployeeId(), emp.getName(), emp.getDepartment(), emp.getSalary(), emp.getStatus()));
+            stack.push(new EmployeeResponse(emp));
         }
         return stack;
     }
@@ -219,7 +237,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             int count = Math.min(3, employees1.size());
             for (int i = 0; i < count; i++) {
                 Employee emp = employees.get(i);
-                EmployeeResponse response = new EmployeeResponse(emp.getEmployeeId(), emp.getName(), emp.getDepartment(), emp.getSalary(), emp.getStatus());
+                EmployeeResponse response = new EmployeeResponse(emp);
                 result.add(response);
             }
         }
@@ -237,7 +255,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<EmployeeResponse> result = new ArrayList<>();
         for (Employee emp : employees) {
             if (emp.getSalary() == secondHighestSalary) {
-                result.add(new EmployeeResponse(emp.getEmployeeId(), emp.getName(), emp.getDepartment(), emp.getSalary(), emp.getStatus()));
+                result.add(new EmployeeResponse(emp));
             }
         }
         return result;
@@ -296,8 +314,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         int freq = 0;
         Character letter = '0';
         for (Employee emp : employees) {
-            char c = emp.getName().charAt(0);   //y
-            map.put(c, map.getOrDefault(c, 0) + 1);  //y-->1
+            char c = emp.getName().charAt(0);
+            map.put(c, map.getOrDefault(c, 0) + 1);
             if (map.get(c) >= freq) {
                 freq = map.get(c);
                 letter = c;
@@ -307,4 +325,55 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return (UserDetails) employeeRepository.findByEmail(username).orElseThrow(()->new RuntimeException(String.valueOf(APIStatus.EMPLOYEE_NOT_FOUND)));
+    }
+
+    @Override
+    public void getlastLogin(String email) {
+        Employee employee = employeeRepository.findByEmail(email).orElse(null);
+        if(employee != null){
+            employee.setLastLogin(LocalDateTime.now().toString());
+            employeeRepository.save(employee);
+//            employee.setLastLogin(String.valueOf(LocalDateTime.now()));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> forgetPassword(JwtForgetPasswordRequest request) {
+            Employee employee = employeeRepository.findByEmail(request.getEmail()).orElse(null);
+
+            if (employee == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found.");
+            }
+
+            if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+                return ResponseEntity.badRequest().body("New Password and Confirm Password do not match.");
+            }
+
+            employee.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            employeeRepository.save(employee);
+
+            return ResponseEntity.ok(APIStatus.EMPLOYEE_PASSWORD_SET);
+        }
+
+    @Override
+    public ResponseEntity<String> changePassword(JwtResetPasswordRequest request) {
+        Employee employee = employeeRepository.findByEmail(request.getEmail()).orElse(null);
+         if(employee == null){
+             return ResponseEntity.ok(APIStatus.EMPLOYEE_NOT_FOUND.getMessage());
+         }
+         if(!passwordEncoder.matches(request.getPreviousPassword(), employee.getPassword())){
+             return ResponseEntity.ok(APIStatus.EMPLOYEE_INCORRECT_PREVIOUS_PASSWORD.getMessage());
+         }
+         if(!request.getNewPassword().equals(request.getConfirmPassword())){
+             return ResponseEntity.badRequest().body(APIStatus.EMPLOYEE_INCORRECT_NEW_CONFORM_PASSWORD.getMessage());
+         }
+        employee.setPassword(passwordEncoder.encode(request.getNewPassword()));
+       employeeRepository.save(employee);
+        return ResponseEntity.ok(APIStatus.EMPLOYEE_PASSWORD_RESET.getMessage());
+    }
 }

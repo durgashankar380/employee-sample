@@ -33,7 +33,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(nativeQuery = true, value = "select name from employee")
     List<String> getAllNames();
 
-    @Query(value = "SELECT u.* FROM employee u WHERE u.id IN (SELECT employee_id FROM (SELECT id, department, salary, ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) as rn FROM final_user) sub WHERE rn <= 3)", nativeQuery = true)
+    @Query(value = "SELECT u.* FROM employee u WHERE u.id IN (SELECT employee_id FROM (SELECT id, department, salary, ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) as rn FROM employee) sub WHERE rn <= 3)", nativeQuery = true)
     List<Employee> findTop3HighestPaidEmployeesInEachDepartment();
 
     @Query(nativeQuery = true, value = "select * from employee ")
@@ -56,13 +56,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(value = "SELECT department FROM employee GROUP BY department ORDER BY SUM(salary) DESC LIMIT 1", nativeQuery = true)
     String findDepartmentWithHighestTotalSalary();
 
-    @Query(value = "SELECT * FROM employee e WHERE e.salary > (SELECT AVG(e2.salary) FROM final_user e2 WHERE e2.department = e.department)", nativeQuery = true)
+    @Query(value = "SELECT * FROM employee e WHERE e.salary > (SELECT AVG(e2.salary) FROM employee e2 WHERE e2.department = e.department)", nativeQuery = true)
     List<Employee> findEmployeesAboveDepartmentAverageSalary();
 
     @Query(value = "SELECT LEFT(name, 1) as first_letter, COUNT(*) as count FROM employee GROUP BY first_letter ORDER BY count DESC LIMIT 1", nativeQuery = true)
     List<Object[]> findMostCommonFirstLetter();
 
-    @Query(value = "SELECT * FROM employee e WHERE e.salary = (SELECT MAX(e2.salary) FROM final_user e2 WHERE e2.salary < (SELECT MAX(e3.salary) FROM final_user e3))", nativeQuery = true)
+    @Query(value = "SELECT * FROM employee e WHERE e.salary = (SELECT MAX(e2.salary) FROM employee e2 WHERE e2.salary < (SELECT MAX(e3.salary) FROM employee e3))", nativeQuery = true)
     List<Employee> findEmployeesWithSecondHighestSalary();
 
     @Query(value = "SELECT id, name, department, salary FROM employee", nativeQuery = true)
@@ -89,4 +89,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Page<Employee> findByStatusNot(int i, Pageable pageable);
 
     Page<Employee> findByStatus(int status, Pageable pageable);
+
+    Optional<Employee> findByEmail(String email);
+
 }

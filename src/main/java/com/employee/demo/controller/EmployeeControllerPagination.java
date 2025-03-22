@@ -17,7 +17,7 @@ public class EmployeeControllerPagination {
     private EmployeeServicePage servicePage;
 
 
-    @GetMapping("/getAllPage")
+    @PostMapping("/getAllPage")
     public Page<Employee> getAllEmployeePage(@RequestBody EmployeePageRequest request) {
         return servicePage.getAllEmployeePage(request);
     }
@@ -37,9 +37,9 @@ public class EmployeeControllerPagination {
         return servicePage.updateStatus(status, employeeId);
     }
 
-    @GetMapping("searchByStatus")
-    public ResponseEntity<?> searchByStatus(@RequestParam int status,@RequestBody EmployeePageRequest request) {
-        return servicePage.searchByStatus(status, request);
+    @PostMapping("searchByStatus")
+    public ResponseEntity<?> searchByStatus(@RequestBody EmployeePageRequest request) {
+        return servicePage.searchByStatus(request);
     }
 
 }

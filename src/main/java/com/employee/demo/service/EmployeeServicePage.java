@@ -4,7 +4,6 @@ import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeePageRequest;
 import com.employee.demo.response.EmployeePageResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface EmployeeServicePage {
@@ -15,8 +14,5 @@ public interface EmployeeServicePage {
 
     ResponseEntity<?> updateStatus(int status, long employeeId);
 
-    ResponseEntity<?> searchByStatus(int status, EmployeePageRequest request);
+    ResponseEntity<?> searchByStatus(EmployeePageRequest request);
 }
-
-
-//irctc partioning and shardining

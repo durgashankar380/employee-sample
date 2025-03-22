@@ -7,7 +7,7 @@ import com.employee.demo.response.EmployeeResponse;
 
 import java.util.*;
 
-public interface EmployeeService2 {
+public interface EmployeeServiceAll {
     void addEmployee(EmployeeRequest employeeRequest);
 
     List<Employee> getAllEmployee();

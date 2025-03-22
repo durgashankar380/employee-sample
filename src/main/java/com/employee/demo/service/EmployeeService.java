@@ -2,8 +2,12 @@ package com.employee.demo.service;
 
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
+import com.employee.demo.request.JwtForgetPasswordRequest;
+import com.employee.demo.request.JwtResetPasswordRequest;
 import com.employee.demo.response.EmployeeResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.*;
 
@@ -47,4 +51,12 @@ public interface EmployeeService {
     List<Employee> getAverageSalary();
 
     Character getMostCommonFirstLetter();
+
+    UserDetails loadUserByUsername(String username);
+
+    void getlastLogin(String email);
+
+    ResponseEntity<?> forgetPassword(JwtForgetPasswordRequest request);
+
+    ResponseEntity<String> changePassword(JwtResetPasswordRequest request);
 }

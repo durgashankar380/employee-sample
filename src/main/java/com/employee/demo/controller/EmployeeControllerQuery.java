@@ -3,7 +3,7 @@ package com.employee.demo.controller;
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.service.EmployeeService2;
+import com.employee.demo.service.EmployeeServiceAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,10 @@ import java.util.*;
 
 @RestController
 @RequestMapping("employee-Query")
-public class EmployeeController2 {
+public class EmployeeControllerQuery {
 
     @Autowired
-    EmployeeService2 service2;
+    EmployeeServiceAll service2;
 
     @PostMapping("/add-Employee")
     public void addEmployee(@RequestBody EmployeeRequest employeeRequest) {
@@ -38,7 +38,7 @@ public class EmployeeController2 {
     }
 
 
-    @GetMapping("/sorted-Bysalary")
+    @GetMapping("/sorted-By-salary")
     public List<Employee> getEmployeesSortedBySalary() {
         return service2.getEmployeesSortedBySalary();
     }
@@ -79,7 +79,7 @@ public class EmployeeController2 {
         return service2.findMostCommonFirstLetter();
     }
 
-    @GetMapping("/2HighestSalary")
+    @GetMapping("/SecondHighestSalary")
     List<Employee> findEmployeesWithSecondHighestSalary() {
         return service2.findEmployeesWithSecondHighestSalary();
     }

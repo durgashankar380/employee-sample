@@ -1,6 +1,7 @@
 package com.employee.demo.service.impl;
 
 
+import com.employee.demo.apiStatus.APIStatus;
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeePageRequest;
@@ -28,8 +29,6 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
     public Page<Employee> getAllEmployeePage(EmployeePageRequest request) {
         Pageable pageable = PageRequest.of(request.getPageIndex(), request.getPageSize(), Sort.by(Sort.Direction.fromString(request.getSortDir()), request.getSortBy()));
         Page<Employee> employees;
-       // request.setStatus(1);
-       // int status = request.getStatus();
         int size = request.getPageSize();
         if (size >= 0) {
             if (!request.getSearchBy().isEmpty() && !request.getSearchBy().isBlank()) {
@@ -70,9 +69,9 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
         Employee employee = repository.findById(employeeId).orElse(null);
         int prev = 0;
         if (employee == null) {
-            return ResponseEntity.badRequest().body("Employee doesn't Exist !!!");
+            return ResponseEntity.badRequest().body(APIStatus.EMPLOYEE_NOT_FOUND);
         } else if (status < 1 || status > 3) {
-            return ResponseEntity.badRequest().body("Invalid status to update!!!");
+            return ResponseEntity.badRequest().body(APIStatus.EMPLOYEE_INVALID_STATUS);
         } else if (employee.getStatus() == status) {
             String s = status == 1 ? "ACTIVE" : (status == 2) ? " INACTIVE " : " Temporarily DELETED ";
             String resp = "No need to update " + s;
@@ -82,15 +81,12 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
             employee.setStatus(status);
             employee = repository.save(employee);
         }
-
-        return new ResponseEntity<>(new EmployeeResponse(employee.getEmployeeId(),
-                employee.getName(), employee.getDepartment(),
-                employee.getSalary(), employee.getStatus()), HttpStatus.ACCEPTED);
-
+        return new ResponseEntity<>(new EmployeeResponse(employee), HttpStatus.ACCEPTED);
     }
 
     @Override
-    public ResponseEntity<?> searchByStatus(int status, EmployeePageRequest request) {
+    public ResponseEntity<?> searchByStatus(EmployeePageRequest request) {
+        int status=request.getStatus();
         int size = request.getPageSize();
         if (request.getPageSize() == 0) {
             size =repository.findAll().size();
@@ -100,7 +96,8 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
         if (status == 0) {
             employees = repository.findByStatusNot(3, pageable);
         }else if(status>3 || status<1){
-            return ResponseEntity.badRequest().body("the entered status is invalid ");
+            //return ResponseEntity.badRequest().body("the entered status is invalid ");
+            return ResponseEntity.badRequest().body(APIStatus.EMPLOYEE_STATUS_INVALID);
         }
         else {
             employees = repository.findByStatus(status, pageable);

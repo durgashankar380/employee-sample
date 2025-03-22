@@ -4,14 +4,14 @@ import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
-import com.employee.demo.service.EmployeeService2;
+import com.employee.demo.service.EmployeeServiceAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-public class EmployeeServiceImpl2 implements EmployeeService2 {
+public class EmployeeServiceImplAll implements EmployeeServiceAll {
 
     @Autowired
     private EmployeeRepository repository;
@@ -83,8 +83,9 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
             String department = (String) result[2];
             Double salary = (Double) result[3];
             Integer status = (Integer) result[4];
+            String email = (String) result[5];
 
-            EmployeeResponse response = new EmployeeResponse(id, name, department, salary, status);
+            EmployeeResponse response = new EmployeeResponse(id, name, department, salary, status,email);
 
             if (!departmentMap.containsKey(department)) {
                 departmentMap.put(department, new ArrayList<>());
@@ -116,8 +117,8 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
             String department = (String) result[2];
             Double salary = (Double) result[3];
             Integer status = (Integer) result[4];
-
-            EmployeeResponse response = new EmployeeResponse(employeeId, name, department, salary, status);
+            String email = (String) result[5];
+            EmployeeResponse response = new EmployeeResponse(employeeId, name, department, salary, status,email);
             employeeMap.put(employeeId, response);
         }
 
@@ -131,8 +132,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
 
         for (Object[] result : results) {
             String department = (String) result[0];
-            Long count = ((Number) result[1]).longValue(); // Safe conversion
-
+            Long count = ((Number) result[1]).longValue();
             departmentCountMap.put(department, count);
         }
         return departmentCountMap;
@@ -144,7 +144,7 @@ public class EmployeeServiceImpl2 implements EmployeeService2 {
 
         if (rowsAffected > 0) {
             Optional<Employee> updatedEmployee = repository.findById(id);
-            return updatedEmployee.orElse(null); // Return null if not found
+            return updatedEmployee.orElse(null);
         } else {
             return null;
         }
