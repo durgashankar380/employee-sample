@@ -12,13 +12,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+	List<Employee> findByDepartmentId(Long departmentId);
+
+
+	Optional<Employee> findByEmail(String email);
 	Employee save(EmployeeRequest employeeRequest);
 
 	List<Employee> findBySalary(double secMaxSalary);
@@ -54,13 +55,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 //			"concat('%',:search,'%') or lower(e.department) like concat('%',:search,'%')")
 	@Query("SELECT e FROM Employee e WHERE " +
 			"LOWER(e.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-			"LOWER(e.department) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+			"CAST(e.department AS string) LIKE (CONCAT('%', :search, '%')) OR " +
 			"CAST(e.salary AS string)  LIKE (CONCAT('%', :search, '%')) OR " +
 			"CAST(e.id AS string) LIKE (CONCAT('%', :search, '%')) ")
 
 	Page<Employee> search(@Param("search") String searchBy, Pageable pageable);
 
-	Page<Employee> findByNameAndDepartmentAndSalary(String name, String department, Double salary, Pageable pageable);
+	Page<Employee> findByNameAndDepartmentAndSalary(String name,String department, Double salary, Pageable pageable);
 
 	@Query(
 			nativeQuery = true,

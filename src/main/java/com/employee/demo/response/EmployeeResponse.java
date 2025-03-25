@@ -13,15 +13,15 @@ public class EmployeeResponse {
 
 	private Long id;
 	private String name;
-	private String department;
 	private double salary;
 	private int status;
+	public String email;
 
 	public EmployeeResponse (Employee employee){
-		this.department=employee.getDepartment();
 		this.id=employee.getId();
 		this.name=employee.getName();
 		this.salary=employee.getSalary();
 		this.status=employee.getStatus();
+		this.email=employee.getEmail();
 	}
 }

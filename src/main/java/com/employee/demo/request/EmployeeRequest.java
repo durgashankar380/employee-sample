@@ -1,5 +1,6 @@
 package com.employee.demo.request;
 
+import com.employee.demo.model.Department;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,8 @@ import lombok.NoArgsConstructor;
 public class EmployeeRequest {
     private Long id;
 	private String name;
-	private String department;
 	private Double salary;
-
+	private String email;
+	private String password;
+    private DepartmentRequest department;
 }

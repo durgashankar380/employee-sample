@@ -2,12 +2,12 @@ package com.employee.demo.controller;
 
 import java.util.*;
 
+import com.employee.demo.request.JwtResetRequest;
+import com.employee.demo.service.DepartmentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
@@ -18,6 +18,8 @@ import com.employee.demo.service.EmployeeService;
 public class EmployeeController {
     private final EmployeeService service;
 
+    @Autowired
+    private DepartmentService departmentService;
     public EmployeeController(EmployeeService service) {
         this.service = service;
     }
@@ -28,6 +30,12 @@ public class EmployeeController {
     public ResponseEntity<?> addAndUpdateEmployee(@RequestBody EmployeeRequest employeeRequest) {
         return service.addAndUpdateEmployee(employeeRequest);
     }
+
+    @PostMapping("/reset_password")
+    public ResponseEntity<?> resetPassword(@RequestBody JwtResetRequest resetRequest){
+        return service.resetPassword(resetRequest);
+    }
+
     
     @GetMapping("/total-salary")
     public Map<String, Double> getTotalSalaryPerDepartment() {
@@ -36,12 +44,12 @@ public class EmployeeController {
 
     @GetMapping("/grouped-by-department")
     public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
-        return service.getEmployeesGroupedByDepartment();
+        return departmentService.getEmployeesGroupedByDepartment();
     }
 
     @GetMapping("/unique-departments")
     public Set<String> getUniqueEmployeeDepartments() {
-        return service.getUniqueEmployeeDepartments();
+        return departmentService.getUniqueEmployeeDepartments();
     }
 
     @GetMapping("/employee-map")
@@ -61,7 +69,7 @@ public class EmployeeController {
 
     @GetMapping("/count-per-department")
     public Map<String,Long> countPerDepartment(){
-        return service.countPerDepartment();
+        return departmentService.countPerDepartment();
     }
 
     @GetMapping("/queue")
@@ -89,12 +97,12 @@ public class EmployeeController {
     }
     @GetMapping("/departmentWithHighestSalary")
     public String departmentWithHighestSalary(){
-        return service.getDepartmentWithHighestSalary();
+        return departmentService.getDepartmentWithHighestSalary();
     }
-    @GetMapping("/empEarnMoreThanAvgSalary")
-    public List<EmployeeResponse> empEarnMoreThanAvgSalary(){
-        return service.getEmpEarnMoreThanAvgSalary();
-    }
+//    @GetMapping("/empEarnMoreThanAvgSalary")
+//    public List<EmployeeResponse> empEarnMoreThanAvgSalary(){
+//        return service.getEmpEarnMoreThanAvgSalary();
+//    }
     @GetMapping("/mostCommonFirstLetter")
     public Character mostCommonFirstLetter(){
         return service.getMostCommonFirstLetter();
@@ -106,4 +114,8 @@ public class EmployeeController {
 //    Find Employees Who Earn More Than Their Department's Average Salary
 //    Find the Most Common First Letter in Employee Names
 
+    @DeleteMapping("/delete_employee")
+    public void deleteEmployee(@RequestParam Long id){
+        service.deleteEmployee(id);
+    }
 }

@@ -1,5 +1,6 @@
 package com.employee.demo.service.impl;
 
+import com.employee.demo.apiResponse.ApiResponse;
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.response.EmployeeResponse;
@@ -46,7 +47,7 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
         }
         List<EmployeeResponse> responseList=employees.getContent().stream().
 //                filter(employee -> employee.getStatus()==1).
-                map(employee -> new EmployeeResponse(employee.getId(),employee.getName(),employee.getDepartment(),employee.getSalary(),employee.getStatus())).
+                map(EmployeeResponse::new).
                 toList();
         return new EmployeePageResponse(
                 employees
@@ -58,9 +59,9 @@ public class EmployeeServicePageImpl implements EmployeeServicePage {
         Employee employee=repository.findById(id).orElse(null);
         int prevStatus=0;
         if(employee==null){
-            return ResponseEntity.badRequest().body("THERE IS NO EMPLOYEE WITH THIS EMPLOYEE_ID");
+            return ResponseEntity.badRequest().body(ApiResponse.EMPLOYEE_NOT_FOUND);
         }else if(status<1 || status>3){
-            return ResponseEntity.badRequest().body("INVALID STATUS TO UPDATE ");
+            return ResponseEntity.badRequest().body(ApiResponse.EMPLOYEE_INVALID_STATUS);
         }
         else if(employee.getStatus()==status){
             String state= status==1?" ACTIVE ":(status==2?" INACTIVE " : " TEMPORARILY DELETE ");

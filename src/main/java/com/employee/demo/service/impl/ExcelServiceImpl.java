@@ -1,5 +1,6 @@
 package com.employee.demo.service.impl;
 
+import com.employee.demo.apiResponse.ApiResponse;
 import com.employee.demo.service.ExcelService;
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
@@ -29,7 +30,7 @@ public class ExcelServiceImpl  implements ExcelService {
             List<Employee> employeeList=parseExcelFile(file.getInputStream());
             repository.saveAll(employeeList);
         }catch (Exception e){
-            throw  new RuntimeException("Failed to store excel data : "+e.getMessage());
+            throw  new RuntimeException(ApiResponse.FAIL_STORE_FILE_DATA.getMessage());
         }
     }
 
@@ -50,14 +51,14 @@ public class ExcelServiceImpl  implements ExcelService {
                 }
                 Employee employee=new Employee();
                 employee.setName(currRow.getCell(0).getStringCellValue());
-                employee.setDepartment(currRow.getCell(1).getStringCellValue());
+//                employee.setDepartment(currRow.getCell(1).getStringCellValue());
                 employee.setSalary(currRow.getCell(2).getNumericCellValue());
                 employees.add(employee);
 
             }
             workbook.close();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse Excel file : "+e.getMessage());
+            throw new RuntimeException(ApiResponse.FAIL_PARSE_FILE_DATA.getMessage());
         }
         return employees;
     }
