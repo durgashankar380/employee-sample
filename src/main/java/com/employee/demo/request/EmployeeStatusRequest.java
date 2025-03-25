@@ -14,7 +14,7 @@ public class EmployeeStatusRequest {
 	}
 	private Long id;
 	    private String name;
-	    private String department;
+	  //  private String department;
 	    private double salary;
 	    private int status;
 	    

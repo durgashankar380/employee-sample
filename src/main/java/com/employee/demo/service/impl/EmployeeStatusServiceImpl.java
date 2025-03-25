@@ -59,7 +59,7 @@ public class EmployeeStatusServiceImpl implements EmployeeStatusService {
             // Create a new employee
             Employee newEmployee = new Employee();
             newEmployee.setName(request.getName());
-            newEmployee.setDepartment(request.getDepartment());
+         //   newEmployee.setDepartment(request.getDepartment());
             newEmployee.setSalary(request.getSalary());
             newEmployee.setStatus(request.getStatus());
 

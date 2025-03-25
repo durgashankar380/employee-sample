@@ -13,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
+import com.employee.demo.repository.DepartmentRepository;
 import com.employee.demo.repository.EmployeeJwtRepository;
 import com.employee.demo.request.JwtRequest;
 import com.employee.demo.request.RequestEmployee;
@@ -41,6 +43,9 @@ public class JwtImpl implements JwtService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Override
     public ResponseEntity<JwtResponse> login(JwtRequest request) {
@@ -53,31 +58,79 @@ public class JwtImpl implements JwtService {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
+//    @Override
+//    public ResponseEntity<String> register(RequestEmployee employeeRequest) {
+//        System.out.println("Incoming Employee Data: " + employeeRequest.toString());
+//
+//        Optional<Employee> existingEmployee = employeeJwtRepository.findByEmail(employeeRequest.getEmail());
+//        if (existingEmployee.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists!");
+//        }
+//
+//        // Convert RequestEmployee to Employee entity
+//        Employee employee = new Employee();
+//        employee.setName(employeeRequest.getName());
+//        employee.setEmail(employeeRequest.getEmail());
+//        
+//        // Encrypt the password before saving
+//        String encryptedPassword = passwordEncoder.encode(employeeRequest.getPassword());
+//        employee.setPassword(encryptedPassword);
+//        
+//       // employee.setDepartment(employeeRequest.getDepartment());
+//        employee.setSalary(employeeRequest.getSalary());
+//
+//        employeeJwtRepository.save(employee); 
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Employee registered successfully!");
+//    }
+    
+    
+    
+    
     @Override
     public ResponseEntity<String> register(RequestEmployee employeeRequest) {
         System.out.println("Incoming Employee Data: " + employeeRequest.toString());
 
+        // Check if employee already exists
         Optional<Employee> existingEmployee = employeeJwtRepository.findByEmail(employeeRequest.getEmail());
         if (existingEmployee.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists!");
         }
 
-        // Convert RequestEmployee to Employee entity
+        // Check if department exists, else create a new department
+        Optional<Department> existingDepartment = departmentRepository.findByName(employeeRequest.getDepartment().getName());
+        Department department;
+        
+        if (existingDepartment.isPresent()) {
+            department = existingDepartment.get();
+        } else {
+            department = new Department();
+            department.setName(employeeRequest.getDepartment().getName());
+            department.setLocation(employeeRequest.getDepartment().getLocation());
+            department.setDescription(employeeRequest.getDepartment().getDescription());
+            department = departmentRepository.save(department); // Save department
+        }
+
+        // Create Employee entity
         Employee employee = new Employee();
         employee.setName(employeeRequest.getName());
         employee.setEmail(employeeRequest.getEmail());
         
-        // Encrypt the password before saving
+        // Encrypt password
         String encryptedPassword = passwordEncoder.encode(employeeRequest.getPassword());
         employee.setPassword(encryptedPassword);
-        
-        employee.setDepartment(employeeRequest.getDepartment());
+
         employee.setSalary(employeeRequest.getSalary());
+        employee.setDepartment(department); // Assign department to employee
 
-        employeeJwtRepository.save(employee); // Save encrypted password in DB
+        employeeJwtRepository.save(employee); // Save employee
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Employee registered successfully!");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Employee registered successfully with department!");
     }
+
+    
+    
+    
     
     @Override
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {

@@ -29,16 +29,16 @@ public class EmployeeQController {
     }
     
     //2 get all unique departments----
-    @GetMapping("/unique-departments")
-    public List<String> getUniqueDepartments() {
-        return employeeQService.getUniqueDepartments();
-    }
+//    @GetMapping("/unique-departments")
+//    public List<String> getUniqueDepartments() {
+//        return employeeQService.getUniqueDepartments();
+//    }
     
     //3 get all employee names----
-    @GetMapping("/names")
-    public List<String> getEmployeeNames() {
-        return employeeQService.getEmployeeNames();
-    }
+//    @GetMapping("/names")
+//    public List<String> getEmployeeNames() {
+//        return employeeQService.getEmployeeNames();
+//    }
     
     //4 get all employees in FIFO order----
     @GetMapping("/fifo")
@@ -54,22 +54,22 @@ public class EmployeeQController {
     
      
      //6 get employee count per department
-     @GetMapping("/employee-count-per-department")
-     public  Map<String,Integer> getEmployeeCountPerDepartment() {
-    	 return employeeQService.getEmployeeCountPerDepartment();
-     } 
+//     @GetMapping("/employee-count-per-department")
+//     public  Map<String,Integer> getEmployeeCountPerDepartment() {
+//    	 return employeeQService.getEmployeeCountPerDepartment();
+//     } 
      
      //7 get employees grouped by department
-     @GetMapping("/grouped-by-department")
-     public  Map<String, List<Employee>> getEmployeesGroupedByDepartment(){
-         return employeeQService.getEmployeesGroupedByDepartment();
-     }
+//     @GetMapping("/grouped-by-department")
+//     public  Map<String, List<Employee>> getEmployeesGroupedByDepartment(){
+//         return employeeQService.getEmployeesGroupedByDepartment();
+//     }
      
      //8 get total salary per department----
-     @GetMapping("/total-salary-per-department")
-     public List<Object[]> getTotalSalaryPerDepartment() {
-    	 return (List<Object[]>) employeeQService.getTotalSalaryPerDepartment();
-     }
+//     @GetMapping("/total-salary-per-department")
+//     public List<Object[]> getTotalSalaryPerDepartment() {
+//    	 return (List<Object[]>) employeeQService.getTotalSalaryPerDepartment();
+//     }
      
      //9 get employees As map----
      @GetMapping("/employees-map")
@@ -85,23 +85,23 @@ public class EmployeeQController {
      }
      
    //11 get department with highest total salary
-     @GetMapping("/highest-salary-department")
-     public String getDepartmentWithHighestTotalSala() {
-    	 return employeeQService.findDepartmentWithHighestTotalSalary();
-     }
-    
+//     @GetMapping("/highest-salary-department")
+//     public String getDepartmentWithHighestTotalSala() {
+//    	 return employeeQService.findDepartmentWithHighestTotalSalary();
+//     }
+//    
    //12 get employee who have salary greater then its department average
-     @GetMapping("/above-department-average")
-     public Map<String, List<Employee>> getEmployeesAboveDepartmentAverage() {
-    	 return employeeQService.getEmployeesAboveDepartmentAverage();
-     }
+//     @GetMapping("/above-department-average")
+//     public Map<String, List<Employee>> getEmployeesAboveDepartmentAverage() {
+//    	 return employeeQService.getEmployeesAboveDepartmentAverage();
+//     }
     
      //13 get top3 employee per department----
-    @GetMapping("/top3-by-department")
-    public Map<String, List<Employee>>  getTop3EmployeesByDepartment() {
-        return employeeQService.getTop3EmployeesByDepartment();
-    }
-        
+//    @GetMapping("/top3-by-department")
+//    public Map<String, List<Employee>>  getTop3EmployeesByDepartment() {
+//        return employeeQService.getTop3EmployeesByDepartment();
+//    }
+//        
   //14 get most common first letter from employees----
     @GetMapping("/most-common-first-letter")
     public char getMostCommonFirstLetter() {

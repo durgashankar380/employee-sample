@@ -13,7 +13,7 @@ public class ResponseEmployee {
 
 	private Long id;
 	private String name;
-	private String department;
+	//private String department;
 	private double salary;
 	private int status;
 
@@ -22,10 +22,16 @@ public class ResponseEmployee {
 	 public ResponseEmployee(Employee Employee) {
 	        this.id = Employee.getId();
 	        this.name = Employee.getName();
-	        this.department = Employee.getDepartment();
+	       // this.department = Employee.getDepartment();
 	        this.salary = Employee.getSalary();
 	        this.status= Employee.getStatus();
 	    }
+
+
+
+	public ResponseEmployee(Long id2, String name2, Double salary2, int status2) {
+		// TODO Auto-generated constructor stub
+	}
 	 
 	
 }

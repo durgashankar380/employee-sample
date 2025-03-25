@@ -5,16 +5,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RequestEmployee {
+@NoArgsConstructor
+public class EmployeeRequestDto {
     private String name;
-   // private String department;
-    private Double salary;
+    private double salary;
+    private int status;
     private String email;
     private String password;
-    private DepartmentRequest department;
-	
-   
- }
+	public static void setDepartment(DepartmentRequestDto departmentRequestDto) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
 

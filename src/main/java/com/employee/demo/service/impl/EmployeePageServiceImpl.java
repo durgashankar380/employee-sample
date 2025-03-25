@@ -35,8 +35,10 @@ public class EmployeePageServiceImpl implements EmployeePageService {
 	    Page<Employee> employeePage = employeePageRepository.searchEmployees(request.getKeyword(),  pageable);
 
 	    List<ResponseEmployee> responseEmployees = employeePage.getContent().stream()
-	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary(),emp.getStatus()))
-	            .collect(Collectors.toList());
+//	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary(),emp.getStatus()))
+	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getSalary(),emp.getStatus()))
+
+	    		.collect(Collectors.toList());
 	    
 	  
 
@@ -75,8 +77,9 @@ public class EmployeePageServiceImpl implements EmployeePageService {
 	 
 	    List<ResponseEmployee> responseEmployees = employeesPage.getContent()
 	        .stream()
-	        .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary(),emp.getStatus()))
-	        .collect(Collectors.toList());
+//	        .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary(),emp.getStatus()))
+	        .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getSalary(),emp.getStatus()))
+            .collect(Collectors.toList());
 	    
 	   
 

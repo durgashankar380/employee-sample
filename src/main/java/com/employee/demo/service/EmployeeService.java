@@ -6,8 +6,10 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
@@ -19,13 +21,13 @@ public interface EmployeeService {
     Employee saveEmployee(RequestEmployee requestEmployee);
  
     //2
-    Map<String, Double> getTotalSalaryPerDepartment();
+   // Map<String, Double> getTotalSalaryPerDepartment();
     
     //3	
-    Map<String, List<Employee>> getEmployeesGroupedByDepartment();
+   // Map<String, List<Employee>> getEmployeesGroupedByDepartment();
     
     //4
-    Set<String> getUniqueDepartments();
+   // Set<String> getUniqueDepartments();
     
     //5
     Map<Long, Employee> getEmployeesAsMap();
@@ -41,7 +43,7 @@ public interface EmployeeService {
     List<String> getEmployeeNames();
     
     //9
-    Map<String, Integer> getEmployeeCountByDepartment();
+   // Map<String, Integer> getEmployeeCountByDepartment();
     
     //10
     List<Employee> getEmployeesInFIFOOrder();
@@ -50,16 +52,16 @@ public interface EmployeeService {
     List<Employee> getEmployeesInLIFOOrder();
     
     //12
-    Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment();
+  //  Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment();
     
     //13
     List<ResponseEmployee> getEmployeesWithSecondHighestSalary();
     
     //14
-    String getDepartmentWithHighestTotalSalary();
+  //  String getDepartmentWithHighestTotalSalary();
     
     //15
-    List<ResponseEmployee> getEmployeesAboveDepartmentAverage();
+   // List<ResponseEmployee> getEmployeesAboveDepartmentAverage();
     
     //16
     char getMostCommonFirstLetter();
@@ -77,7 +79,8 @@ public interface EmployeeService {
     ResponseEntity<String> saveExcelData(MultipartFile file);
     
   
-    
-   
+  
 
+
+	
 }

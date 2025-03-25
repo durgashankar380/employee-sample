@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -26,12 +27,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.ApiStatus.ApiStatus;
 import com.employee.demo.Exception.EmployeeNotFoundException;
 import com.employee.demo.Exception.EmployeeSaveException;
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
+import com.employee.demo.repository.DepartmentRepository;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
@@ -43,6 +47,8 @@ import jakarta.transaction.Transactional;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private DepartmentRepository departmentRepository;
+	
 	private EmployeeRepository employeeRepository;
 
 	public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
@@ -56,16 +62,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        if (requestEmployee.getName() == null || requestEmployee.getName().isEmpty()) {
 	            throw new EmployeeSaveException(ApiStatus.EMPLOYEE_NAME_MANDATORY);
 	        }
-	        if (requestEmployee.getDepartment() == null || requestEmployee.getDepartment().isEmpty()) {
-	            throw new EmployeeSaveException(ApiStatus.EMPLOYEE_DEPARTMENT_MANDATORY);
-	        }
+//	        if (requestEmployee.getDepartment() == null || requestEmployee.getDepartment().isEmpty()) {
+//	            throw new EmployeeSaveException(ApiStatus.EMPLOYEE_DEPARTMENT_MANDATORY);
+//	        }
 	        if (requestEmployee.getSalary() == null) {
 	            throw new EmployeeSaveException(ApiStatus.EMPLOYEE_SALARY_MANDATORY);
 	        }
 
 	        Employee employee = new Employee();
 	        employee.setName(requestEmployee.getName());
-	        employee.setDepartment(requestEmployee.getDepartment());
+	     //   employee.setDepartment(requestEmployee.getDepartment());
 	        employee.setSalary(requestEmployee.getSalary());
 
 	        return employeeRepository.save(employee);
@@ -77,71 +83,71 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	// 2 get the total salary per department
-	@Override
-	public Map<String, Double> getTotalSalaryPerDepartment() {
-		try {
-			List<Employee> employees = employeeRepository.findAll();
-			Map<String, Double> departmentSalaryMap = new HashMap<>();
-
-			for (Employee emp : employees) {
-				String department = emp.getDepartment();
-				Double salary = emp.getSalary();
-
-				departmentSalaryMap.put(department, departmentSalaryMap.getOrDefault(department, 0.0) + salary);
-			}
-
-			return departmentSalaryMap;
-
-		 } catch (Exception e) {
-		        throw new RuntimeException("Employee Data Not Found", e);
-		    }
-	}
-	
+//	@Override
+//	public Map<String, Double> getTotalSalaryPerDepartment() {
+//		try {
+//			List<Employee> employees = employeeRepository.findAll();
+//			Map<String, Double> departmentSalaryMap = new HashMap<>();
+//
+//			for (Employee emp : employees) {
+//				String department = emp.getDepartment();
+//				Double salary = emp.getSalary();
+//
+//				departmentSalaryMap.put(department, departmentSalaryMap.getOrDefault(department, 0.0) + salary);
+//			}
+//
+//			return departmentSalaryMap;
+//
+//		 } catch (Exception e) {
+//		        throw new RuntimeException("Employee Data Not Found", e);
+//		    }
+//	}
+//	
 
 	// 3 get the employee according their group of department
-	@Override
-	public Map<String, List<Employee>> getEmployeesGroupedByDepartment() {
-		List<Employee> employees = employeeRepository.findAll();
-		try {
-		Map<String, List<Employee>> groupedEmployees = new HashMap<>();
+//	@Override
+//	public Map<String, List<Employee>> getEmployeesGroupedByDepartment() {
+//		List<Employee> employees = employeeRepository.findAll();
+//		try {
+//		Map<String, List<Employee>> groupedEmployees = new HashMap<>();
+//
+//		for (Employee employee : employees) {
+//			String department = employee.getDepartment();
+//
+//			List<Employee> departmentEmployees = new ArrayList<>();
+//
+//			if (groupedEmployees.containsKey(department)) {
+//				departmentEmployees = groupedEmployees.get(department);
+//			} else {
+//				departmentEmployees = new ArrayList<>();
+//				groupedEmployees.put(department, departmentEmployees);
+//			}
+//
+//			departmentEmployees.add(employee);
+//		}
+//
+//		return groupedEmployees;
+//		 } catch (Exception e) {
+//		        throw new RuntimeException("Employee Data Not Found", e);
+//		    }
+//		
+//	}
 
-		for (Employee employee : employees) {
-			String department = employee.getDepartment();
-
-			List<Employee> departmentEmployees = new ArrayList<>();
-
-			if (groupedEmployees.containsKey(department)) {
-				departmentEmployees = groupedEmployees.get(department);
-			} else {
-				departmentEmployees = new ArrayList<>();
-				groupedEmployees.put(department, departmentEmployees);
-			}
-
-			departmentEmployees.add(employee);
-		}
-
-		return groupedEmployees;
-		 } catch (Exception e) {
-		        throw new RuntimeException("Employee Data Not Found", e);
-		    }
-		
-	}
-
-	// 4 get unique department (get all types of department)
-	@Override
-	public Set<String> getUniqueDepartments() {
-		try {
-		List<Employee> employees = employeeRepository.findAll();
-
-		Set<String> uniqueDepartments = new HashSet<>();
-		for (Employee employee : employees) {
-			uniqueDepartments.add(employee.getDepartment());
-		}
-		return uniqueDepartments;
-		 } catch (Exception e) {
-		        throw new RuntimeException("Employee Data Not Found", e);
-		    }
-	}
+//	// 4 get unique department (get all types of department)
+//	@Override
+//	public Set<String> getUniqueDepartments() {
+//		try {
+//		List<Employee> employees = employeeRepository.findAll();
+//
+//		Set<String> uniqueDepartments = new HashSet<>();
+//		for (Employee employee : employees) {
+//			uniqueDepartments.add(employee.getDepartment());
+//		}
+//		return uniqueDepartments;
+//		 } catch (Exception e) {
+//		        throw new RuntimeException("Employee Data Not Found", e);
+//		    }
+//	}
 
 	// 5 get the employee by id using map(id as key and employee details or employee
 	// object as value)
@@ -170,9 +176,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 				if (req.getName() == null || req.getName().isEmpty()) {
 					throw new EmployeeSaveException(ApiStatus.EMPLOYEE_NAME_MANDATORY);
 				}
-				if (req.getDepartment() == null || req.getDepartment().isEmpty()) {
-					throw new EmployeeSaveException(ApiStatus.EMPLOYEE_DEPARTMENT_MANDATORY);
-				}
+//				if (req.getDepartment() == null || req.getDepartment().isEmpty()) {
+//					throw new EmployeeSaveException(ApiStatus.EMPLOYEE_DEPARTMENT_MANDATORY);
+//				}
 				if (req.getSalary() == null) {
 					throw new EmployeeSaveException(ApiStatus.EMPLOYEE_SALARY_MANDATORY);
 				}
@@ -180,7 +186,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 			List<Employee> employees = new ArrayList<>();
 			for (RequestEmployee req : requestEmployees) {
-				Employee employee = new Employee(null, req.getName(), req.getDepartment(), req.getSalary());
+			//	Employee employee = new Employee(null, req.getName(), req.getDepartment(), req.getSalary());
+				Employee employee = new Employee(null, req.getName(),req.getSalary());
+
 				employees.add(employee);
 			}
 
@@ -230,24 +238,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	// 9 get the no of employee present per department
-	@Override
-	public Map<String, Integer> getEmployeeCountByDepartment() {
-		try {
-		List<Employee> employee = employeeRepository.findAll();
-		Map<String, Integer> departmentCountMap = new HashMap<>();
-
-		for (Employee emp : employee) {
-			String department = emp.getDepartment();
-
-			// If department exists, increase the count, otherwise initialize it
-			departmentCountMap.put(department, departmentCountMap.getOrDefault(department, 0) + 1);
-		}
-
-		return departmentCountMap;
-		 } catch (Exception e) {
-		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
-		    }
-	}
+//	@Override
+//	public Map<String, Integer> getEmployeeCountByDepartment() {
+//		try {
+//		List<Employee> employee = employeeRepository.findAll();
+//		Map<String, Integer> departmentCountMap = new HashMap<>();
+//
+//		for (Employee emp : employee) {
+//			String department = emp.getDepartment();
+//
+//			// If department exists, increase the count, otherwise initialize it
+//			departmentCountMap.put(department, departmentCountMap.getOrDefault(department, 0) + 1);
+//		}
+//
+//		return departmentCountMap;
+//		 } catch (Exception e) {
+//		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
+//		    }
+//	}
 
 	//10 get employees in FIFO order
 	@Override
@@ -291,33 +299,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
     //12 get top 3 employees by department
-    @Override
-    public Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment() {
-        try {
-            List<Employee> Employees = employeeRepository.findAll();
-            Map<String, List<ResponseEmployee>> result = new HashMap<>();
-            Map<String, List<Employee>> departmentMap = new HashMap<>();
-
-            for (Employee Employee : Employees) {
-                departmentMap.computeIfAbsent(Employee.getDepartment(), k -> new ArrayList<>()).add(Employee);
-            }
-
-            for (Map.Entry<String, List<Employee>> entry : departmentMap.entrySet()) {
-                List<Employee> EmployeeList = entry.getValue();
-                EmployeeList.sort((s1, s2) -> Double.compare(s2.getSalary(), s1.getSalary()));
-
-                List<ResponseEmployee> top3 = new ArrayList<>();
-                for (int i = 0; i < Math.min(3, EmployeeList.size()); i++) {
-                    top3.add(new ResponseEmployee(EmployeeList.get(i)));
-                }
-                result.put(entry.getKey(), top3);
-            }
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace(); 
-            return Collections.emptyMap();
-        }
-    }
+//    @Override
+//    public Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment() {
+//        try {
+//            List<Employee> Employees = employeeRepository.findAll();
+//            Map<String, List<ResponseEmployee>> result = new HashMap<>();
+//            Map<String, List<Employee>> departmentMap = new HashMap<>();
+//
+//            for (Employee Employee : Employees) {
+//                departmentMap.computeIfAbsent(Employee.getDepartment(), k -> new ArrayList<>()).add(Employee);
+//            }
+//
+//            for (Map.Entry<String, List<Employee>> entry : departmentMap.entrySet()) {
+//                List<Employee> EmployeeList = entry.getValue();
+//                EmployeeList.sort((s1, s2) -> Double.compare(s2.getSalary(), s1.getSalary()));
+//
+//                List<ResponseEmployee> top3 = new ArrayList<>();
+//                for (int i = 0; i < Math.min(3, EmployeeList.size()); i++) {
+//                    top3.add(new ResponseEmployee(EmployeeList.get(i)));
+//                }
+//                result.put(entry.getKey(), top3);
+//            }
+//            return result;
+//        } catch (Exception e) {
+//            e.printStackTrace(); 
+//            return Collections.emptyMap();
+//        }
+//    }
 
     //13 get Employee who have second highest grade
     @Override
@@ -351,56 +359,56 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     //14 get department with highest total grade
-    @Override
-    public String getDepartmentWithHighestTotalSalary() {
-        try {
-            List<Employee> Employees = employeeRepository.findAll();
-            Map<String, Double> departmentGradeSum = new HashMap<>();
-
-            for (Employee Employee : Employees) {
-                departmentGradeSum.put(Employee.getDepartment(),
-                        departmentGradeSum.getOrDefault(Employee.getDepartment(), 0.0) + Employee.getSalary());
-            }
-
-            return departmentGradeSum.entrySet().stream()
-                    .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey)
-                    .orElse(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    @Override
+//    public String getDepartmentWithHighestTotalSalary() {
+//        try {
+//            List<Employee> Employees = employeeRepository.findAll();
+//            Map<String, Double> departmentGradeSum = new HashMap<>();
+//
+//            for (Employee Employee : Employees) {
+//                departmentGradeSum.put(Employee.getDepartment(),
+//                        departmentGradeSum.getOrDefault(Employee.getDepartment(), 0.0) + Employee.getSalary());
+//            }
+//
+//            return departmentGradeSum.entrySet().stream()
+//                    .max(Map.Entry.comparingByValue())
+//                    .map(Map.Entry::getKey)
+//                    .orElse(null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     //15 get Employees above department average
-    @Override
-    public List<ResponseEmployee> getEmployeesAboveDepartmentAverage() {
-        try {
-            List<Employee> Employees = employeeRepository.findAll();
-            Map<String, Double> departmentAverage = new HashMap<>();
-            Map<String, Integer> departmentCount = new HashMap<>();
-
-            for (Employee Employee : Employees) {
-                departmentAverage.put(Employee.getDepartment(),
-                        departmentAverage.getOrDefault(Employee.getDepartment(), 0.0) + Employee.getSalary());
-                departmentCount.put(Employee.getDepartment(),
-                        departmentCount.getOrDefault(Employee.getDepartment(), 0) + 1);
-            }
-
-            departmentAverage.replaceAll((dept, sum) -> sum / departmentCount.get(dept));
-
-            List<ResponseEmployee> result = new ArrayList<>();
-            for (Employee Employee : Employees) {
-                if (Employee.getSalary() > departmentAverage.get(Employee.getDepartment())) {
-                    result.add(new ResponseEmployee(Employee));
-                }
-            }
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
-    }
+ //   @Override
+//    public List<ResponseEmployee> getEmployeesAboveDepartmentAverage() {
+//        try {
+//            List<Employee> Employees = employeeRepository.findAll();
+//            Map<String, Double> departmentAverage = new HashMap<>();
+//            Map<String, Integer> departmentCount = new HashMap<>();
+//
+//            for (Employee Employee : Employees) {
+//                departmentAverage.put(Employee.getDepartment(),
+//                        departmentAverage.getOrDefault(Employee.getDepartment(), 0.0) + Employee.getSalary());
+//                departmentCount.put(Employee.getDepartment(),
+//                        departmentCount.getOrDefault(Employee.getDepartment(), 0) + 1);
+//            }
+//
+//            departmentAverage.replaceAll((dept, sum) -> sum / departmentCount.get(dept));
+//
+//            List<ResponseEmployee> result = new ArrayList<>();
+//            for (Employee Employee : Employees) {
+//                if (Employee.getSalary() > departmentAverage.get(Employee.getDepartment())) {
+//                    result.add(new ResponseEmployee(Employee));
+//                }
+//            }
+//            return result;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Collections.emptyList();
+//        }
+//    }
 
     
     //16 get most common first letter
@@ -430,9 +438,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ResponseEmployee getEmployeeById(Long id) {
 		try {
 		Employee employee = employeeRepository.findById(id).orElseThrow();
-		return new ResponseEmployee(employee.getId(), employee.getName(), employee.getDepartment(),
-				employee.getSalary(),employee.getStatus());
-		 } catch (Exception e) {
+//		return new ResponseEmployee(employee.getId(), employee.getName(), employee.getDepartment(),
+//				employee.getSalary(),employee.getStatus());
+		
+		return new ResponseEmployee(employee.getId(), employee.getName(), employee.getSalary(),employee.getStatus());	
+     } catch (Exception e) {
 		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
 		    }
 	}
@@ -444,7 +454,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		try {
 		Employee employee = employeeRepository.findById(id).orElseThrow();
 		employee.setName(requestEmployee.getName());
-		employee.setDepartment(requestEmployee.getDepartment());
+	//	employee.setDepartment(requestEmployee.getDepartment());
 		employee.setSalary(requestEmployee.getSalary());
 		return employeeRepository.save(employee);
 		 } catch (Exception e) {
@@ -486,7 +496,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        	  Iterator<Cell> cellIterator=row.cellIterator();
 	        	  Employee employee=new Employee();
 	        	  if(cellIterator.hasNext()) employee.setName(cellIterator.next().getStringCellValue());
-	        	  if(cellIterator.hasNext()) employee.setDepartment(cellIterator.next().getStringCellValue());
+	        	//  if(cellIterator.hasNext()) employee.setDepartment(cellIterator.next().getStringCellValue());
 	        	  if(cellIterator.hasNext()) employee.setSalary(cellIterator.next().getNumericCellValue());
 
 	        	  ((List<Employee>) employee).add(employee);
@@ -502,6 +512,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}	
 	
 	
+	
+	
+    
+     
 	
 	 
 
