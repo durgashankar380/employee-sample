@@ -1,5 +1,6 @@
 package com.employee.demo.controller;
 
+import com.employee.demo.apiResponse.ApiResponse;
 import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.DepartmentRequest;
@@ -17,6 +18,8 @@ import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +28,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/auth")
@@ -42,7 +47,14 @@ private DepartmentService departmentService;
     @Setter
     @Getter
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
+//    @Autowired
+//    private RedisTemplate<String,String> redisTemplate;
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestParam String username){
+//        redisTemplate.delete("USER_SESSION:"+username);
+        return ResponseEntity.ok(ApiResponse.LOG_OUT_SUCCESSFULLY);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
@@ -55,7 +67,8 @@ private DepartmentService departmentService;
 
         JwtResponse response = JwtResponse.builder()
                 .jwtToken(token)
-                .username(userDetails.getUsername()).build();
+                .build();
+//        redisTemplate.opsForValue().set("USER_SESSION:"+request.getEmail(),token,6, TimeUnit.HOURS);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -65,7 +78,6 @@ private DepartmentService departmentService;
         try {
             service.setLastLogin(email);
             manager.authenticate(authentication);
-
 
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException(" Invalid Username or Password  !!");

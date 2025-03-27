@@ -3,18 +3,20 @@ package com.employee.demo.service;
 import com.employee.demo.model.Department;
 import com.employee.demo.request.DepartmentRequest;
 import com.employee.demo.request.DepartmentRequestWithEmployeeList;
+import com.employee.demo.response.DepartmentResponse;
 import com.employee.demo.response.EmployeeResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 public interface DepartmentService {
-    List<Department> getAllDepartments();
+    List<DepartmentResponse> getAllDepartments();
 
-    Optional<Department> getDepartmentById(Long id);
+    ResponseEntity<?> getDepartmentById(Long id);
+
+    ResponseEntity<?> getDepartmentByName(String name);
 
     Department saveDepartment(DepartmentRequest department);
 
@@ -30,5 +32,7 @@ public interface DepartmentService {
 
     String getDepartmentWithHighestSalary();
 
-    ResponseEntity<?> addEmployeeListByDepartment(DepartmentRequestWithEmployeeList requests);
+    ResponseEntity<?> addAndUpdateEmployeeListByDepartment(DepartmentRequestWithEmployeeList requests);
+
+    List<EmployeeResponse> getEmpEarnMoreThanAvgSalary();
 }

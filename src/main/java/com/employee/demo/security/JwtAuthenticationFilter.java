@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtHelper jwtHelper;
     @Autowired
     private UserDetailsService userDetailsService;
+//    @Autowired
+//    private RedisTemplate<String,String> redisTemplate;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         logger.info("request : {}",request);
@@ -43,7 +47,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
 
                 username = this.jwtHelper.getUsernameFromToken(token);
+//                String activeToken=redisTemplate.opsForValue().get("USER_SESSION:"+username);
 
+//                if (activeToken==null||!activeToken.equals(token)){
+//                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                    return;
+//                }
             } catch (IllegalArgumentException e) {
                 logger.info("Illegal Argument while fetching the username !!");
                 e.printStackTrace();
@@ -62,7 +71,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } else {
             logger.info("Invalid Header Value !! ");
         }
-
 
         //
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

@@ -24,7 +24,8 @@ public class Department {
     private String location;
     @Column(nullable = false)
     private String description;
-
+    @Column(nullable = false)
+    private Integer status;
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Employee> employeeList=new ArrayList<>();

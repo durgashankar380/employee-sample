@@ -36,22 +36,6 @@ public class EmployeeController {
         return service.resetPassword(resetRequest);
     }
 
-    
-    @GetMapping("/total-salary")
-    public Map<String, Double> getTotalSalaryPerDepartment() {
-        return service.getTotalSalaryPerDepartment();
-    }
-
-    @GetMapping("/grouped-by-department")
-    public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
-        return departmentService.getEmployeesGroupedByDepartment();
-    }
-
-    @GetMapping("/unique-departments")
-    public Set<String> getUniqueEmployeeDepartments() {
-        return departmentService.getUniqueEmployeeDepartments();
-    }
-
     @GetMapping("/employee-map")
     public Map<Long, EmployeeResponse> getEmployeesByIdMap() {
         return service.getEmployeesByIdMap();
@@ -67,10 +51,7 @@ public class EmployeeController {
         return service.getEmployeesList();
     }
 
-    @GetMapping("/count-per-department")
-    public Map<String,Long> countPerDepartment(){
-        return departmentService.countPerDepartment();
-    }
+
 
     @GetMapping("/queue")
     public Queue<EmployeeResponse> getQueue(){
@@ -95,14 +76,8 @@ public class EmployeeController {
     public List<EmployeeResponse> secondHighestSalary(){
         return service.getSecondHighestSalary();
     }
-    @GetMapping("/departmentWithHighestSalary")
-    public String departmentWithHighestSalary(){
-        return departmentService.getDepartmentWithHighestSalary();
-    }
-//    @GetMapping("/empEarnMoreThanAvgSalary")
-//    public List<EmployeeResponse> empEarnMoreThanAvgSalary(){
-//        return service.getEmpEarnMoreThanAvgSalary();
-//    }
+
+
     @GetMapping("/mostCommonFirstLetter")
     public Character mostCommonFirstLetter(){
         return service.getMostCommonFirstLetter();

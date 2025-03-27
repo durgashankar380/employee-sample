@@ -11,5 +11,5 @@ public class EmployeePageRequest {
     private String sortBy;
     private String sortDir;
     private String searchBy;
-    private int status;
+    private Integer status;
 }

@@ -22,7 +22,15 @@ public enum ApiResponse {
     PLEASE_ENTER_EMAIL(400,"please enter the email you have not enter it !!" ),
     EMPLOYEE_PASSWORD_SUCCESSFULLY_UPDATED(200,"Employee password has been successfully updated !!! " ),
     PLEASE_ENTER_PREVOIUS_PASSWORD(400,"Please enter the previous password !!! " ),
-    ENTERED_PREVIOUS_PASSWORD_WRONG(400,"Please enter the correct previous password !!! " );
+    ENTERED_PREVIOUS_PASSWORD_WRONG(400,"Please enter the correct previous password !!! " ),
+    DEPARTMENT_NOT_FOUND(404,"Department doesn't exist !! " ),
+    LOG_OUT_SUCCESSFULLY(200,"Logging out successfully ! " ),
+    INVALID_DEPARTMENT_ID(404,"department not found with given id !! " ),
+    DEPARTMENT_STATUS_ACTIVATED_SUCCESSFULLY(200,"department status activated successfully !!" ),
+    DEPARTMENT_STATUS_DEACTIVATED_SUCCESSFULLY(200,"department status deactivated successfully !!" ),
+    DEPARTMENT_STATUS_TEMPORARILY_DELETED_SUCCESSFULLY(200, "department status temporarily deleted successfully !!"),
+    INVALID_STATUS(400,"invalid status to update" ), ID_ALREADY_EXIST_WITH_GIVEN_DATA(400,"id already exist with given name and location !!" );
+
     private final int code;
     @Getter
     private final String message;
