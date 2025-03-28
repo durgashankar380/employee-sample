@@ -2,6 +2,7 @@ package com.employee.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.demo.request.JwtRequest;
-import com.employee.demo.request.RequestEmployee;
+import com.employee.demo.request.RequestEmployeeDto;
 import com.employee.demo.request.ResetPasswordRequest;
 import com.employee.demo.request.ForgotPasswordRequest;
 import com.employee.demo.response.JwtResponse;
@@ -30,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RequestEmployee employee) {
+    public ResponseEntity<String> register(@RequestBody RequestEmployeeDto employee) {
         return jwtService.register(employee);
     }
     

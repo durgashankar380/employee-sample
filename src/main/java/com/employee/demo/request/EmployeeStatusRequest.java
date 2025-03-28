@@ -1,5 +1,7 @@
 package com.employee.demo.request;
 
+import com.employee.demo.model.Department;
+
 import lombok.AllArgsConstructor;
 
 import lombok.Data;
@@ -14,10 +16,9 @@ public class EmployeeStatusRequest {
 	}
 	private Long id;
 	    private String name;
-	  //  private String department;
 	    private double salary;
 	    private int status;
-	    
+	    private Long departmentId;
 	   
 		
 }

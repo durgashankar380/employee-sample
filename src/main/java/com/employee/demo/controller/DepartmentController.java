@@ -1,25 +1,27 @@
 package com.employee.demo.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.employee.demo.model.Department;
+import com.employee.demo.request.DepartmentRequest;
 import com.employee.demo.request.DepartmentRequestDto;
 import com.employee.demo.service.DepartmentService;
 
 @RestController
-@RequestMapping("/departments")
+@RequestMapping("/api/departments")
 public class DepartmentController {
+	 private final DepartmentService departmentService;
 
-    private final DepartmentService departmentService;
+	    public DepartmentController(DepartmentService departmentService) {
+	        this.departmentService = departmentService;
+	    }
 
-    public DepartmentController(DepartmentService departmentService) {
-        this.departmentService = departmentService;
-    }
+	    @PostMapping("/add-update")
+	    public ResponseEntity<String> addOrUpdateDepartment(@RequestBody DepartmentRequestDto departmentRequest) {
+	        return departmentService.addOrUpdateDepartment(departmentRequest);
+	    }
+	}
 
-    @PostMapping("/save")
-    public ResponseEntity<Department> saveDepartmentWithEmployees(@RequestBody DepartmentRequestDto departmentRequestDto) {
-        Department savedDepartment = departmentService.saveDepartmentWithEmployees(departmentRequestDto);
-        return ResponseEntity.ok(savedDepartment);
-    }
-}

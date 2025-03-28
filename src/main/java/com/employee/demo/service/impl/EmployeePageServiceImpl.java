@@ -36,7 +36,7 @@ public class EmployeePageServiceImpl implements EmployeePageService {
 
 	    List<ResponseEmployee> responseEmployees = employeePage.getContent().stream()
 //	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary(),emp.getStatus()))
-	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getSalary(),emp.getStatus()))
+	            .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getSalary(),emp.getStatus(),emp.getDepartment().getName()))
 
 	    		.collect(Collectors.toList());
 	    
@@ -78,7 +78,7 @@ public class EmployeePageServiceImpl implements EmployeePageService {
 	    List<ResponseEmployee> responseEmployees = employeesPage.getContent()
 	        .stream()
 //	        .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getDepartment(), emp.getSalary(),emp.getStatus()))
-	        .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getSalary(),emp.getStatus()))
+	        .map(emp -> new ResponseEmployee(emp.getId(), emp.getName(), emp.getSalary(),emp.getStatus(),emp.getDepartment().getName()))
             .collect(Collectors.toList());
 	    
 	   

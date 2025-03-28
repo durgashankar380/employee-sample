@@ -2,6 +2,7 @@ package com.employee.demo.model;
 
 import java.util.List;
 
+import com.employee.demo.request.RequestEmployee;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "department") 
-@Data 
+@Data
 @AllArgsConstructor 
 @NoArgsConstructor 
 public class Department {
@@ -34,8 +35,11 @@ public class Department {
        
         @Column(name="description")
 	    private String description;
+        
+        @Column(name= "status")
+        private int status = 1;
 
 	    @JsonManagedReference
-	    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+	    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
 	    private List<Employee> employees;
 }

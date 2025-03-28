@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.employee.demo.ApiStatus.ApiStatus;
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
+import com.employee.demo.repository.DepartmentRepository;
 import com.employee.demo.repository.EmployeeStatusRepository;
 import com.employee.demo.request.EmployeeStatusRequest;
 import com.employee.demo.response.EmployeeStatusResponse;
@@ -17,6 +19,9 @@ public class EmployeeStatusServiceImpl implements EmployeeStatusService {
 
     @Autowired
     private EmployeeStatusRepository employeeStatusRepository;
+    
+    @Autowired
+    private DepartmentRepository departmentRepository;
     
 
     @Override
@@ -62,6 +67,10 @@ public class EmployeeStatusServiceImpl implements EmployeeStatusService {
          //   newEmployee.setDepartment(request.getDepartment());
             newEmployee.setSalary(request.getSalary());
             newEmployee.setStatus(request.getStatus());
+            
+            Department department = departmentRepository.findById(request.getDepartmentId())
+                    .orElseThrow(() -> new RuntimeException("Department not found"));
+            newEmployee.setDepartment(department); // Set department
 
             employeeStatusRepository.save(newEmployee);
             return new EmployeeStatusResponse(ApiStatus.NEW_EMPLOYEE_ADDED_SUCCESSFULLY);

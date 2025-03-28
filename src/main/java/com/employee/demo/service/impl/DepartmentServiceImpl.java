@@ -1,68 +1,90 @@
 package com.employee.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.DepartmentRepository;
+import com.employee.demo.repository.EmployeeRepository;
+import com.employee.demo.request.DepartmentRequest;
 import com.employee.demo.request.DepartmentRequestDto;
-import com.employee.demo.request.EmployeeRequestDto;
+import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.service.DepartmentService;
 
 
 @Service
-public class DepartmentServiceImpl implements DepartmentService{
-	 @Autowired
-	    private PasswordEncoder passwordEncoder;
-	    
+public class DepartmentServiceImpl implements DepartmentService {
+
     @Autowired
-	private DepartmentRepository departmentRepository;
-
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
-        this.departmentRepository = departmentRepository;
-    }
-
-//    @Override
-//    public Department saveDepartmentWithEmployees(DepartmentRequestDto departmentRequestDto) {
-//        for (EmployeeRequestDto emp : departmentRequestDto.getEmployees()) {
-//        	EmployeeRequestDto.setDepartment(departmentRequestDto);
-//        }
-//        return departmentRepository.save(departmentRequestDto);
-//    }
-//    
+    private DepartmentRepository departmentRepository;
     
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
-    public Department saveDepartmentWithEmployees(DepartmentRequestDto departmentRequestDto) {
+    public ResponseEntity<String> addOrUpdateDepartment(DepartmentRequestDto departmentRequest) {
+        if (departmentRequest.getName() == null) {
+            return ResponseEntity.badRequest().body("Department name is required");
+        }
 
-        Department department = new Department();
-        department.setName(departmentRequestDto.getName());
-        department.setLocation(departmentRequestDto.getLocation());
-        department.setDescription(departmentRequestDto.getDescription());
+        Department department;
+        if (departmentRequest.getId() == 0) { 
+            department = new Department();
+            department.setName(departmentRequest.getName());
+            department.setLocation(departmentRequest.getLocation());
+            department.setDescription(departmentRequest.getDescription());
+            department.setStatus(departmentRequest.getStatus());
+        } else { 
+            Optional<Department> existingDepartment = departmentRepository.findById(departmentRequest.getId());
+            if (!existingDepartment.isPresent()) {
+                return ResponseEntity.badRequest().body("Department does not exist");
+            }
+            department = existingDepartment.get();
+            department.setName(departmentRequest.getName());
+            department.setLocation(departmentRequest.getLocation());
+            department.setDescription(departmentRequest.getDescription());
+            department.setStatus(departmentRequest.getStatus());
+        }
 
-        // Convert Employee DTOs to Employee entities
-        List<Employee> employees = departmentRequestDto.getEmployees().stream().map(empDto -> {
-            Employee employee = new Employee();
-            employee.setName(empDto.getName());
-            employee.setSalary(empDto.getSalary());
-            employee.setEmail(empDto.getEmail());
-            
-            String encryptedPassword = passwordEncoder.encode(empDto.getPassword());
-            employee.setPassword(encryptedPassword);
-            
-            employee.setDepartment(department); 
-            return employee;
-        }).collect(Collectors.toList());
+        List<Employee> employees = new ArrayList<>();  
+        for (RequestEmployee reqEmp : departmentRequest.getEmployees()) {
+            Employee employee;
+            if (reqEmp.getId() == 0) {
+                employee = new Employee();
+                employee.setPassword(passwordEncoder.encode(reqEmp.getPassword())); // Encrypt password for new employee
+            } else {
+                Optional<Employee> existingEmployee = employeeRepository.findById(reqEmp.getId());
+                if (!existingEmployee.isPresent()) {
+                    return ResponseEntity.badRequest().body("Employee does not exist");
+                }
+                employee = existingEmployee.get();
+                
+                // Only update password if it's changed
+                if (reqEmp.getPassword() != null && !reqEmp.getPassword().isEmpty()) {
+                    employee.setPassword(passwordEncoder.encode(reqEmp.getPassword()));
+                }
+            }
 
-        department.setEmployees(employees);
+            employee.setName(reqEmp.getName());
+            employee.setSalary(reqEmp.getSalary());
+            employee.setStatus(reqEmp.getStatus());
+            employee.setEmail(reqEmp.getEmail());
+            employee.setDepartment(department);
+            employees.add(employee);
+        }
 
-       
-        return departmentRepository.save(department);
+        department.setEmployees(employees); 
+        departmentRepository.save(department); 
+        return ResponseEntity.ok("Department and employees saved successfully");
     }
-
-   
 }

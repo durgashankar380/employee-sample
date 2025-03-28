@@ -3,6 +3,8 @@ package com.employee.demo.service.impl;
 import java.util.Optional;
 
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import com.employee.demo.repository.DepartmentRepository;
 import com.employee.demo.repository.EmployeeJwtRepository;
 import com.employee.demo.request.JwtRequest;
 import com.employee.demo.request.RequestEmployee;
+import com.employee.demo.request.RequestEmployeeDto;
 import com.employee.demo.request.ResetPasswordRequest;
 import com.employee.demo.request.ForgotPasswordRequest;
 import com.employee.demo.response.JwtResponse;
@@ -58,37 +61,9 @@ public class JwtImpl implements JwtService {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-//    @Override
-//    public ResponseEntity<String> register(RequestEmployee employeeRequest) {
-//        System.out.println("Incoming Employee Data: " + employeeRequest.toString());
-//
-//        Optional<Employee> existingEmployee = employeeJwtRepository.findByEmail(employeeRequest.getEmail());
-//        if (existingEmployee.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists!");
-//        }
-//
-//        // Convert RequestEmployee to Employee entity
-//        Employee employee = new Employee();
-//        employee.setName(employeeRequest.getName());
-//        employee.setEmail(employeeRequest.getEmail());
-//        
-//        // Encrypt the password before saving
-//        String encryptedPassword = passwordEncoder.encode(employeeRequest.getPassword());
-//        employee.setPassword(encryptedPassword);
-//        
-//       // employee.setDepartment(employeeRequest.getDepartment());
-//        employee.setSalary(employeeRequest.getSalary());
-//
-//        employeeJwtRepository.save(employee); 
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Employee registered successfully!");
-//    }
-    
-    
-    
     
     @Override
-    public ResponseEntity<String> register(RequestEmployee employeeRequest) {
+    public ResponseEntity<String> register(RequestEmployeeDto employeeRequest) {
         System.out.println("Incoming Employee Data: " + employeeRequest.toString());
 
         // Check if employee already exists
@@ -98,7 +73,7 @@ public class JwtImpl implements JwtService {
         }
 
         // Check if department exists, else create a new department
-        Optional<Department> existingDepartment = departmentRepository.findByName(employeeRequest.getDepartment().getName());
+        Optional<Department> existingDepartment = departmentRepository.findById(employeeRequest.getDepartment().getId());
         Department department;
         
         if (existingDepartment.isPresent()) {

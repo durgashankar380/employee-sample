@@ -7,12 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@AllArgsConstructor 
 @NoArgsConstructor
 public class DepartmentRequestDto {
+	private Long id;
     private String name;
     private String location;
     private String description;
-    private List<EmployeeRequestDto> employees;
-
+    private int status;
+    private List<RequestEmployee> employees;
 }

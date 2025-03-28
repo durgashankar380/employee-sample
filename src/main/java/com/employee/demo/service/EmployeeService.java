@@ -18,65 +18,66 @@ import com.employee.demo.response.EmployeePageResponse;
 public interface EmployeeService {
 
 	//1
-    Employee saveEmployee(RequestEmployee requestEmployee);
+    //Employee saveEmployee(RequestEmployee requestEmployee);
  
     //2
-   // Map<String, Double> getTotalSalaryPerDepartment();
+    public Map<String, Double> getTotalSalaryPerDepartment();
     
     //3	
-   // Map<String, List<Employee>> getEmployeesGroupedByDepartment();
+    Map<String, List<Employee>> getEmployeesGroupedByDepartment();
     
     //4
-   // Set<String> getUniqueDepartments();
+    Set<String> getUniqueDepartments();
     
     //5
-    Map<Long, Employee> getEmployeesAsMap();
+  //  Map<Long, Employee> getEmployeesAsMap();
     
     //6
-    List<Employee> saveEmployees(List<RequestEmployee> requestEmployees);
+   // List<Employee> saveEmployees(List<RequestEmployee> requestEmployees);
     
     
     //7
-    List<Employee> getEmployeesSortedBySalaryDesc();
+   // List<Employee> getEmployeesSortedBySalaryDesc();
     
     //8
     List<String> getEmployeeNames();
     
     //9
-   // Map<String, Integer> getEmployeeCountByDepartment();
+    Map<String, Integer> getEmployeeCountByDepartment();
     
     //10
     List<Employee> getEmployeesInFIFOOrder();
     
     //11
-    List<Employee> getEmployeesInLIFOOrder();
+   // List<Employee> getEmployeesInLIFOOrder();
     
     //12
-  //  Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment();
+    Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment();
     
     //13
-    List<ResponseEmployee> getEmployeesWithSecondHighestSalary();
+   // List<ResponseEmployee> getEmployeesWithSecondHighestSalary();
     
     //14
-  //  String getDepartmentWithHighestTotalSalary();
+    String getDepartmentWithHighestTotalSalary();
     
     //15
-   // List<ResponseEmployee> getEmployeesAboveDepartmentAverage();
+    List<ResponseEmployee> getEmployeesAboveDepartmentAverage();
     
     //16
-    char getMostCommonFirstLetter();
+  //  char getMostCommonFirstLetter();
 
     //17
     ResponseEmployee getEmployeeById(Long id);
     
     //18
-    Employee updateEmployee(Long id, RequestEmployee requestEmployee);
+  //  Employee updateEmployee(Long id, RequestEmployee requestEmployee);
     
     //19
-    void deleteEmployee(Long id);  
+  //  void deleteEmployee(Long id);  
     
     //20 To add data in database using excel sheet	
-    ResponseEntity<String> saveExcelData(MultipartFile file);
+  //  ResponseEntity<String> saveExcelData(MultipartFile file);
+
     
   
   

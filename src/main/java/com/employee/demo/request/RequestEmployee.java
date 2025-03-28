@@ -8,12 +8,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestEmployee {
+	private Long id;
     private String name;
-   // private String department;
     private Double salary;
+    private int status;
     private String email;
     private String password;
-    private DepartmentRequest department;
+	
+	
+	
 	
    
  }

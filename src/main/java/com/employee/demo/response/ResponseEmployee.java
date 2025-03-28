@@ -1,5 +1,6 @@
 package com.employee.demo.response;
 
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
 
 import lombok.AllArgsConstructor;
@@ -11,27 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseEmployee {
 
-	private Long id;
-	private String name;
-	//private String department;
-	private double salary;
-	private int status;
-
-	
-	
-	 public ResponseEmployee(Employee Employee) {
-	        this.id = Employee.getId();
-	        this.name = Employee.getName();
-	       // this.department = Employee.getDepartment();
-	        this.salary = Employee.getSalary();
-	        this.status= Employee.getStatus();
-	    }
-
-
-
-	public ResponseEmployee(Long id2, String name2, Double salary2, int status2) {
+	public ResponseEmployee(Employee employee) {
 		// TODO Auto-generated constructor stub
 	}
+	public ResponseEmployee(Long id2, String name2, Double salary2, String email, Department department2) {
+		// TODO Auto-generated constructor stub
+	}
+	private Long id;
+	private String name;
+	private double salary;
+	private int status;
+	private String department;
 	 
 	
 }

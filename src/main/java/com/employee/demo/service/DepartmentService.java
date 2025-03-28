@@ -1,12 +1,11 @@
 package com.employee.demo.service;
 
-import com.employee.demo.model.Department;
+import org.springframework.http.ResponseEntity;
+
+import com.employee.demo.request.DepartmentRequest;
 import com.employee.demo.request.DepartmentRequestDto;
 
 public interface DepartmentService {
-	
-	Department saveDepartmentWithEmployees(DepartmentRequestDto departmentRequestDto);
-
-
+	 ResponseEntity<String> addOrUpdateDepartment(DepartmentRequestDto departmentRequest);
 
 }
