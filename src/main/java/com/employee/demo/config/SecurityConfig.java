@@ -46,19 +46,24 @@ public class SecurityConfig {
         return http.build();
     }
 	
-	 @Bean
-	    public UserDetailsService userDetailsService(EmployeeRepository employeeRepository) {
-		 return emailId -> {
-			 Employee employee = employeeRepository.findByEmailId(emailId)
-					 .orElseThrow(() -> new UsernameNotFoundException("User not found with emailId: " + emailId));
+	@Bean
+	public UserDetailsService userDetailsService(EmployeeRepository employeeRepository) {
+	    return emailId -> {
+	        Employee employee = employeeRepository.findByEmailId(emailId)
+	        		.orElseThrow(() -> new UsernameNotFoundException("User not found with emailId:"+emailId));
+//	        if (employee == null) {
+//	            throw new UsernameNotFoundException("User not found with emailId: " + emailId);
+//	        }
+	        
 
 	        return new org.springframework.security.core.userdetails.User(
-	        		employee.getEmailId(),
-	        		employee.getPassword(),
-	                java.util.Collections.emptyList()
-	                );
+	            employee.getEmailId(),
+	            employee.getPassword(),
+	            java.util.Collections.emptyList()
+	        );
 	    };
-	 }
+	}
+
 	 
 	 @Bean
 	    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {

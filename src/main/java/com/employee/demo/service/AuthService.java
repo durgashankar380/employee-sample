@@ -8,7 +8,8 @@ import com.employee.demo.request.JwtRequest;
 import com.employee.demo.request.ResetPasswordRequest;
 
 public interface AuthService {
-	 ResponseEntity<String> register(Employee employee);
+	 String register(Employee employee);
 	 ResponseEntity<?> login(JwtRequest request);
 	ResponseEntity<String> forgotPasswordEmployee(ForgetPasswordRequest forgetPasswordRequest);
-}
+	ResponseEntity<String> resetPasswordEmployee(ResetPasswordRequest resetPasswordRequest);
+	}

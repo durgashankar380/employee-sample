@@ -1,6 +1,7 @@
 package com.employee.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,8 @@ public class AuthController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody Employee employee) {
-		return authService.register(employee);
+		String msg = authService.register(employee);
+		return new ResponseEntity<String>(msg,HttpStatus.OK);
 		
 	}
 	
@@ -37,4 +39,8 @@ public class AuthController {
 		return authService.forgotPasswordEmployee(forgetPasswordRequest);
 	}
 	
+	@PostMapping("/reset-password")
+	public ResponseEntity<String> resetPasswordEmployee(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+		return authService.resetPasswordEmployee(resetPasswordRequest);
+	}
 }
