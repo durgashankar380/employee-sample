@@ -5,11 +5,16 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
 
 public interface EmployeeService {
+
+	String createEmployee(EmployeeRequest request, Integer departmentId);
+
+	Department getEmployeeByDepartment(Integer departmentId);
 
 	EmployeeResponse addEmployee(EmployeeRequest employeeRequest);
 

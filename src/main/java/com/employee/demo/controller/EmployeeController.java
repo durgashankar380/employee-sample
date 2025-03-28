@@ -3,7 +3,10 @@ package com.employee.demo.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.helper.ExcelHelper;
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
@@ -29,6 +33,11 @@ public class EmployeeController {
 	@PostMapping("/add")
 	public EmployeeResponse addEmployee(@RequestBody EmployeeRequest employeeRequest) {
 		return employeeService.addEmployee(employeeRequest);
+	}
+
+	@PostMapping("/add-multiple")
+	List<Employee> addMultipleEmployee(@RequestBody List<Employee> employees) {
+		return employeeService.addMultipleEmployee(employees);
 	}
 
 	@GetMapping("/grouped-by-department")
@@ -76,11 +85,6 @@ public class EmployeeController {
 		return employeeService.findEarliestWiseEmployees();
 	}
 
-	@PostMapping("/add-multiple")
-	List<Employee> addMultipleEmployee(@RequestBody List<Employee> employees) {
-		return employeeService.addMultipleEmployee(employees);
-	}
-
 	@GetMapping("/three-highest-paid")
 	Map<String, List<EmployeeResponse>> getTopThreeHighestPaidEmployee() {
 		return employeeService.findTopThreeHighestPaidEmployee();
@@ -109,6 +113,18 @@ public class EmployeeController {
 		} else {
 			return "type of file is not excel.";
 		}
+	}
+
+	@PostMapping("/add/{departmentId}")
+	public ResponseEntity<String> addEmployee(@RequestBody EmployeeRequest employeeRequest,
+			@PathVariable Integer departmentId) {
+		String msg = employeeService.createEmployee(employeeRequest, departmentId);
+		return new ResponseEntity<String>(msg, HttpStatus.OK);
+	}
+
+	@GetMapping("/by-department-id/{departmentId}")
+	public ResponseEntity<Department> getEmployeeByDepartment(@PathVariable Integer departmentId) {
+		return new ResponseEntity<>(employeeService.getEmployeeByDepartment(departmentId), HttpStatus.OK);
 	}
 
 }

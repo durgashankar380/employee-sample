@@ -11,12 +11,16 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.employee.demo.helper.ExcelHelper;
+import com.employee.demo.model.Department;
 import com.employee.demo.model.Employee;
+import com.employee.demo.repository.DepartmentRepository;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.response.EmployeeResponse;
@@ -30,6 +34,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public EmployeeServiceImpl(EmployeeRepository repository) {
 		this.employeeRepository = repository;
 	}
+
+	@Autowired
+	private DepartmentRepository departmentRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 // add employee	
 	@Override
@@ -60,15 +70,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 //			}
 //			departmentEmployee.add(employee);
 //		}
-		
-                           // Second way	
+
+		// Second way
 		for (Employee emp : allEmployee) {
 			groupedEmployees.putIfAbsent(emp.getDepartment(), new ArrayList<>());
 			groupedEmployees.get(emp.getDepartment()).add(emp);
 		}
 		return groupedEmployees;
 	}
-	
 
 // get the total sum of given salary of all department.	
 	@Override
@@ -293,6 +302,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String createEmployee(EmployeeRequest request, Integer departmentId) {
+		Department department = departmentRepository.findById(departmentId).orElseThrow();
+		Employee emp = new Employee();
+		emp.setName(request.getName());
+		emp.setDepartment(department.getDepartmentName());
+		emp.setSalary(request.getSalary());
+		emp.setStatus(1);
+		emp.setEmailId(request.getEmailId());
+		emp.setPassword(passwordEncoder.encode(request.getPassword()));
+		emp.setDepartments(department);
+		employeeRepository.save(emp);
+		return "Employee added succesfully.";
+	}
+
+	@Override
+	public Department getEmployeeByDepartment(Integer departmentId) {
+		Department department = departmentRepository.findById(departmentId).orElseThrow();
+		return department;
 	}
 
 }

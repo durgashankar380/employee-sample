@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.demo.helper.JwtTokenHelper;
-import com.employee.demo.request.EmployeeRequest;
+import com.employee.demo.model.Employee;
 import com.employee.demo.request.ForgetPasswordRequest;
 import com.employee.demo.request.JwtRequest;
 import com.employee.demo.request.ResetPasswordRequest;
@@ -38,16 +38,17 @@ public class AuthController {
 	private EmployeeJwtService employeeJwtService;
 
 	@PostMapping("/register")
-	public ResponseEntity<String> register(@RequestBody EmployeeRequest request) {
-		String msg = employeeJwtService.register(request);
+	public ResponseEntity<String> register(@RequestBody Employee employee) {
+		String msg = employeeJwtService.register(employee);
 		return new ResponseEntity<>(msg, HttpStatus.OK);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> createToken(@RequestBody JwtRequest request) {
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmailId(), request.getPassword()));
+			System.out.print(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmailId(), request.getPassword())));
 			UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmailId());
+			System.out.print(userDetails);
 			String token = jwtTokenHelper.generateToken(userDetails.getUsername());
 			return ResponseEntity.ok(new JwtResponse(token));
 		} catch (BadCredentialsException e) {

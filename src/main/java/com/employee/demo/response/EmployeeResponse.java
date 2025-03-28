@@ -20,7 +20,6 @@ public class EmployeeResponse {
 	public EmployeeResponse(Employee employee) {
 		this.id=employee.getId();
 		this.name=employee.getName();
-		this.department=employee.getDepartment();
 		this.salary=employee.getSalary();
 		this.status = employee.getStatus();	
 	}

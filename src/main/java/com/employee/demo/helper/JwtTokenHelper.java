@@ -12,7 +12,7 @@ import io.jsonwebtoken.security.Keys;
  
 @Component
 public class JwtTokenHelper {
-	private static final long EXPIRATION_TIME = 8 * 60 * 1000;
+	private static final long EXPIRATION_TIME = 800 * 60 * 1000;
     private static final String SECRET_KEY = Base64.getEncoder().encodeToString("this_will_be_Very_Long_Secret_Key_That_Is_Secure_And_Strong".getBytes());
 
 
