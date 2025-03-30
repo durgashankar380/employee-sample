@@ -30,14 +30,14 @@ public interface EmployeeService {
     Set<String> getUniqueDepartments();
     
     //5
-  //  Map<Long, Employee> getEmployeesAsMap();
+   Map<Long, Employee> getEmployeesAsMap();
     
     //6
    // List<Employee> saveEmployees(List<RequestEmployee> requestEmployees);
     
     
     //7
-   // List<Employee> getEmployeesSortedBySalaryDesc();
+    List<Employee> getEmployeesSortedBySalaryDesc();
     
     //8
     List<String> getEmployeeNames();
@@ -49,13 +49,13 @@ public interface EmployeeService {
     List<Employee> getEmployeesInFIFOOrder();
     
     //11
-   // List<Employee> getEmployeesInLIFOOrder();
+    List<Employee> getEmployeesInLIFOOrder();
     
     //12
     Map<String, List<ResponseEmployee>> getTop3EmployeesByDepartment();
     
     //13
-   // List<ResponseEmployee> getEmployeesWithSecondHighestSalary();
+    List<ResponseEmployee> getEmployeesWithSecondHighestSalary();
     
     //14
     String getDepartmentWithHighestTotalSalary();
@@ -64,19 +64,19 @@ public interface EmployeeService {
     List<ResponseEmployee> getEmployeesAboveDepartmentAverage();
     
     //16
-  //  char getMostCommonFirstLetter();
+    char getMostCommonFirstLetter();
 
     //17
     ResponseEmployee getEmployeeById(Long id);
     
     //18
-  //  Employee updateEmployee(Long id, RequestEmployee requestEmployee);
+    Employee updateEmployee(Long id, RequestEmployee requestEmployee);
     
     //19
-  //  void deleteEmployee(Long id);  
+    void deleteEmployee(Long id);  
     
     //20 To add data in database using excel sheet	
-  //  ResponseEntity<String> saveExcelData(MultipartFile file);
+  // ResponseEntity<String> saveExcelData(MultipartFile file);
 
     
   

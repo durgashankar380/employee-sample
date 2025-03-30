@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -19,8 +20,11 @@ import com.employee.demo.Exception.EmployeeNotFoundException;
 import com.employee.demo.model.Employee;
 import com.employee.demo.repository.DepartmentRepository;
 import com.employee.demo.repository.EmployeeRepository;
+import com.employee.demo.request.RequestEmployee;
 import com.employee.demo.response.ResponseEmployee;
 import com.employee.demo.service.EmployeeService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -61,35 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //	}
 	
 	
-	
-
-
-	
-	
-
-//	// 2 get the total salary per department
-//	@Override
-//	public Map<String, Double> getTotalSalaryPerDepartment() {
-//		try {
-//			List<Employee> employees = employeeRepository.findAll();
-//			Map<String, Double> departmentSalaryMap = new HashMap<>();
-//
-//			for (Employee emp : employees) {
-//				String department = emp.getDepartment();
-//				Double salary = emp.getSalary();
-//
-//				departmentSalaryMap.put(department, departmentSalaryMap.getOrDefault(department, 0.0) + salary);
-//			}
-//
-//			return departmentSalaryMap;
-//
-//		 } catch (Exception e) {
-//		        throw new RuntimeException("Employee Data Not Found", e);
-//		    }
-//	}
-//	
-	
-	
+	//2
 	@Override
 	public Map<String, Double> getTotalSalaryPerDepartment() {
 	    try {
@@ -111,40 +87,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        throw new RuntimeException("Employee Data Not Found", e);
 	    }
 	}
-
 	
-
-	// 3 get the employee according their group of department
-//	@Override
-//	public Map<String, List<Employee>> getEmployeesGroupedByDepartment() {
-//		List<Employee> employees = employeeRepository.findAll();
-//		try {
-//		Map<String, List<Employee>> groupedEmployees = new HashMap<>();
-//
-//		for (Employee employee : employees) {
-//			String department = employee.getDepartment();
-//
-//			List<Employee> departmentEmployees = new ArrayList<>();
-//
-//			if (groupedEmployees.containsKey(department)) {
-//				departmentEmployees = groupedEmployees.get(department);
-//			} else {
-//				departmentEmployees = new ArrayList<>();
-//				groupedEmployees.put(department, departmentEmployees);
-//			}
-//
-//			departmentEmployees.add(employee);
-//		}
-//
-//		return groupedEmployees;
-//		 } catch (Exception e) {
-//		        throw new RuntimeException("Employee Data Not Found", e);
-//		    }
-//		
-//	}
-	
-	
-	
+	// 3	
 	@Override
 	public Map<String, List<Employee>> getEmployeesGroupedByDepartment() {
 		List<Employee> employees = employeeRepository.findAll();
@@ -171,27 +115,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		        throw new RuntimeException("Employee Data Not Found", e);
 		    }
 	}
-
 	
 	
-
-//	// 4 get unique department (get all types of department)
-//	@Override
-//	public Set<String> getUniqueDepartments() {
-//		try {
-//		List<Employee> employees = employeeRepository.findAll();
-//
-//		Set<String> uniqueDepartments = new HashSet<>();
-//		for (Employee employee : employees) {
-//			uniqueDepartments.add(employee.getDepartment());
-//		}
-//		return uniqueDepartments;
-//		 } catch (Exception e) {
-//		        throw new RuntimeException("Employee Data Not Found", e);
-//		    }
-//	}
-	
-	
+	//4
 	@Override
 	public Set<String> getUniqueDepartments() {
 		try {
@@ -210,21 +136,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	// 5 get the employee by id using map(id as key and employee details or employee
 	// object as value)
-//	@Override
-//	public Map<Long, Employee> getEmployeesAsMap() {
-//		try {
-//		List<Employee> employees = employeeRepository.findAll();
-//		Map<Long, Employee> employeeMap = new HashMap<>();
-//
-//		for (Employee employee : employees) {
-//			employeeMap.put(employee.getId(), employee);
-//		}
-//
-//		return employeeMap;
-//		 } catch (Exception e) {
-//		        throw new RuntimeException("Employee Data Not Found", e);
-//		    }
-//	}
+	@Override
+	public Map<Long, Employee> getEmployeesAsMap() {
+		try {
+		List<Employee> employees = employeeRepository.findAll();
+		Map<Long, Employee> employeeMap = new HashMap<>();
+
+		for (Employee employee : employees) {
+			employeeMap.put(employee.getId(), employee);
+		}
+
+		return employeeMap;
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
+	}
 
 	// 6 add the multiple employees at once post method
 //	@Override
@@ -260,24 +186,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 //	}
 
 	// 7 get the employee by descending order of salary
-//	@Override
-//	public List<Employee> getEmployeesSortedBySalaryDesc() {
-//		try {
-//		List<Employee> employees = employeeRepository.findAll();
-//
-//		// This is a method reference that refers to the getSalary() method of the
-//		// Employee class.
-//		// It extracts the salary of an employee.
-//		// comparing is static method of Comparator
-//		employees.sort(Comparator.comparing(Employee::getSalary));
-//
-//		Collections.reverse(employees);
-//
-//		return employees;
-//		 } catch (Exception e) {
-//		        throw new RuntimeException("Employee Data Not Found", e);
-//		    }
-//	}
+	@Override
+	public List<Employee> getEmployeesSortedBySalaryDesc() {
+		try {
+		List<Employee> employees = employeeRepository.findAll();
+
+		// This is a method reference that refers to the getSalary() method of the
+		// Employee class.
+		// It extracts the salary of an employee.
+		// comparing is static method of Comparator
+		employees.sort(Comparator.comparing(Employee::getSalary));
+
+		Collections.reverse(employees);
+
+		return employees;
+		 } catch (Exception e) {
+		        throw new RuntimeException("Employee Data Not Found", e);
+		    }
+	}
+	
 
 	// 8 get only names of the employees
 	@Override
@@ -295,6 +222,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		        throw new RuntimeException("Employee Data Not Found", e);
 		    }
 	}
+	
 
 	// 9 get the no of employee present per department
 	@Override
@@ -340,26 +268,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	
      //11 get employees in LIFO order
-//	@Override
-//	public List<Employee> getEmployeesInLIFOOrder() {
-//		try {
-//	    List<Employee> employees = employeeRepository.findAll();
-//	    Stack<Employee> stack = new Stack<>();
-//
-//	    for (Employee emp : employees) {
-//	        stack.push(emp);
-//	    }
-//
-//	    List<Employee> lifoEmployees = new ArrayList<>();
-//	    while (!stack.isEmpty()) {
-//	        lifoEmployees.add(stack.pop());
-//	    }
-//
-//	    return lifoEmployees;
-//	 } catch (Exception e) {
-//	        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
-//	    }
-//	}
+	@Override
+	public List<Employee> getEmployeesInLIFOOrder() {
+		try {
+	    List<Employee> employees = employeeRepository.findAll();
+	    Stack<Employee> stack = new Stack<>();
+
+	    for (Employee emp : employees) {
+	        stack.push(emp);
+	    }
+
+	    List<Employee> lifoEmployees = new ArrayList<>();
+	    while (!stack.isEmpty()) {
+	        lifoEmployees.add(stack.pop());
+	    }
+
+	    return lifoEmployees;
+	 } catch (Exception e) {
+	        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
+	    }
+	}
 	
 	
 	
@@ -394,34 +322,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
     //13 get Employee who have second highest grade
-//    @Override
-//    public List<ResponseEmployee> getEmployeesWithSecondHighestSalary() {
-//        try {
-//            List<Employee> employees = employeeRepository.findAll();
-//
-//            // Get distinct salaries in descending order
-//            List<Double> distinctSalaries = employees.stream()
-//                    .map(Employee::getSalary) 
-//                    .distinct() // Remove duplicates
-//                    .sorted(Comparator.reverseOrder())
-//                    .collect(Collectors.toList());
-//
-//            // Ensure there is a second highest salary
-//            if (distinctSalaries.size() < 2) return Collections.emptyList();
-//
-//            double secondHighestSalary = distinctSalaries.get(1);
-//
-//            
-//            return employees.stream()
-//                    .filter(emp -> Double.compare(emp.getSalary(), secondHighestSalary) == 0)
-//                    .map(ResponseEmployee::new)
-//                    .collect(Collectors.toList());
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return Collections.emptyList();
-//        }
-//    }
+    @Override
+    public List<ResponseEmployee> getEmployeesWithSecondHighestSalary() {
+        try {
+            List<Employee> employees = employeeRepository.findAll();
+
+            // Get distinct salaries in descending order
+            List<Double> distinctSalaries = employees.stream()
+                    .map(Employee::getSalary) 
+                    .distinct() // Remove duplicates
+                    .sorted(Comparator.reverseOrder())
+                    .collect(Collectors.toList());
+
+            // Ensure there is a second highest salary
+            if (distinctSalaries.size() < 2) return Collections.emptyList();
+
+            double secondHighestSalary = distinctSalaries.get(1);
+
+            
+            return employees.stream()
+                    .filter(emp -> Double.compare(emp.getSalary(), secondHighestSalary) == 0)
+                    .map(ResponseEmployee::new)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
     
    
 
@@ -495,26 +423,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     
     //16 get most common first letter
-//    @Override
-//    public char getMostCommonFirstLetter() {
-//        try {
-//            List<Employee> Employees =employeeRepository.findAll();
-//            Map<Character, Integer> letterCount = new HashMap<>();
-//
-//            for (Employee Employee : Employees) {
-//                char firstLetter = Employee.getName().charAt(0);
-//                letterCount.put(firstLetter, letterCount.getOrDefault(firstLetter, 0) + 1);
-//            }
-//
-//            return letterCount.entrySet().stream()
-//                    .max(Map.Entry.comparingByValue())
-//                    .map(Map.Entry::getKey)
-//                    .orElse(' ');
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ' ';
-//        }
-//    }
+    @Override
+    public char getMostCommonFirstLetter() {
+        try {
+            List<Employee> Employees =employeeRepository.findAll();
+            Map<Character, Integer> letterCount = new HashMap<>();
+
+            for (Employee Employee : Employees) {
+                char firstLetter = Employee.getName().charAt(0);
+                letterCount.put(firstLetter, letterCount.getOrDefault(firstLetter, 0) + 1);
+            }
+
+            return letterCount.entrySet().stream()
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse(' ');
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ' ';
+        }
+    }
+    
 
     //17 
     @Override
@@ -532,32 +461,37 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 	//18
-//	@Override
-//	@Transactional
-//	public Employee updateEmployee(Long id, RequestEmployee requestEmployee) {
-//		try {
-//		Employee employee = employeeRepository.findById(id).orElseThrow();
-//		employee.setName(requestEmployee.getName());
-//	//	employee.setDepartment(requestEmployee.getDepartment());
-//		employee.setSalary(requestEmployee.getSalary());
-//		return employeeRepository.save(employee);
-//		 } catch (Exception e) {
-//		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
-//		    }
-//	}
+	@Override
+	@Transactional
+	public Employee updateEmployee(Long id, RequestEmployee requestEmployee) {
+		try {
+		Employee employee = employeeRepository.findById(id).orElseThrow();
+		employee.setName(requestEmployee.getName());
+		employee.setSalary(requestEmployee.getSalary());
+		employee.setStatus(requestEmployee.getStatus());
+		
+		return employeeRepository.save(employee);
+		 } catch (Exception e) {
+		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
+		    }
+	}
+    
+    
 
 	//19
-//	@Override
-//	public void deleteEmployee(Long id) {
-//		try {
-//		if (!employeeRepository.existsById(id)) {
-//			throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
-//		}
-//		employeeRepository.deleteById(id);
-//		 } catch (Exception e) {
-//		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
-//		    }
-//	}
+	@Override
+	public void deleteEmployee(Long id) {
+		try {
+		if (!employeeRepository.existsById(id)) {
+			throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
+		}
+		employeeRepository.deleteById(id);
+		 } catch (Exception e) {
+		        throw new EmployeeNotFoundException(ApiStatus.EMPLOYEE_NOT_FOUND);
+		    }
+	}
+    
+    
 
 	//20 To add data in database using excel sheet
 //	@Override

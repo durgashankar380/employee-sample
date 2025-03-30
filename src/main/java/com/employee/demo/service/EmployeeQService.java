@@ -17,7 +17,7 @@ public interface EmployeeQService {
    // List<String> getUniqueDepartments();
     
     //3 get all employee names
-   // List<String> getEmployeeNames();
+    List<String> getEmployeeNames();
     
     //4 get all employees in FIFO order
    List<Employee> getEmployeesInFIFOOrder();

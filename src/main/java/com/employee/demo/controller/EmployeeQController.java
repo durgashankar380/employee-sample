@@ -35,10 +35,10 @@ public class EmployeeQController {
 //    }
     
     //3 get all employee names----
-//    @GetMapping("/names")
-//    public List<String> getEmployeeNames() {
-//        return employeeQService.getEmployeeNames();
-//    }
+    @GetMapping("/names")
+    public List<String> getEmployeeNames() {
+        return employeeQService.getEmployeeNames();
+    }
     
     //4 get all employees in FIFO order----
     @GetMapping("/fifo")

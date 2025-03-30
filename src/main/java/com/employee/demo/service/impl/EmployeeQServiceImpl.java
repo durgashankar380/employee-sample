@@ -38,10 +38,10 @@ public class EmployeeQServiceImpl implements EmployeeQService {
 //    }
        
     //3 get all employee names
-//    @Override
-//    public List<String> getEmployeeNames() {
-//    	return employeeQRepository.getEmployeeNames();
-//    }
+    @Override
+    public List<String> getEmployeeNames() {
+    	return employeeQRepository.getEmployeeNames();
+    }
     
     //4 get all employees in FIFO order
     @Override

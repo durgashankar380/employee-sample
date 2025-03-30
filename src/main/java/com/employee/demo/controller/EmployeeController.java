@@ -22,6 +22,7 @@ import com.employee.demo.model.Employee;
 import com.employee.demo.repository.EmployeeRepository;
 import com.employee.demo.request.EmployeePageRequest;
 import com.employee.demo.request.RequestEmployee;
+import com.employee.demo.request.RequestEmployeeDto;
 import com.employee.demo.response.ResponseEmployee;
 import com.employee.demo.response.EmployeePageResponse;
 import com.employee.demo.service.EmployeeService;
@@ -65,10 +66,10 @@ public class EmployeeController {
     }
     
     //5
-//    @GetMapping("/map")
-//    public Map<Long, Employee> getEmployeesAsMap() {
-//    	return employeeService.getEmployeesAsMap();
-//    }
+    @GetMapping("/map")
+    public Map<Long, Employee> getEmployeesAsMap() {
+    	return employeeService.getEmployeesAsMap();
+    }
     
     //6
 //    @PostMapping("/add-multiple")
@@ -78,10 +79,10 @@ public class EmployeeController {
     
     
     //7
-//    @GetMapping("/sorted-by-salary")
-//    public List<Employee> getEmployeesSortedBySalaryDesc() {
-//        return employeeService.getEmployeesSortedBySalaryDesc();
-//    }
+    @GetMapping("/sorted-by-salary")
+    public List<Employee> getEmployeesSortedBySalaryDesc() {
+        return employeeService.getEmployeesSortedBySalaryDesc();
+    }
     
 //    8
     @GetMapping("/names")
@@ -102,10 +103,10 @@ public class EmployeeController {
     }
     
     //11
-//    @GetMapping("/lifo-employees")
-//    public List<Employee> getEmployeesInLIFOOrder() {
-//        return employeeService.getEmployeesInLIFOOrder();
-//    }
+    @GetMapping("/lifo-employees")
+    public List<Employee> getEmployeesInLIFOOrder() {
+        return employeeService.getEmployeesInLIFOOrder();
+    }
     
     
     //12
@@ -115,10 +116,10 @@ public class EmployeeController {
     }
     
     //13
-//    @GetMapping("/second-highest")
-//    public List<ResponseEmployee> getEmployeesWithSecondHighestSalary(){
-//    	return  employeeService.getEmployeesWithSecondHighestSalary();
-//    }
+    @GetMapping("/second-highest")
+    public List<ResponseEmployee> getEmployeesWithSecondHighestSalary(){
+    	return  employeeService.getEmployeesWithSecondHighestSalary();
+    }
     
     //14
     @GetMapping("/highest-total-grade")
@@ -133,10 +134,10 @@ public class EmployeeController {
     }
     
     //16
-//    @GetMapping("/most-comman-first-letter")
-//    public char getMostCommonFirstLetter() {
-//		return employeeService.getMostCommonFirstLetter();
-//	}
+    @GetMapping("/most-comman-first-letter")
+    public char getMostCommonFirstLetter() {
+		return employeeService.getMostCommonFirstLetter();
+	}
     
     //17
      @GetMapping("/Employee-by-id")  
@@ -147,18 +148,18 @@ public class EmployeeController {
     
     
   //18
-//   @PutMapping("/Update")  
-//    public Employee updateEmployee(@RequestParam Long id, @RequestBody RequestEmployee requestEmployee) {
-//        return employeeService.updateEmployee(id, requestEmployee);
-//    }
+   @PutMapping("/Update")  
+    public Employee updateEmployee(@RequestParam Long id, @RequestBody RequestEmployee requestEmployee) {
+        return employeeService.updateEmployee(id, requestEmployee);
+    }
 
     
     //19
-//    @DeleteMapping("/delete")  
-//    public String deleteEmployee(@RequestParam Long id) {
-//        employeeService.deleteEmployee(id);
-//        return "Employee deleted successfully!";
-//   }
+    @DeleteMapping("/delete")  
+    public String deleteEmployee(@RequestParam Long id) {
+        employeeService.deleteEmployee(id);
+        return "Employee deleted successfully!";
+   }
     
   //20 To add data in database using excel sheet
 //    @PostMapping("/upload")

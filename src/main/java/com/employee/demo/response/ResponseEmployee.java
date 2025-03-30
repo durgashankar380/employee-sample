@@ -11,18 +11,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseEmployee {
-
-	public ResponseEmployee(Employee employee) {
-		// TODO Auto-generated constructor stub
-	}
-	public ResponseEmployee(Long id2, String name2, Double salary2, String email, Department department2) {
-		// TODO Auto-generated constructor stub
-	}
 	private Long id;
 	private String name;
 	private double salary;
 	private int status;
 	private String department;
+	
+	  public ResponseEmployee(Employee emp) {
+	        this.id = emp.getId();
+	        this.name = emp.getName();
+	        this.salary = emp.getSalary();
+	        this.status = emp.getStatus();
+	        this.department = (emp.getDepartment() != null) ? emp.getDepartment().getName() : "No Department";
+	    }
+
 	 
 	
 }
