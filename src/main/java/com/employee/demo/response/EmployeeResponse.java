@@ -14,7 +14,7 @@ public class EmployeeResponse {
 
     private long employeeId;
     private String name;
-    private String department;
+   // private String department;
     private double Salary;
     private Integer status;
     private String email;
@@ -22,7 +22,7 @@ public class EmployeeResponse {
     public EmployeeResponse(Employee employee) {
         this.employeeId = employee.getEmployeeId();
         this.name = employee.getName();
-        this.department = employee.getDepartment();
+      //  this.department = employee.getDepartment();
         this.Salary = employee.getSalary();
         this.status = employee.getStatus();
         this.email = employee.getEmail();

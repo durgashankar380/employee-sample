@@ -18,7 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter
+ {
 
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(JwtAuthenticationFilter.class);
 

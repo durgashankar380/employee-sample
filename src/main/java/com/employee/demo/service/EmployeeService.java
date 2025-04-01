@@ -5,14 +5,17 @@ import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.request.JwtForgetPasswordRequest;
 import com.employee.demo.request.JwtResetPasswordRequest;
 import com.employee.demo.response.EmployeeResponse;
+import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 public interface EmployeeService {
 
+    List<Employee> getEmployeesByDepartment(Long id);
 
     ResponseEntity<?> addEmployee(EmployeeRequest employeeRequest);
 
@@ -22,15 +25,15 @@ public interface EmployeeService {
 
     Set<String> getUniqueEmployeeDepartments();
 
-    Map<Long, EmployeeResponse> getEmployeeById();
-
+//    Map<Long, EmployeeResponse> getEmployeeById();
+//
     List<EmployeeResponse> getEmployeesSortedBySalary();
-
-    List<String> getAllEmployeeName();
-
+//
+      List<String> getAllEmployeeName();
+//
     Map<String, Long> getcountperDepartment();
-
-    Queue<EmployeeResponse> queueOfEmployee();
+//
+      Queue<EmployeeResponse> queueOfEmployee();
 
     Stack<EmployeeResponse> stackOfEmployee();
 
@@ -59,4 +62,12 @@ public interface EmployeeService {
     ResponseEntity<?> forgetPassword(JwtForgetPasswordRequest request);
 
     ResponseEntity<String> changePassword(JwtResetPasswordRequest request);
+
+    Map<Long, EmployeeResponse> getEmployeeById();
+
+    List<EmployeeResponse> getAllEmployee();
+
+
+
+
 }

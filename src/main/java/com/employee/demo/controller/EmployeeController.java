@@ -4,21 +4,30 @@ import com.employee.demo.model.Employee;
 import com.employee.demo.request.EmployeeRequest;
 import com.employee.demo.request.JwtResetPasswordRequest;
 import com.employee.demo.response.EmployeeResponse;
+import com.employee.demo.service.DepartmentService;
 import com.employee.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
-@RequestMapping("employee/")
+@RequestMapping("/employee")
+@Secured({"ROLE_ADMIN", "ROLE_USER"})
 //@EnableWebMvc
 public class EmployeeController {
 
     @Autowired
     private EmployeeService service;
 
+    @Autowired
+    DepartmentService departmentService;
+    @GetMapping("/department/{id}")
+    public List<Employee> getEmployeesByDepartment(@PathVariable Long id) {
+        return service.getEmployeesByDepartment(id);
+    }
 
     @PostMapping("/addAndUpdateEmployee")
     public ResponseEntity<?> addEmployee(@RequestBody EmployeeRequest employeeRequest) {
@@ -27,23 +36,24 @@ public class EmployeeController {
 
     @GetMapping("/findTotalSalaryByDepartment")
     public Map<String, Double> getTotalSalaryByDepartment() {
-        return service.getTotalSalaryByDepartment();
+        return departmentService.getTotalSalaryByDepartment();
     }
 
     @GetMapping("/grouped-by-department")
     public Map<String, List<EmployeeResponse>> getEmployeesGroupedByDepartment() {
-        return service.getEmployeesGroupedByDepartment();
+        return departmentService.getEmployeesGroupedByDepartment();
     }
 
     @GetMapping("/unique-departments")
     public Set<String> getUniqueEmployeeDepartments() {
-        return service.getUniqueEmployeeDepartments();
+        return departmentService.getUniqueEmployeeDepartments();
     }
 
     @GetMapping("/getEmployeeById")
     public Map<Long, EmployeeResponse> getEmployeeById() {
         return this.service.getEmployeeById();
     }
+
 
     @GetMapping("/employee-names")
     public List<String> getEmployeeNames() {
@@ -78,7 +88,7 @@ public class EmployeeController {
 
     @GetMapping("/getAllEmployees")
     public List<EmployeeResponse> getAllEmployees() {
-        return this.service.getEmployeesSortedBySalary();
+        return this.service.getAllEmployee();
     }
 
     @GetMapping("/getEmployeeByName")
@@ -108,7 +118,6 @@ public class EmployeeController {
 
     @GetMapping("/departmentWithHighestTotalSalary")
     public String getDepartmentWithHighestTotalSalary() {
-
         return this.service.getDepartmentWithHighestTotalSalary();
     }
 

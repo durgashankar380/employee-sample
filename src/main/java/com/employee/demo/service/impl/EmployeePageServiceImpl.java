@@ -29,7 +29,7 @@ public class EmployeePageServiceImpl implements EmployeePageService {
         sheet.forEach(row -> {
             Employee emp = new Employee();
             if (row.getRowNum() != 0) {
-                emp.setDepartment(row.getCell(1).getStringCellValue());
+              //  emp.setDepartment(row.getCell(1).getStringCellValue());
                 emp.setName(row.getCell(2).getStringCellValue());
                 emp.setSalary(row.getCell(3).getNumericCellValue());
                 employeeList.add(emp);

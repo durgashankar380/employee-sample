@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class EmployeeRequest  {
     private long employeeId;
     private String name;
-    private String department;
-    private double salary;
+   // private String department;
+    private Double salary;
     private Integer status;
 //    @NotBlank(message = "Email is required")
 //    @Email(message = "Invalid email format")

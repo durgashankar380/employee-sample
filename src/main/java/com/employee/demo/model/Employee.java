@@ -1,5 +1,6 @@
 package com.employee.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,8 +27,8 @@ public class Employee implements UserDetails {
     @NonNull
     private String name;
     @NonNull
-    private String department;
-    @NonNull
+//    private String department;
+//    @NonNull
     private double salary;
     @NonNull
     private Integer status;
@@ -38,9 +40,14 @@ public class Employee implements UserDetails {
     @NonNull
     private String lastLogin;
 //
-//    @ManyToOne
-//    @JoinColumn(name = "department_id", nullable = false)
-//    private Department departments;
+//    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnoreProperties("employee")
+//    private List<Department> department;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("employee")
+    private Department department;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -71,6 +78,8 @@ public class Employee implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
 
 
